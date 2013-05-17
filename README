@@ -1,0 +1,44 @@
+SMUHPC Workshop README
+======================
+
+In this directory and below are both the source code files, and the
+resulting web pages, for the SMUHPC new user workshop. They are written
+using the ReST [1] formatting, which is parsed into final formats using the
+Sphinx formatting engine [2].
+
+Here are some benefits of using ReST + Sphinx:
+
+- ReST is very readable in its raw form. It has minimal mark-up
+  and is in plain text, so a simple copy/paste from other formats
+  generates a good first pass at the pages.
+- Sphinx can parse the documents into many convenient formats, most
+  notably HTML and a PDF.
+
+To build the docs, you must first have Sphinx [2] installed (version
+1.1 or newer), as well as Python [3] (version 2.5 or newer).
+
+To build the HTML site from the provided sources, use the two commands
+from the top-level workshop subdirectory:
+  $ make clean
+  $ make html
+If that is successful, open the file build/html/index.html in your web
+browser (relative to this directory).
+
+To build the documents in PDF (requires pdflatex [4] to be installed),
+use the two commands: 
+  $ make clean
+  $ make latexpdf
+If this is successful, the PDF file will be located in
+build/latex/ARKode.pdf.  
+
+If pdflatex is not functioning properly, you may instead try
+  $ make clean
+  $ make latex
+This will build the raw LaTeX source file
+build/latex/SMUHPCWorkshop.tex, that you may then compile into a PS or
+DVI file as desired. 
+
+[1] http://docutils.sourceforge.net/rst.html
+[2] http://sphinx.pocoo.org/
+[3] http://www.python.org/
+[5] http://www.tug.org/applications/pdftex/
