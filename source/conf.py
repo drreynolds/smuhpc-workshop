@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# SMUHPC Workshop documentation build configuration file, created by
+# SMU HPC Summer Workshop documentation build configuration file, created by
 # sphinx-quickstart on Fri May 17 10:43:48 2013.
 #
 # This file is execfile()d with the current directory set to its containing dir.
@@ -40,7 +40,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'SMUHPC Workshop'
+project = u'SMU HPC Summer Workshop'
 copyright = u'2013, Dan Reynolds, Amit Kumar, Tom Coan'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -103,7 +103,7 @@ html_theme = 'agogo'
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-html_title = "2013 SMUHPC Workshop"
+html_title = "2013 SMU HPC Summer Workshop"
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 #html_short_title = None
@@ -183,7 +183,7 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'SMUHPCWorkshop.tex', u'SMUHPC Workshop Documentation',
+  ('index', 'SMUHPCWorkshop.tex', u'SMU HPC Summer Workshop',
    u'Daniel R. Reynolds', 'manual'),
 ]
 
@@ -213,7 +213,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'smuhpcworkshop', u'SMUHPC Workshop Documentation',
+    ('index', 'smuhpcworkshop', u'SMU HPC Summer Workshop',
      [u'Daniel R. Reynolds'], 1)
 ]
 
@@ -227,7 +227,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'SMUHPCWorkshop', u'SMUHPC Workshop Documentation',
+  ('index', 'SMUHPCWorkshop', u'SMU HPC Summer Workshop',
    u'Daniel R. Reynolds', 'SMUHPCWorkshop', 'One line description of project.',
    'Miscellaneous'),
 ]
