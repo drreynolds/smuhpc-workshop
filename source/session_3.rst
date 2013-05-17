@@ -225,6 +225,24 @@ Executing shell scripts
 **FILL THIS IN**
 
 
+BASH resources:
+
+* `BASH Programming -- Introductory How-To
+  <http://tldp.org/HOWTO/Bash-Prog-Intro-HOWTO.html>`_ 
+
+* `Advanced BASH-Scripting Guide <http://tldp.org/LDP/abs/html/>`_
+
+
+
+Python resources:
+
+* `Introductory Python Tutorial <http://www.learnpython.org/>`_
+
+* `The Definitive Python Tutorial <http://docs.python.org/2/tutorial/>`_ 
+
+
+
+
 
 
 Compiled programs
@@ -264,6 +282,23 @@ Compiling your own codes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **FILL THIS IN**
+
+Fortran resources:
+
+* `Interactive Fortran 90 Programming Course
+  <http://www.liv.ac.uk/HPC/HTMLFrontPageF90.html>`_ 
+
+* `Fortran 90 Tutorial
+  <http://www.cs.mtu.edu/~shene/COURSES/cs201/NOTES/fortran.html>`_
+
+
+C++ resources:
+
+* `C++ Language Tutorial <http://www.cplusplus.com/doc/tutorial/>`_ 
+
+* `Interactive C++ Tutorial (focuses on object-oriented programming)
+  <http://www.learncpp.com/>`_
+
 
 
 

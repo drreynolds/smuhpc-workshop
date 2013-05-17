@@ -15,9 +15,68 @@ packages are now being distributed with the GNU configure utility.
 
 
 
+Make resources:
+
+* `GNU Make manual
+  <http://dreynolds.math.smu.edu/Courses/Math6370_Spring13/make.pdf>`_ 
+
+
 
 Modules
 ------------------------------------------------------
 
 
 
+
+
+
+
+Version control systems
+------------------------------------------------------
+
+
+
+CVS
+^^^^^^^^
+
+
+CVS resources:
+
+* `CVS tutorial <http://www-mrsrl.stanford.edu/~brian/cvstutorial/>`_
+
+
+
+SVN
+^^^^^^^^
+
+
+SVN resources:
+
+* `SVN tutorial <http://svnbook.red-bean.com/en/1.7/index.html>`_
+
+
+Git
+^^^^^^^^
+
+
+Git resources:
+
+* `Git tutorials <http://www.atlassian.com/git/tutorial>`_
+
+* `Git book chapters <http://git-scm.com/book>`_
+
+
+
+Mercurial
+^^^^^^^^^^^^
+
+Mercurial resources:
+
+* `Main mercurial site <http://mercurial.selenic.com/>`_
+
+* `TortoiseHG -- multi-platform, graphical mercurial client
+  <http://tortoisehg.bitbucket.org/>`_ 
+
+* `Mercurial guide <http://hgbook.red-bean.com/>`_
+
+* `Mercurial tutorial <http://mercurial.selenic.com/wiki/Tutorial>`_
