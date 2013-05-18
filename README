@@ -3,8 +3,8 @@ SMUHPC Workshop README
 
 In this directory and below are both the source code files, and the
 resulting web pages, for the SMUHPC new user workshop. They are
-written using the ReST [1] formatting, which is parsed into final
-formats using the Sphinx formatting engine [2].
+written using the ReST [1] formatting language, which is parsed into
+final formats using the Sphinx formatting engine [2].
 
 Some benefits of using ReST + Sphinx include:
 - ReST is very readable in its raw form. It has minimal mark-up
