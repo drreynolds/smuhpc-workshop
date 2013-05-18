@@ -15,16 +15,33 @@ Here are some benefits of using ReST + Sphinx:
   notably HTML and a PDF.
 
 To build the docs, you must first have Sphinx [2] installed (version
-1.1 or newer), as well as Python [3] (version 2.5 or newer).
+1.1 or newer), as well as Python [3] (version 2.5 or newer).  If you
+are using a Debian-based Linux distribution (e.g. Ubuntu, Mint), this
+may be easily accomplished via
+  $ sudo apt-get install python-sphinx
+
+To download the files, it is recommended to use the Mercurial [4]
+"clone" command to retrieve the repository, so that changes can easily
+be pushed back up to Bitbucket.  Again, in Debian-based Linux
+distributions, you can install Mercurial via
+  $ sudo apt-get install mercurial
+
+The clone command would then be 
+  $ hg clone ssh://hg@bitbucket.org/drreynolds/smuhpc-workshop
+
+Alternately, you may click the (download) link at the right of the
+main repository page on Bitbucket; however this will only retrieve the
+files, not allow you to easily share your changes with the group or
+update your files with our changes.
 
 To build the HTML site from the provided sources, use the two commands
-from the top-level workshop subdirectory:
+from the top-level subdirectory:
   $ make clean
   $ make html
 If that is successful, open the file build/html/index.html in your web
 browser (relative to this directory).
 
-To build the documents in PDF (requires pdflatex [4] to be installed),
+To build the documents in PDF (requires pdflatex [5] to be installed),
 use the two commands: 
   $ make clean
   $ make latexpdf
@@ -41,4 +58,5 @@ DVI file as desired.
 [1] http://docutils.sourceforge.net/rst.html
 [2] http://sphinx.pocoo.org/
 [3] http://www.python.org/
+[4] http://mercurial.selenic.com/
 [5] http://www.tug.org/applications/pdftex/
