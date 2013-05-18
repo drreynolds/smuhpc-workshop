@@ -2,26 +2,25 @@ SMUHPC Workshop README
 ======================
 
 In this directory and below are both the source code files, and the
-resulting web pages, for the SMUHPC new user workshop. They are written
-using the ReST [1] formatting, which is parsed into final formats using the
-Sphinx formatting engine [2].
+resulting web pages, for the SMUHPC new user workshop. They are
+written using the ReST [1] formatting, which is parsed into final
+formats using the Sphinx formatting engine [2].
 
-Here are some benefits of using ReST + Sphinx:
-
+Some benefits of using ReST + Sphinx include:
 - ReST is very readable in its raw form. It has minimal mark-up
   and is in plain text, so a simple copy/paste from other formats
   generates a good first pass at the pages.
-- Sphinx can parse the documents into many convenient formats, most
+- Sphinx can parse the documents into many convenient formats, most 
   notably HTML and a PDF.
 
 To build the docs, you must first have Sphinx [2] installed (version
 1.1 or newer), as well as Python [3] (version 2.5 or newer).  If you
-are using a Debian-based Linux distribution (e.g. Ubuntu, Mint), this
+are using a Debian-based Linux distribution (e.g. Ubuntu, Mint), this 
 may be easily accomplished via
   $ sudo apt-get install python-sphinx
 
 To download the files, it is recommended to use the Mercurial [4]
-"clone" command to retrieve the repository, so that changes can easily
+"clone" command to retrieve the repository, so that changes can easily 
 be pushed back up to Bitbucket.  Again, in Debian-based Linux
 distributions, you can install Mercurial via
   $ sudo apt-get install mercurial
@@ -30,7 +29,7 @@ The clone command would then be
   $ hg clone ssh://hg@bitbucket.org/drreynolds/smuhpc-workshop
 
 Alternately, you may click the (download) link at the right of the
-main repository page on Bitbucket; however this will only retrieve the
+main repository page on Bitbucket; however this will only retrieve the 
 files, not allow you to easily share your changes with the group or
 update your files with our changes.
 
