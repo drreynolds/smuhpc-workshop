@@ -19,7 +19,7 @@ are using a Debian-based Linux distribution (e.g. Ubuntu, Mint), this
 may be easily accomplished via
   $ sudo apt-get install python-sphinx
 
-If instead you are using a RedHat based Linux distribution, you may be
+If instead you are using a RedHat-based Linux distribution, you may be
 able to use
   $ sudo yum install python-sphinx10
 
@@ -29,7 +29,7 @@ be pushed back up to Bitbucket.  Again, in Debian-based Linux
 distributions, you can install Mercurial via
   $ sudo apt-get install mercurial
 
-Similarly, if instead you are using a RedHat based Linux distribution,
+Similarly, if instead you are using a RedHat-based Linux distribution,
 you may be able to use
   $ sudo yum install mercurial
 
