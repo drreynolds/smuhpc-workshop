@@ -19,11 +19,19 @@ are using a Debian-based Linux distribution (e.g. Ubuntu, Mint), this
 may be easily accomplished via
   $ sudo apt-get install python-sphinx
 
+If instead you are using a RedHat based Linux distribution, you may be
+able to use
+  $ sudo yum install python-sphinx10
+
 To download the files, it is recommended to use the Mercurial [4]
 "clone" command to retrieve the repository, so that changes can easily 
 be pushed back up to Bitbucket.  Again, in Debian-based Linux
 distributions, you can install Mercurial via
   $ sudo apt-get install mercurial
+
+Similarly, if instead you are using a RedHat based Linux distribution,
+you may be able to use
+  $ sudo yum install mercurial
 
 The clone command would then be 
   $ hg clone ssh://hg@bitbucket.org/drreynolds/smuhpc-workshop
