@@ -214,16 +214,79 @@ A *shell script* is merely a file that contains a set of commands that
 you would type at the prompt, but that are grouped together for
 repeated use.  In a shell script, your commands are passed on to the
 requested Linux shell, which interprets each command in order and
-executes them as if they'd been performed interatively.
+executes them as if they'd been performed interatively.  
+
+One significant benefit of scripting languages, in contrast with
+compiled programs (later in this session) is that because each
+instruction is executed in order, development of shell scripts is
+easier since the program will proceed up to the point where you have a
+bug before stopping, whereas with compiled languages you cannot run
+anything until the entire program is somewhat bug-free (i.e. until the
+compiler believes it is bug-free).  However, this ease of development
+comes at a cost, since scripted programs typically run significant
+slower than their compiled equivalents, so it is standard to first
+test new algorithms in scripting languages, and then translate them to
+more efficient compiled code prior to large simulations.
+
+There are a variety of Linux shells, but the two most popular shells
+are currently BASH and TCSH.  As most new accounts on SMUHPC are set
+up to use BASH, we'll provide examples for that type of shell here.
+Alternately, there are also a variety of specially-designed scripting
+languages used throughout scientific computing, such as Python and
+Perl.  As we'll be using Python in session 7, we'll provide some
+examples of Python scripts here as well.
+
+
+
+BASH scripts
+^^^^^^^^^^^^^^^
 
 **FILL THIS IN**
+
+
+
+Python scripts
+^^^^^^^^^^^^^^^
+
+**FILL THIS IN**
+
 
 
 Executing shell scripts
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-**FILL THIS IN**
+Shell scripts may be executed in one of two ways.  If the script
+already has *execute* permissions (`ls -l` will show an "x" in the
+fourth column from the left), then it may be executed like any other
+Linux program, through entering the script name at the command prompt.
+Alternately, a script may be executed by supplying the file name as an
+argument to the appropriate shell.
 
+For example, you may execute your shell script from above by calling
+either 
+
+.. code-block:: bash
+
+   % bash myscript.sh
+
+or by first changing the file permissions to "executable"
+
+.. code-block:: bash
+
+   % chmod +x myscript.sh
+
+and then running it like any other executable
+
+.. code-block:: bash
+
+   % ./myscript.sh
+
+These instructions should work for any type of
+appropriately-constructed script file (e.g. BASH, TCSH, Python,
+etc.). 
+
+Additional resources on both BASH and Python scripting are provided
+below. 
 
 BASH resources:
 
