@@ -25,7 +25,7 @@ OpenMP
 
 
 Retrieve the files for this portion of the session by clicking
-:download:`this link <files/session9_OpenMP.tgz>` or by copying them
+:download:`this link <code/session9_OpenMP.tgz>` or by copying them
 on SMUHPC at the command line:
 
 .. code-block:: bash
@@ -244,7 +244,7 @@ MPI
 
 
 Retrieve the files for this portion of the session by clicking
-:download:`this link <files/session9_MPI.tgz>` or by copying them
+:download:`this link <code/session9_MPI.tgz>` or by copying them
 on SMUHPC at the command line:
 
 .. code-block:: bash
