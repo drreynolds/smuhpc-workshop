@@ -340,6 +340,13 @@ Condor resources:
 
 * :download:`SMU HPC Condor tutorial <files/condor.pdf>`
 
+* `Condor manual (version 7.6.10, HTML)
+  <http://research.cs.wisc.edu/htcondor/manual/v7.6/index.html>`_ 
+
+* `Condor manual (version 7.6.10, PDF)
+  <http://research.cs.wisc.edu/htcondor/manual/v7.6/condor-V7_6_10-Manual.pdf>`_ 
+
+
 
 
 Condor Examples

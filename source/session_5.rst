@@ -4,15 +4,17 @@ Advanced Programming (Wed. AM)
 
 In this session, we will use examples in either C, C++ or Fortran90.
 Choose your preferred language of the three and download the files to
-be used in this session with one of the following 3 commands:
+be used in this session by either clicking one of the following three
+links: :download:`C version <code/session5_c.tgz>`, :download:`C++
+version <code/session5_cxx.tgz>`, :download:`F90 version
+<code/session5_f90.tgz>`, or by copying the relevant files on SMUHPC
+with one of the following 3 commands: 
 
 .. code-block:: bash
 
-   % wget http://dreynolds.math.smu.edu/Math6370/Lab4_files/lab4_c.tgz
-   % wget http://dreynolds.math.smu.edu/Math6370/Lab4_files/lab4_c++.tgz
-   % wget http://dreynolds.math.smu.edu/Math6370/Lab4_files/lab4_f90.tgz
-
-
+   % cp ~dreynolds/SMUHPC_tutorial/session5_c.tgz .
+   % cp ~dreynolds/SMUHPC_tutorial/session5_cxx.tgz .
+   % cp ~dreynolds/SMUHPC_tutorial/session5_f90.tgz .
 
 
 Profiling and performance analysis
@@ -88,7 +90,7 @@ where ``routine_name`` is the function that you identified from
 the previous step.  Save a copy of this file using the ``cp`` command
 (e.g. ``cp file.cpp file_old.cpp``), where ``file`` is the file that
 you have identified as containing the bottleneck routine. We will use
-this original file again later in the lab. 
+this original file again later in the session. 
 
 Determine what, if anything, can be optimized in this routine.  Is
 there a simpler way that the arithmetic could be accomplished?  Is it

@@ -24,19 +24,21 @@ OpenMP
 **Update for SMUHPC**
 
 
-Retrieve the files for this portion of the session via
+Retrieve the files for this portion of the session by clicking
+:download:`this link <files/session9_OpenMP.tgz>` or by copying them
+on SMUHPC at the command line:
 
 .. code-block:: bash
 
-   % wget http://dreynolds.math.smu.edu/Math6370/Lab5_files/lab5.tgz
+   % cp ~dreynolds/SMUHPC_workshop/session9_OpenMP.tgz .
 
 Unpack these files as usual
 
 .. code-block:: bash
 
-   % tar -zxf lab5.tgz
+   % tar -zxf session9_OpenMP.tgz
 
-In the Lab5 directory, you will find a number of files, including
+In the resulting directory, you will find a number of files, including
 ``Makefile``, ``driver.cpp``, ``vectors.cpp``.  You may have noticed
 that in listing your set of modules, the g++ compiler was not
 listed. Although it is available on Stampede by default, we will take
@@ -241,17 +243,19 @@ MPI
 **Update for SMUHPC**
 
 
-Retrieve the files for this portion of the session via
+Retrieve the files for this portion of the session by clicking
+:download:`this link <files/session9_MPI.tgz>` or by copying them
+on SMUHPC at the command line:
 
 .. code-block:: bash
 
-   % wget http://dreynolds.math.smu.edu/Math6370/Lab8_files/lab8.tgz
+   % cp ~dreynolds/SMUHPC_workshop/session9_MPI.tgz .
 
 Unpack these files as usual
 
 .. code-block:: bash
 
-   % tar -zxf lab8.tgz
+   % tar -zxf session0_MPI.tgz
 
 
 Compiling MPI Programs on SMUHPC (hard way)
@@ -445,7 +449,7 @@ More Advanced Batch Submission Scripts
 Stampede consists of over 6,400 nodes, each with 16 Intel Xeon E5 SMP
 cores and 32 GB of RAM, providing for a total of over 100,000 CPU
 cores and 200 TB of memory. In addition, most of these nodes also have
-an Intel Xeon Phi Coprocessor. While we will not have a "Lab" using
+an Intel Xeon Phi Coprocessor. While we will not have a session using
 these Phi coprocessors, it is highly recommended that you look into
 these further, potentially making use of them within your projects. 
 

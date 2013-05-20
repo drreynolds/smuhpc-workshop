@@ -26,22 +26,24 @@ previous session, the ``configure`` program automatically created a
 compile everything manually.
 
 
-Retrieve the set of files for this session with the following command:
+Retrieve the set of files for this session either through
+:download:`clicking here <code/session4.tgz>` or by copying the
+relevant files at the command line:
 
 .. code-block:: bash
 
-   % wget http://dreynolds.math.smu.edu/Math6370/Lab2_files/lab2.tgz
+   % cp ~dreynolds/SMUHPC_tutorial/session4.tgz .
 
 
 Unzip/untar this file with the command
 
 .. code-block:: bash
 
-   % tar -zxf lab2.tgz
+   % tar -zxf session4.tgz
 
-You should now see a new subdirectory entitled ``Lab2`` in your
+You should now see a new subdirectory entitled ``session4`` in your
 current directory.  This is where we will work for the rest of this
-section.  Inside Lab2 you will see a number of files: 
+section.  Inside this directory you will see a number of files: 
 
 .. code-block:: bash
 
@@ -133,7 +135,7 @@ A few rules about ``Makefiles``:
 * If you just type ``make`` at the command line, only the first
   *target* is run.
 
-As an example, examine the Makefile from Lab 1.  Here, all of the
+As an example, examine the Makefile from session 3.  Here, all of the
 lines are either blank or are comment lines except for the two: 
 
 .. code-block:: makefile
