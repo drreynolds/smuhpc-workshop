@@ -1,4 +1,3 @@
-============================
  More Programming (Tue. PM)
 ============================
 
@@ -116,7 +115,7 @@ A few rules about ``Makefiles``:
 
 * You specify a *target* for ``make`` to build using the syntax,
 
-  .. code-block:: 
+  .. code-block:: makefile
 
      target : dependencies
            build command 1
@@ -136,7 +135,7 @@ A few rules about ``Makefiles``:
 As an example, examine the Makefile from Lab 1.  Here, all of the
 lines are either blank or are comment lines except for the two: 
 
-.. code-block:: 
+.. code-block:: makefile
 
    main.exe : main.cpp
          g++ -o main.exe main.cpp
@@ -149,7 +148,8 @@ main.exe main.cpp``, which does the compilation, assembly and linking
 all in one step (since there is only one source code file).  
 
 Alternatively, this Makefile could have been written:
-.. code-block:: 
+
+.. code-block:: makefile
 
    main.exe : main.cpp
          g++ -c main.cpp
@@ -157,7 +157,7 @@ Alternatively, this Makefile could have been written:
 
 or even as
 
-.. code-block:: 
+.. code-block:: makefile
 
    main.exe :
          g++ -c main.cpp
@@ -192,7 +192,8 @@ compilation process, we created the temporary files ``driver.o``,
 command ``make clean`` if we add the following lines to the
 ``Makefile``, after your commands to create the executable: 
 
-.. code-block:: 
+.. code-block:: makefile
+
    clean :
          rm -f *.o
 

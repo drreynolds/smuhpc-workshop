@@ -1,6 +1,7 @@
 Introduction to Parallel Computing (Thu. PM)
 ========================================================
 
+**GIVE A SHORT LECTURE FROM THE INTRODUCTORY MATERIAL FOR MY CLASS**
 
 
 What is parallel computing?

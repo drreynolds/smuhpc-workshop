@@ -111,7 +111,7 @@ To restart (foreground) a suspended or backgrounded processes, type
 
 For example, to bring ``sleep 600`` to the foreground, type
 
-.. code-block::
+.. code-block:: bash
 
    % fg 1
 

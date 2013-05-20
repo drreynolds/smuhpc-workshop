@@ -201,7 +201,7 @@ the command
 
 A typical output from squeue will be something like:
 
-.. code-block:: 
+.. code-block:: bash
 
    JOBID	PARTITION	NAME	USER	ST	TIME	NODES	NODELIST(REASON)
    35543	serial	driver.e	tg457291	R	0:02    1	c557-202
@@ -465,7 +465,7 @@ had previously specified:
 
 These two pieces of information are specified on the two lines in the batch submission script,
 
-.. code-block:: 
+.. code-block:: bash
 
    #SBATCH -N NUM
    #SBATCH -n num
