@@ -70,8 +70,8 @@ At the prompt, type
    % sleep 600
 
 This will not return to the prompt for 10 minutes.  You can suspend
-the process running in the foreground by typing ``^Z``, i.e. hold down
-the "Ctrl" key and type "z".  This has suspended the job.  To put it
+the process running in the foreground by typing ``^z``, i.e. hold down
+the "control" key and type "z".  This has suspended the job.  To put it
 in the background, type  
 
 .. code-block:: bash
@@ -124,7 +124,7 @@ Killing a process
 
 It is sometimes necessary to kill a process (for example, when an
 executing program is in an infinite loop).  To kill a job running in
-the foreground, type ``^C`` (control c). For example, run 
+the foreground, type ``^c`` (control c). For example, run 
 
 .. code-block:: bash
 
@@ -238,10 +238,51 @@ examples of Python scripts here as well.
 
 
 
+Scripting vs. using a shell or GUI
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+While it is certainly possible to manually type all commands required
+to compile a code, run it in a variety of ways, and even post-process
+the results, this makes it hard to reproduce the results unless you
+remember exactly the steps that were taken.  Instead, it is
+preferrable to write scripts that set all the appropriate input
+parameters for your program, run it in the desired manner, and process
+the results in such a way that rerunning the scripts will give exactly
+the same results.  With some plotting tools such a script can be
+automatically generated after you’ve come up with the optimal plot by
+fiddling around with the GUI or by typing commands at the prompt.  It
+is worth figuring out how to do this most easily for your own tools
+and work style.  If you always create a script for each figure, and
+then check that it works properly, then you will be able to easily
+reproduce the figure again later.  Since *reproducibility* is a
+cornerstone of the modern scientific method, this additional effort
+can save you later on.  For example, it often happens that the
+referees of a journal or members of a thesis committee will suggest
+improving a figure by plotting something differently, perhaps as
+simple as increasing the font size so that the labels on the axes can
+be read. If you have the code that produced the plot this is easy to
+do in a few minutes. If you don’t, it may take days (or longer) to
+figure out again exactly how you produced that plot to begin with. 
+
+A second, but almost equally important reason for creating scripts is
+that you may need to do the same thing (or nearly the same thing)
+repeatedly during the course of your experimentation.  This can arise
+out of a need to explore a parameter space of simulation inputs, or
+when post-processing many experimental outputs.  In such scenarios,
+even a moderate amount of effort to create a script can easily pay
+dividends if you must do the task repeatedly.  
+
+.. figure:: figs/is_it_worth_the_time.png
+   :scale: 100 %
+
+   xkcd comic 1205, `Is It Worth the Time? <http://xkcd.com/1205/>`_
+
+
+
 BASH scripts
 ^^^^^^^^^^^^^^^
 
-**FILL THIS IN**
+**FILL THIS IN WITH AN EXAMPLE SCRIPT, AND GIVE AN ASSIGNMENT TO CREATE THEIR OWN**
 
 
 
@@ -299,6 +340,9 @@ BASH resources:
 
 Python resources:
 
+* `Python short course
+  <http://faculty.washington.edu/rjl/classes/am583s2013/notes/index.html#python>`_
+
 * `Introductory Python Tutorial <http://www.learnpython.org/>`_
 
 * `The Definitive Python Tutorial <http://docs.python.org/2/tutorial/>`_ 
@@ -348,11 +392,15 @@ Compiling your own codes
 
 Fortran resources:
 
+* `Fortran short-course
+  <http://faculty.washington.edu/rjl/classes/am583s2013/notes/index.html#fortran>`_
+
 * `Interactive Fortran 90 Programming Course
   <http://www.liv.ac.uk/HPC/HTMLFrontPageF90.html>`_ 
 
 * `Fortran 90 Tutorial
   <http://www.cs.mtu.edu/~shene/COURSES/cs201/NOTES/fortran.html>`_
+
 
 
 C++ resources:
@@ -599,7 +647,8 @@ As an example, convert 6 feet to meters,
 
    * 1.8288
 
-If you get the answer 1.8288, congratulations, it worked. Type ``^c`` to exit the program.
+If you get the answer 1.8288, congratulations, it worked. Type
+``^c`` to exit the program.
 
 To view what units the program can convert between, view the data file
 in the ``share`` directory (the list is quite comprehensive). 

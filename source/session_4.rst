@@ -1,9 +1,10 @@
- More Programming (Tue. PM)
+More Programming (Tue. PM)
 ============================
 
 
+
 Makefiles
-=========
+--------------
 
 The ``make`` command allows programmers to easily manage programs with
 large numbers of files.  It aids in developing large programs by
@@ -214,16 +215,39 @@ Make resources:
 
 
 Modules
-=======
+-----------
 
 **FILL THIS IN**
 
+Outline:
 
+* links to documentation on our Module system (if it exists)
+
+* list of module highlights
+
+* high-level description of how module works
+
+* list of module functions (e.g. avail, add, swap)
+
+* example: hard way to compile something, then easy way to do the same
+  once module is used.
+
+* exercise: set up relevant modules to use a set of packages, then set
+  up Makefile to use new environment variables to easily build a piece
+  of source code.
+
+
+
+Module resources:
+
+* `Main Module page <http://modules.sourceforge.net/>`_
+
+* `Module FAQ <http://sourceforge.net/p/modules/wiki/FAQ/>`_
 
 
 
 Version control systems
-=======================
+---------------------------
 
 
 **FILL THIS IN**
@@ -231,10 +255,14 @@ Version control systems
 
 
 CVS
----
+^^^^^
 
 **FILL THIS IN**
 
+Outline: 
+
+* high-level description, including date it was invented
+* listing of main commands
 
 
 CVS resources:
@@ -243,10 +271,17 @@ CVS resources:
 
 
 
+
 SVN
----
+^^^^^
 
 **FILL THIS IN**
+
+Outline: 
+
+* high-level description, including date it was invented
+* listing of main commands
+* listing of free public repositories supporting SVN
 
 
 SVN resources:
@@ -254,10 +289,18 @@ SVN resources:
 * `SVN tutorial <http://svnbook.red-bean.com/en/1.7/index.html>`_
 
 
+
+
 Git
----
+^^^^^
 
 **FILL THIS IN**
+
+Outline: 
+
+* high-level description, including date it was invented
+* listing of main commands
+* listing of free public repositories supporting Git
 
 
 Git resources:
@@ -269,9 +312,18 @@ Git resources:
 
 
 Mercurial
----------
+^^^^^^^^^^^^
 
 **FILL THIS IN**
+
+
+Outline: 
+
+* high-level description, including date it was invented
+* listing of main commands
+* listing of free public repositories supporting Mercurial
+* example of cloning a repository, adding a file, checking it in,
+  pushing back to main repository.
 
 
 Mercurial resources:

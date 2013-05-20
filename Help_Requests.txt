@@ -1,0 +1,42 @@
+Software installs/updates:
+* 
+
+
+I need login access to gpu2
+
+I'd like a place to host this set of web tutorials (a basic web
+server, not a content manager), including space to place all example
+codes for download.  
+
+What is the main purpose of smuhpc3.smu.edu?
+
+
+
+Web page/tutorial content help:
+
+Modules:
+* links to documentation on our Module system (if it exists)
+* list of module highlights
+* high-level description of how module works
+* list of module functions (e.g. avail, add, swap)
+* example: hard way to compile something, then easy way to do the same
+  once module is used.
+* exercise: set up relevant modules to use a set of packages, then set
+  up Makefile to use new environment variables to easily build a piece
+  of source code.
+
+PGI:
+* Do we have a fancier performance monitoring system and/or debugger
+  for PGI than the basic GNU tools?
+
+SMUHPC:
+* Updates to basic hardware component list (I got mine from the wiki)
+* Condor updates, details (overall information, options, etc).
+* Details on the SMUHPC networks.
+* Updates to parallel computing abilities on SMUHPC (if I missed
+  anything or stated anything incorrectly).
+* Updates on how to compile/launch MPI jobs on the different parallel
+  portions of SMUHPC, if it has been at all simplified from how it was
+  before. 
+
+

@@ -41,7 +41,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'SMU HPC Summer Workshop'
-copyright = u'2013, Dan Reynolds, Amit Kumar, Tom Coan'
+copyright = u'2013, Dan Reynolds, Amit Kumar'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
