@@ -92,11 +92,41 @@ pygments_style = 'sphinx'
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 html_theme = 'agogo'
+#html_theme = 'sphinxdoc'
+#html_theme = 'default'
+#html_theme = 'haiku'
+#html_theme = 'nature'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-#html_theme_options = {}
+
+# agogo options
+html_theme_options = {
+    "bodyfont": "Arial",
+    "headerfont": "Arial",
+    "pagewidth": "80em",
+    "documentwidth": "55em",
+    "sidebarwidth": "25em"
+    }
+
+# default options
+# html_theme_options = {
+#     "rightsidebar": "true",
+#     "stickysidebar": "true",
+#     "bodyfont": "Arial",
+#     "headfont": "Arial",
+#     "sidebarbgcolor": "#5c5e5a",
+#     "sidebartextcolor": "#f5f5f5",
+#     "sidebarlinkcolor": "#ededed",
+#     "footerbgcolor": "#b10000",
+#     "footertextcolor": "#f5f5f5",
+#     "relbarbgcolor": "#032b66",
+#     "relbartextcolor": "#f5f5f5",
+#     "relbarlinkcolor": "#ededed",
+#     "codebgcolor": "#e6ecf4"
+#     }
+
 
 # Add any paths that contain custom themes here, relative to this directory.
 #html_theme_path = []

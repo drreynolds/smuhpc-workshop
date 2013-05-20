@@ -75,7 +75,7 @@ interface and a Python interface for scripting.  See:
 
 
 
-Hands-on example
+Exercise
 ----------------------
 
 * Give students another executable to run that generates a single

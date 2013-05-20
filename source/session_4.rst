@@ -231,13 +231,20 @@ Outline:
 
 * list of module functions (e.g. avail, add, swap)
 
-* example: hard way to compile something, then easy way to do the same
-  once module is used.
 
-* exercise: set up relevant modules to use a set of packages, then set
+Module example
+^^^^^^^^^^^^^^^^^^^
+
+**FILL THIS IN, SHOW HARD WAY TO COMPILE SOMETHING, FOLLOWED BY EASY WAY USING MODULES**
+
+
+
+Module exercise
+^^^^^^^^^^^^^^^^^^^
+
+**FILL THIS IN: set up relevant modules to use a set of packages, then set
   up Makefile to use new environment variables to easily build a piece
-  of source code.
-
+  of source code.**
 
 
 Module resources:

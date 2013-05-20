@@ -24,23 +24,23 @@ nodes*, *interactive nodes* and *disk nodes*.
 
 **Login nodes**: 
 
-* smuhpc.smu.edu -- main login node, used for compiling source code,
+* ``smuhpc.smu.edu`` -- main login node, used for compiling source code,
   setting up job submission files, input files, transferring data
   to/from SMUHPC, etc..  This node *should not* be used for running
   intensive calculations.
-* smuhpc2.smu.edu -- clone of smuhpc.smu.edu, with identical usage.
-* smuhpc3.smu.edu -- clone of smuhpc.smu.edu, primarily used for??
-* smuhpc4.smu.edu -- clone of smuhpc.smu.edu, primarily used for
+* ``smuhpc2.smu.edu`` -- clone of ``smuhpc.smu.edu``, with identical usage.
+* ``smuhpc3.smu.edu`` -- clone of ``smuhpc.smu.edu``, primarily used for??
+* ``smuhpc4.smu.edu`` -- clone of ``smuhpc.smu.edu``, primarily used for
   interacting with the parallel nodes.
 
 
 **Batch worker nodes**:
 
 * 107 nodes have 8 cores each (for 856 in total).  Each node has 48 GB
-  of RAM and and 250 GB of local disk space.  [wnode1-27, cnode-1-80]
+  of RAM and and 250 GB of local disk space.  [``wnode1-27``, ``cnode1-80``]
 
 * 56 nodes have 12 cores each (for 672 in total).  Each node has 72 GB
-  of RAM and and 500 GB of local disk space.  [cwnode1-56]
+  of RAM and and 500 GB of local disk space.  [``cwnode1-56``]
 
 * all batch nodes are connected with a gigabit ethernet network.
 
@@ -50,26 +50,26 @@ nodes*, *interactive nodes* and *disk nodes*.
 * 16 nodes have 8 cores each (for 128 in total).  Each node has 48 GB
   of RAM and 500 GB of local disk space.  These are connected via a
   `Quadrics <http://en.wikipedia.org/wiki/Quadrics>`_ infiniband
-  network.  [inode1-16]
+  network.  [``inode1-16``]
 
 * 32 nodes have 12 cores each (for 384 in total).  Each node has 72 GB 
   of RAM and 500 GB of local disk space.  These are connected via a 
   `QLogic <http://qlogic.com/pages/default.aspx>`_ infiniband
-  network.  [iwnode1-32]
+  network.  [``iwnode1-32``]
 
 
 **Interactive nodes**:
 
 * 2 high-memory data analysis and shared-memory parallel nodes.  Both
   have 8 cores each, 144 GB of RAM and 3 TB of local disk space.
-  [highmem1-2]
+  [``highmem1`` and ``highmem2``]
 
 * 2 GPU computing nodes:
 
-  * gpu1: 8 CPU cores, 6 GB of RAM and 2 NVIDIA GTX 295 cards.
+  * ``gpu1``: 8 CPU cores, 6 GB of RAM and 2 NVIDIA GTX 295 cards.
     Each of these GPU cards has 960 GPU cores and 3585 MB of RAM. 
 
-  * gpu2: 16 CPU cores, 128 GB of RAM and 2 NVIDIA Tesla 2090 cards.
+  * ``gpu2``: 16 CPU cores, 128 GB of RAM and 2 NVIDIA Tesla 2090 cards.
     Each of these GPU cards has 512 GPU cores and 6 GB of RAM.
 
 
@@ -78,8 +78,6 @@ nodes*, *interactive nodes* and *disk nodes*.
 * One 320 TB parallel Lustre file system is attached to all nodes, and
   is managed by the nodes diskarraynfs, diskarray, diskarray2-6,
   diskarray2b-6b. 
-
-* Users cannot log into these nodes.
 
 
 **General SMUHPC information**:
@@ -92,6 +90,13 @@ nodes*, *interactive nodes* and *disk nodes*.
   performance mathematics and software libraries, as well as the GNU,
   NAG and PGI compiler suites, as well as Matlab, Mathematica, R and
   python for batch scripting and interactive data analysis.
+
+* To log into any of ``gpu1``, ``gpu2``, ``highmem1`` or ``highmem2``,
+  you must first log into one of the login nodes (``smuhpc``,
+  ``smuhpc2``, ``smuhpc3`` or ``smuhpc4``) and then SSH from there to
+  the relevant machine.
+
+* Users may not log directly into any of the worker or disk nodes.
 
 * `Wiki page <https://wiki.smu.edu/display/smuhpc/SMUHPC>`_ (requires
   SMU login).
@@ -155,7 +160,9 @@ file are as follows:
      executable  = myjob.sh
 
 
-* **getenv** --   For example,
+* **getenv** {true, false} -- Propagates the environment variables
+  present in your shell upon submitting the job to the job when it
+  runs. For example, 
 
   .. code-block:: text
 
@@ -206,14 +213,19 @@ file are as follows:
 
      notification = never
 
-* **notify_user** --   For example,
+* **notify_user** -- If you wish for Condor to send you messages about
+  when your job does something (what events does it use?), you can
+  supply your email to the scheduler with this option.  For example,
 
   .. code-block:: text
 
      notify_user = username@smu.edu
 
-* **requirements** --  For example, to request that you job run on a
-  12-core batch node, you could use
+* **requirements** -- Option allowing you to provide additional
+  requirements that must be satisfied before launching your job.  This
+  typically refers to the type of node you wish to run on.  For
+  example, to request that you job run on a 12-core batch node, you
+  could use 
 
   .. code-block:: text
 
@@ -281,8 +293,6 @@ The Condor queue commands
 
 Whole node versus shared node jobs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-**UPDATE WITH HELP FROM SYSADMINS**
 
 When running batch jobs on the cluster, you may request to use a whole
 node for your job (otherwise you will share the node with other

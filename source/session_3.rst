@@ -284,6 +284,56 @@ BASH scripts
 
 **FILL THIS IN WITH AN EXAMPLE SCRIPT, AND GIVE AN ASSIGNMENT TO CREATE THEIR OWN**
 
+Basics of BASH shell scripting:
+
+* The first line of the shell script file should include the line
+
+  .. code-block:: bash
+
+     #!/bin/bash
+
+  to indicate that the script contents should be executed by the BASH
+  shell.
+
+* Lines beginning with a ``#`` character are interpreted as comments
+  (except for the first line).
+
+* Variables may be defined in-line via:
+
+* Loops may be performed via:
+
+* If-then-else statements may be performed via:
+
+
+As an example, consider the following script
+
+.. code-block:: bash
+
+   #!/bin/bash
+   # BASH shell script example
+   # Dan Reynolds
+   # May 2013
+
+   
+**BASH exercise**
+
+Construct your own BASH shell script that performs the following
+tasks:
+
+* Loops over the integers 1 through 20
+
+* If the integer is odd, use the ``echo`` command to issue that the
+  integer is odd, e.g.
+
+  .. code-block:: text
+ 
+     3 is odd
+
+* If the integer is even, use ``echo`` to state that the value is
+  even.
+
+
+
 
 
 Python scripts
