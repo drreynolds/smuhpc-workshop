@@ -1,84 +1,84 @@
 Remaining items to do before workshop:
 
-* BASH script basics (variables, loops, if-then-else)
+[ ] BASH script basics (variables, loops, if-then-else)
 
-* BASH example script
+[ ] BASH example script
 
-* BASH exercise
+[ ] BASH exercise
 
-* Python basics (variables, loops, if-then-else)
+[ ] Python basics (variables, loops, if-then-else)
 
-* Python example script
+[ ] Python example script
 
-* F90 "Hello world" program, and instructions for compiling at the
-  command line.
+[ ] F90 "Hello world" program, and instructions for compiling at the
+    command line.
 
-* C "Hello world" program, and instructions for compiling at the
-  command line.
+[ ] C "Hello world" program, and instructions for compiling at the
+    command line.
 
-* C++ "Hello world" program, and instructions for compiling at the
-  command line.
+[ ] C++ "Hello world" program, and instructions for compiling at the
+    command line.
 
-* Lecture information on "Module" system in session 4
+[ ] Lecture information on "Module" system in session 4
 
-* Module example
+[ ] Module example
 
-* Module exercise
+[ ] Module exercise
 
-* General information on version control systems
+[ ] General information on version control systems
 
-* General info on CVS
+[ ] General info on CVS
 
-* General info on SVN
+[ ] General info on SVN
 
-* General info on Git
+[ ] General info on Git
 
-* General info on Mercurial
+[ ] General info on Mercurial
 
-* Mercurial example: clone a repository, add a file, check in, push
+[ ] Mercurial example: clone a repository, add a file, check in, push
 
-* Optimization using the PGI compiler
+[ ] Optimization using the PGI compiler
 
-* Debugging using the PGI compiler
+[ ] Debugging using the PGI compiler
 
-* Notes on how condor works
+[ ] Notes on how condor works
 
-* Explanation of the "notification" option to condor
+[ ] Explanation of the "notification" option to condor
 
-* Explanation of "NODE" in the Condor job file
+[ ] Explanation of "NODE" in the Condor job file
 
-* Listing/explanation of other Condor options/variables.
+[ ] Listing/explanation of other Condor options/variables.
 
-* Explanation/examples of Condor commands
+[ ] Explanation/examples of Condor commands
 
-* Explanation of why, exactly, anyone would want Condor SSH to job.
+[ ] Explanation of why, exactly, anyone would want Condor SSH to job.
 
-* Condor examples: single shared node job, suite of shared node jobs,
-  single whole node job, suite of whole node jobs.
+[ ] Condor examples: single shared node job, suite of shared node jobs,
+    single whole node job, suite of whole node jobs.
 
-* Condor exercises of some sort.
+[ ] Condor exercises of some sort.
 
-* Introduction on postprocessing
+[ ] Introduction on postprocessing
 
-* Executable to generate a set of files to be processed
-  (e.g. advection.exe)
+[ ] Executable to generate a set of files to be processed
+    (e.g. advection.exe)
 
-* Split advection post-processing script into two parts, explain each
-  in detail.
+[ ] Split advection post-processing script into two parts, explain each
+    in detail.
 
-* Notes on other HPC data I/O utilities (HDF5).
+[ ] Notes on other HPC data I/O utilities (HDF5).
 
-* Postprocessing exercise
+[ ] Postprocessing exercise
 
-* Notes on the SMUHPC networks
+[ ] Notes on the SMUHPC networks
 
-* Notes on which parts of SMUHPC can run what (batch, OpenMP, MPI)
+[ ] Notes on which parts of SMUHPC can run what (batch, OpenMP, MPI)
 
-* Update OpenMP notes for SMUHPC
+[ ] Update OpenMP notes for SMUHPC
 
-* Update MPI notes for SMUHPC
+[ ] Update MPI notes for SMUHPC
 
-* Specific sets of instructions for compiling/running on each parallel
-  portion of the cluster
+[ ] Specific sets of instructions for compiling/running on each parallel
+    portion of the cluster
 
 
