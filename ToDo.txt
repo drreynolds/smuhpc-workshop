@@ -58,7 +58,7 @@ Remaining items to do before workshop:
 
 [ ] Condor exercises of some sort. (session 6)
 
-[ ] Introduction on postprocessing (session 7)
+[X] Introduction on postprocessing (session 7)
 
 [X] Executable to generate a set of files to be postprocessed
     (e.g. advection.exe) (session 7)
@@ -72,9 +72,9 @@ Remaining items to do before workshop:
 [ ] Find out how to open graphics files on SMUHPC (png), and add to
     instructions. (session 7)
 
-[ ] Notes on other HPC data I/O utilities (HDF5). (session 7)
+[X] Notes on other HPC data I/O utilities (HDF5). (session 7)
 
-[ ] Postprocessing exercise instructions (session 7) 
+[X] Postprocessing exercise instructions (session 7) 
 
 [ ] Notes on the SMUHPC networks (session 9)
 

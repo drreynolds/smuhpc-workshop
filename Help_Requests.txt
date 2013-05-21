@@ -1,6 +1,7 @@
 Software installs/updates:
 * 
 
+Which room in Fondren Library?
 
 I need login access to gpu2
 

@@ -16,10 +16,10 @@ advection.exe : advection.cpp output.cpp initialize.cpp
 	$(CXX) $(CXXFLAGS) $^ -lm -o $@
 
 clean :
-	\rm -f *.o u_sol*
+	\rm -f *.o u_sol* u_surf*
 
 realclean : clean
-	\rm -f *.exe *~ 
+	\rm -f *.exe *~ *.pyc
 
 
 ####### End of Makefile #######

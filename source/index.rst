@@ -10,11 +10,13 @@ Each of the following pages contains a set of tutorials and hands-on
 exercises for the 2013 SMU HPC Summer workshop, sponsored by the `SMU
 Center for Scientific Computation <http://www.smu.edu/academics/csc>`_.
 
-Dates: June 3-7, 2013
-
 `Information and Registration <http://www.smu.edu/BusinessFinance/OIT/StayInformed/SMUHPC>`_
 
-Location: Fondren Library, room X
+Location: Fondren Library, room TBD
+
+Dates: June 3-7, 2013
+
+Times: Morning sessions begin at 9:00, afternoon sessions begin at 1:00
 
 
 

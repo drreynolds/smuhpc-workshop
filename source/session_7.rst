@@ -1,7 +1,19 @@
 Postprocessing (Thu. AM)
 ========================================================
 
-**FILL IN A SHORT INTRO**
+Scientific simulation is worthless unless the results of those
+simulations can be analyzed and understood.  Unfortunately, most
+classes on scientific computing focus almost exclusively on how to
+create the methods for performing the simulations, with little time
+(if any) dedicated to the analysis of those results.  While one
+session of a workshop is insufficient to fully rectify this situation,
+we'll try to get get you started down the right path, by first
+focusing on how to input simulation data into more interactive
+computing environments, and then how to postprocess and visualize that
+data.  While there are many available interactive computing
+environments that can be used for these purposes, we'll focus on two
+of the most popular options, Matlab and Python.
+
 
 Retrieve the set of files for this session either through
 :download:`clicking here <code/session7.tgz>` or by copying the
@@ -105,14 +117,14 @@ happening (we'll discuss in greater detail during class):
 
 * At each output time, this routine writes two files: 
 
-  * The first is the solution file, that holds the 2D data array,
-    printed as one long array with the :math:`x` coordinate the faster
-    index.  In this same file, the physical time of the output,
-    :math:`t` is also stored.
+  * The first is the solution file (``u_sol.###.txt``), that holds the
+    2D data array, printed as one long array with the :math:`x`
+    coordinate the faster index.  In this same file, after ``u`` is
+    stored, the physical time of the output, ``t`` is also stored.
 
-  * The second is a metadata file, that contains the problem size and
-    the total number of outputs that have been written so far in the
-    simulation. 
+  * The second is a metadata file (``u_sol_meta.txt``), that contains
+    the problem size and the total number of outputs that have been
+    written so far in the simulation. 
 
 
 We will first build a Matlab/Python function that will read in the
@@ -120,13 +132,14 @@ metadata file.  First. let's view the contents of the metadata file:
 
 .. code-block:: text
 
+   % cat u_sol_meta.txt 
    50
    50
    25
 
 Hence we only need to read three numbers in a single column and store
 them appropriately.  The relevant Matlab code is in the file
-``load_info.m``: 
+``load_info.m``, and relies on the built-in function ``load``: 
 
 .. code-block:: matlab
 
@@ -149,7 +162,8 @@ them appropriately.  The relevant Matlab code is in the file
    return
    % end of function
 
-and the relevant Python code is in the file ``load_info.py``: 
+and the relevant Python code is in the file ``load_info.py``, and
+relies on the Numpy function ``loadtxt``: 
 
 .. code-block:: python
 
@@ -171,29 +185,398 @@ and the relevant Python code is in the file ``load_info.py``:
 
    # end of file
 
+In both of these files, the data in the file ``u_sol_meta.txt`` is
+input and converted to a one-dimensional array of numbers.  In the
+Matlab code we name these and return each separately.  In the Python
+code we merely return the array and leave naming to the calling
+routine. 
 
-**Continue**
+
+Now that we've seen a simple approach for loading an array into Matlab
+and Python, we can move on to functions for reading the larger
+``u_sol.###.txt`` files.  As with the above functions, we may use
+``load`` or ``loadtxt`` to input the data, which we will then
+split into the solution component, ``u``, and the current time,
+``t``.  Since ``u`` holds a two-dimensional array, but is stored in a
+flattened one-dimensional format, we can use ``reshape`` (both
+languages) to convert it to the two-dimensional representation.
+
+Here's the Matlab code, ``load_data_2d.m``:
+
+.. code-block:: matlab
+
+   function [t,u] = load_data_2d(tstep)
+   % Usage: [t,u] = load_data_2d(tstep)
+   %
+   % Input: tstep is an integer denoting which time step output to load
+   % 
+   % Outputs: t is the physical time, and u is the 2D array containing
+   % the result at the requested time step 
+   %
+   % Daniel R. Reynolds
+   % SMU HPC Workshop
+   % 20 May 2013
+   
+   % input general problem information
+   [nx,ny,nt] = load_info();
+   
+   % ensure that tstep is allowable
+   if (tstep < 0 || tstep > nt) 
+      error('load_data_2d error: illegal tstep')
+   end
+   
+   % set filename string and load as a long 1-dimensional array
+   infile = sprintf('u_sol.%03i.txt',tstep);
+   data = load(infile);
+         
+   % separate data array from current time, and reshape data into 2D
+   u1D = data(1:end-1);
+   t = data(end);
+   u = reshape(u1D, [nx, ny]);      
+  
+   return
+
+and here is the corresponding Python code, ``load_data_2d.py``:
+
+.. code-block:: python
+
+   # Defines the function load_data_2d().
+   #
+   # Daniel R. Reynolds
+   # SMU HPC Workshop
+   # 20 May 2013
+   
+   # import requisite modules
+   import numpy as np
+   from load_info import load_info
+   
+   def load_data_2d(tstep):
+       """Returns the solution over the mesh for a given time snapshot.  
+          Has calling syntax:
+             t,u = load_data_2d(tstep)
+          Input: tstep is an integer denoting which time step output to load.
+          Outputs: t is the physical time, and u is the 2D array containing 
+                   the result at the requested time step."""
+   
+       # load the parallelism information
+       nx,ny,nt = load_info()
+   
+       # check that tstep is allowed
+       if (tstep < 0 or tstep > nt):
+           print 'load_data_2d error: illegal tstep!'
+           return
+   
+       # determine data file name and load as a long 1-dimensional array
+       infile = 'u_sol.' + repr(tstep).zfill(3) + '.txt' 
+       data = np.loadtxt(infile, dtype=np.double)
+   
+       # separate data array from current time and reshape data into 2D
+       u1D = data[:len(data)-1]
+       t = data[-1];
+       u = np.reshape(u1D, (nx,ny), order='F')
+   
+       return [t,u]
 
 
+How these work:
 
-**Mention other data import utilities (e.g. HDF5) used in high-performance computing, and that HDF5 readers already exist in both Matlab and Python.**
+* These routines take as input an integer, ``tstep``, that corresponds
+  to the desired time step output file (the ``###`` in the file
+  name). 
+
+* They then call the corresponding ``load_info`` function to find out
+  the two-dimensional domain size and the total number of time steps
+  written to disk, and perform a quick check to see whether ``tstep``
+  is an allowable time step index.
+
+* The routine then combines the time step index into a string that
+  represents the correct file name (e.g. ``u_sol.006.txt``), and calls
+  the relevant ``load`` or ``loadtxt`` routine to input the data.
+
+* The routine then splits the data into the one-dimensional version of
+  ``u`` (called ``u1D``) and ``t``, before reshaping ``u1D`` into a
+  two-dimensional version of the solution, before returning the values.
+
+  **Note**: in the Python version, we must specify that the data is
+  ordered in "Fortran" style, i.e. that the first index is the fastest
+  (as opposed to "C" style, where it is the slowest).  Fortran
+  ordering is the default in Matlab, whereas C ordering is the default
+  in Python.
+
+
+These data input routines can be used by Matlab or Python scripts to
+first read in the data, before either performing analysis or plotting.
+
+A few general comments on the above approach:
+
+* By storing the values as raw text, these files are larger than
+  necessary.  In this example, the files are not too large (~58 KB
+  each), but in more realistic simulations it would be preferred to
+  store data in a more compressed format.  Two approaches for this are
+  to:
+
+  a. Zip each file after it is written to disk, through using library
+     routines (e.g. ``libz``, ``libzip``, ``libgzip``), and the
+     uncompress them when reading.  If the file is compressed with
+     ``gzip``, Numpy's ``loadtxt`` routine will automatically unzip as
+     it reads.
+
+  b. Write the data to disk in binary format.
+
+* Performance-wise, it is best to write out data in the
+  order in which it is stored in memory during the simulation.  In
+  this example, the data is stored with the ``x`` index being the
+  fastest, hence the "Fortran" ordering of the data file.
+
+
+High-quality alternatives to such manual I/O approaches abound.  Two
+popular I/O libraries in high-performance computing are `HDF5
+<http://www.hdfgroup.org/HDF5/>`_ and `netCDF
+<http://www.unidata.ucar.edu/software/netcdf/>`_.  Both of these
+libraries have the following benefits over doing things manually:
+
+* Natively output in binary format for smaller file sizes.
+
+* Allow you to output descriptive information in addition to just the
+  data (e.g. units of each field, version of the code).
+
+* Allow you to output multiple items to the same file (e.g. density,
+  momentum, energy).
+
+* Support parallel computing, allowing many MPI tasks to write to the
+  same file.
+
+* Professional visualization utilities typically have readers built-in
+  for these file types.
+
+* Have data input utilities in both Matlab and Python:
+
+  * Matlab/HDF5: ``h5create``, ``h5disp``, ``h5info``, ``h5read``,
+    ``h5readatt``, ``h5write``, ``h5writeatt``.  All are built into
+    Matlab (see `this Matlab help page
+    <http://www.mathworks.com/help/matlab/high-level-functions.html>`_
+    for information).
+
+  * Matlab/netCDF: although not built into Matlab, there are
+    contributed versions of netCDF readers on `Matlab Central
+    <http://www.mathworks.com/matlabcentral/fileexchange/15177-netcdf-reader>`_. 
+  * Python/HDF5: the Python module ``h5py`` contains a full Pythonic
+    interface to the HDF5 data format (`click here for more
+    information on h5py <https://code.google.com/p/h5py/>`_).
+
+  * Python/netCDF: the Python module ``netcdf4-python`` contains
+    interfaces to the majority of netCDF (`click here for more
+    information on netcdf4-python
+    <https://code.google.com/p/netcdf4-python/>`_). 
+
 
 
 
 Visualization and other processing tasks
 --------------------------------------------------------
 
-* Go through visualization scripts in both Matlab and Python.  Add a
-  to the scripts to do a bit of analysis before plotting,
-  e.g. compute the average value and add it to legend/title.
+We will now use the above data input routines to do some
+post-processing of these simulated results.  For this example, we'll
+create surface plots of the field ``u``, one for each time step, and
+write them to the disk.  Of course, once the data is available in our
+preferred scripting environment (Matlab, Python, etc.), we can easily
+perform additional data analysis, as will be included in the hands-on
+exercise at the end of this session.
 
-* Mention other visualization utilities (Mayavi, Visit, Paraview) that can be
-  used on data, but qualify this portion by stating that none are installed
-  on SMUHPC (yet).
+As we did earlier, we'll first show the code and then go through the
+steps.  You may focus on your preferred computing environment, since
+both scripts are functionally equivalent.
+
+First the Matlab code, ``plot_solution.m``:
+
+.. code-block:: matlab
+
+   % Plotting script for 2D acoustic wave propagation example
+   % simulation.  This script inputs the file u_sol_meta.txt to determine
+   % simulation information (grid size and total number of time steps).
+   % It then calls load_data_2d() to read the solution data from each
+   % time step, plotting the results (and saving them to disk).
+   %
+   % Daniel R. Reynolds
+   % SMU HPC Workshop
+   % 20 May 2013
+   clear
+   
+   % input general problem information
+   [nx,ny,nt] = load_info();
+   
+   % loop over time steps
+   for tstep = 0:nt
+   
+      % load time step data
+      [t,u] = load_data_2d(tstep);
+   
+      % plot current solution (and save to disk)
+      xvals = linspace(0,1,nx);
+      yvals = linspace(0,1,ny);
+      h = surf(yvals,xvals,u);
+      shading flat
+      view([50 44])
+      axis([0, 1, 0, 1, -1, 1])
+      xlabel('x','FontSize',14), ylabel('y','FontSize',14)
+      title(sprintf('u(x,y) at t = %g, mesh = %ix%i',t,nx,ny),'FontSize',14)
+      pfile = sprintf('u_surf.%03i.png',tstep);
+      saveas(h,pfile);
+      
+      %disp('pausing: hit enter to continue')
+      %pause
+   end
+
+and then the Python code, ``plot_solution.py``:
+
+.. code-block:: python
+
+   # Plotting script for 2D acoustic wave propagation example
+   # simulation.  This script calls load_info() to determine
+   # simulation information (grid size and total number of time steps).
+   # It then calls load_data_2d() to read the solution data from each
+   # time step, plotting the results (and saving them to disk).
+   #
+   # Daniel R. Reynolds
+   # SMU HPC Workshop
+   # 20 May 2013
+   
+   # import the requisite modules
+   from pylab import *
+   import numpy as np
+   from os import *
+   from mpl_toolkits.mplot3d import Axes3D
+   from matplotlib import cm
+   import matplotlib.pyplot as plt
+   from load_info import load_info
+   from load_data_2d import load_data_2d
+   
+   # input general problem information
+   nx,ny,nt = load_info()
+   
+   # iterate over time steps
+   for tstep in range(nt):
+   
+       # input solution at this time
+       t,u = load_data_2d(tstep)
+   
+       # set string constants for output plots, current time, mesh size
+       pname = 'u_surf.' + repr(tstep).zfill(3) + '.png'
+       tstr = repr(round(t,4))
+       nxstr = repr(nx)
+       nystr = repr(ny)
+   
+       # set x and y meshgrid objects
+       xspan = np.linspace(0.0, 1.0, nx)
+       yspan = np.linspace(0.0, 1.0, ny)
+       X,Y = np.meshgrid(xspan,yspan)
+   
+       # plot current solution as a surface, and save to disk
+       fig = plt.figure(1)
+       ax = fig.add_subplot(111, projection='3d')
+       ax.plot_surface(X, Y, u, rstride=1, cstride=1, cmap=cm.jet,
+                       linewidth=0, antialiased=True, shade=True)
+       ax.set_xlabel('y')
+       ax.set_ylabel('x')
+       title('u(x,y) at t = ' + tstr + ', mesh = ' + nxstr + 'x' + nystr)
+       savefig(pname)
+   
+       #ion()
+       #plt.show()
+       #ioff()
+       #raw_input('pausing: hit enter to continue')
+   
+   # end of script
+
+
+How these work:
+
+* These first call ``load_info`` to determine the simulation grid size
+  and total number of time steps that have been output to disk.
+
+* These then loop over each time step, and:
+
+  * Call ``load_data_2d`` to read the simulation time and solution
+    array. 
+
+  * Create arrays for the :math:`x` and :math:`y` coordinates of each
+    solution data point.
+
+  * Plot ``u`` at that time step as a 2D surface plot, setting the
+    plot labels and title appropriately.
+
+  * Save the plot to disk in files of the form ``u_surf.###.png``.
+
+  * (Commented out) Pause the loop until the user hits "enter".
+
+
+Run this code as usual, using either Matlab or Python.  
+
+.. code-block:: bash
+
+   % matlab -r plot_solution
+   % python ./plot_solution.py
+
+You should then see a set of ``.png`` images in the directory:
+
+.. code-block:: bash
+
+   % ls
+   Makefile          plot_solution.m   u_sol.012.txt  u_sol_meta.txt  u_surf.013.png
+   advection.cpp     plot_solution.py  u_sol.013.txt  u_surf.000.png  u_surf.014.png
+   advection.exe     u_sol.000.txt     u_sol.014.txt  u_surf.001.png  u_surf.015.png
+   advection.h       u_sol.001.txt     u_sol.015.txt  u_surf.002.png  u_surf.016.png
+   density.txt       u_sol.002.txt     u_sol.016.txt  u_surf.003.png  u_surf.017.png
+   initialize.cpp    u_sol.003.txt     u_sol.017.txt  u_surf.004.png  u_surf.018.png
+   input.txt         u_sol.004.txt     u_sol.018.txt  u_surf.005.png  u_surf.019.png
+   load_data_2d.m    u_sol.005.txt     u_sol.019.txt  u_surf.006.png  u_surf.020.png
+   load_data_2d.py   u_sol.006.txt     u_sol.020.txt  u_surf.007.png  u_surf.021.png
+   load_data_2d.pyc  u_sol.007.txt     u_sol.021.txt  u_surf.008.png  u_surf.022.png
+   load_info.m       u_sol.008.txt     u_sol.022.txt  u_surf.009.png  u_surf.023.png
+   load_info.py      u_sol.009.txt     u_sol.023.txt  u_surf.010.png  u_surf.024.png
+   load_info.pyc     u_sol.010.txt     u_sol.024.txt  u_surf.011.png  u_surf.025.png
+   output.cpp        u_sol.011.txt     u_sol.025.txt  u_surf.012.png
+
+
+
+You can view these plots on SMUHPC with the command
+
+.. code-block:: bash
+
+   % eog u_surf.000.png
+
+(you can cycle from one picture to the next with the left/right arrow
+keys).
+
+
+
+Advanced visualization
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+A few difficulties with using either Matlab or Python for data
+visualization include:
+
+* Difficulty dealing with three-dimensional plotting: while slices and
+  projections are simple, 3D data sets require much more interactive
+  visualization, including isocontour surface plots, moving slices,
+  rotating, etc..  
+
+* Difficulty dealing with data output from parallel simulations: you
+  need to read in each processor's data file and glue them together
+  manually, and such in-core processing is impossible when the data
+  sets grow too large.
+
+As a result, there are a variety of high-quality visualization
+packages that are designed for interactive 3D visualization, as
+discussed below.  None of these are installed on SMUHPC at present,
+though all are freely-available and open-source, so if you need/want
+one you should make a request to the SMUHPC system administrators.
+
 
 
 Mayavi
-^^^^^^^^^^
+"""""""""""
 
 Mayavi is a Python plotting package designed primarily for interactive
 3D visualization. See:
@@ -203,7 +586,7 @@ Mayavi is a Python plotting package designed primarily for interactive
 
 
 VisIt
-^^^^^^^
+"""""""""""""
 
 `VisIt <https://wci.llnl.gov/codes/visit>`_ is an open source
 visualization package being developed at `Lawrence Livermore National
@@ -218,7 +601,7 @@ scripting.  See:
 
 
 ParaView
-^^^^^^^^^^^
+""""""""""""""
 
 Like VisIt, `ParaView <http://www.paraview.org>`_ is another open
 source package for large-scale visualization developed at the
@@ -237,7 +620,7 @@ Exercise
 ----------------------
 
 In the set of files for this session, you will find one additional
-file that you have not yet used, ``density.txt.gz``.  This is a
+file that you have not yet used, ``density.txt``.  This is a
 snapshot of a three-dimensional cosmological density field at a
 redshift of approximately :math:`z = 9`.  Unlike the previous
 example, this file contains only the data field itself, with no
