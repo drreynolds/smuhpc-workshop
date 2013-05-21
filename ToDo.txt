@@ -94,3 +94,12 @@ Remaining items to do before workshop:
 
 [ ] Change all references to "emacs" to instead be "gedit"
 
+[ ] Add room information to pages (Fondren Library 103c)
+
+[ ] Add time information to pages (8-11, 12-3, w/ 15 minute break in
+    each session)
+
+[ ] Add info that smuhpc3 is for interactive computing (like highmemX,
+    but without the extra RAM)
+
+[ ] Set .png image viewing program to "display" in tutorials
