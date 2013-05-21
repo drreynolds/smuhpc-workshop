@@ -13,19 +13,22 @@ Software installs/updates:
 
 
 
-Which room in Fondren Library?
+Which room in Fondren Library?  103c
+
+Times: 8-11, 12-3, 15 minute break during each session.
 
 I'd like a place to host this set of web tutorials (a basic web
 server, not a content manager), including space to place all example
-codes for download.  
+codes for download.  my office computer
 
 I need login access to gpu2
 
 What is the main purpose of smuhpc3.smu.edu?  And why do I not have
-login access to this machine?
+login access to this machine?  Like highmem1 and highmem2, but with 
+less RAM.
 
 What program should be used on SMUHPC to open .png files?  If one is
-not available, I'd like to request "eog".
+not available, I'd like to request "eog".  "display"
 
 Why is Matlab not in the default PATH on the login nodes (is it even
 on the compute nodes)?  There isn't even a module available for it.
@@ -63,4 +66,5 @@ SMUHPC:
 General:
 * Ideas on an exercise for students to do with BASH scripts?
 * Ideas on an exercise for students to do with Python scripts?
-
+  (codecademy has lots of Python exercises, maybe point users there 
+  and ask them to do a handful of exercises)
