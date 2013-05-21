@@ -77,10 +77,10 @@ double vector_infnorm(int l, int m, int n, double ***x) {
   /* loop over the dimensions to compute the vector sum */
   int i, j, k;
   double norm=0.0;
-  for (k=0; k<n; k++)
+  for (i=0; i<l; i++)
     for (j=0; j<m; j++)
-      for (i=0; i<l; i++)
-	norm = (fabs(x[i][j][k]) > norm) ? fabs(x[i][j][k]) : x[i][j][k];
+      for (k=0; k<n; k++)
+	norm = (fabs(x[i][j][k]) > norm) ? fabs(x[i][j][k]) : norm;
   return norm;
 
 } /* end vector_infnorm */
@@ -105,8 +105,8 @@ double vector_dotprod(int l, int m, int n, double ***x, double ***y) {
   int i, j, k;
   double prod=0.0;
   for (k=0; k<n; k++)
-    for (j=0; j<m; j++)
-      for (i=0; i<l; i++)
+    for (i=0; i<l; i++)
+      for (j=0; j<m; j++)
 	prod += x[i][j][k] * y[i][j][k];
   return prod;
 
