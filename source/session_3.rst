@@ -282,8 +282,6 @@ dividends if you must do the task repeatedly.
 BASH scripts
 ^^^^^^^^^^^^^^^
 
-**FILL THIS IN WITH AN EXAMPLE SCRIPT, AND GIVE AN ASSIGNMENT TO CREATE THEIR OWN**
-
 Basics of BASH shell scripting:
 
 * The first line of the shell script file should include the line
@@ -298,11 +296,146 @@ Basics of BASH shell scripting:
 * Lines beginning with a ``#`` character are interpreted as comments
   (except for the first line).
 
-* Variables may be defined in-line via:
+* Variables may be defined in-line via setting *variable*=*value*,
+  e.g.
+ 
+  .. code-block:: bash
 
-* Loops may be performed via:
+     CXX=g++
+     STUDENTS=(Sally Frankie Wally Jenny Ahmad)
 
-* If-then-else statements may be performed via:
+  Here, ``CXX`` is a scalar variable, while ``STUDENTS`` is an array.
+  Variables may be referenced subsequently in the script via placing a
+  dollar-sign in front, e.g.
+
+  .. code-block:: bash
+
+     $CXX driver.cpp -o driver.exe
+
+* Loops may be performed via iteration over a range (version 3.0+):
+
+  .. code-block:: bash
+
+     for i in {1..5}
+     do
+        echo "The number is $i"
+     done
+
+  that gives the output
+
+  .. code-block:: text
+
+     The number is 1
+     The number is 2
+     The number is 3
+     The number is 4
+     The number is 5
+
+  or over a range with a user-supplied increment (version 4.0+, not
+  installed on SMUHPC):
+
+  .. code-block:: bash
+
+     for i in {1..5..2}
+     do
+        echo "The number is $i"
+     done
+
+  that gives the output
+
+  .. code-block:: text
+
+     The number is 1
+     The number is 3
+     The number is 5
+
+  More familarly to C, C++ and Java users is the *three-expression*
+  loop syntax, e.g.
+
+  .. code-block:: bash
+
+     for ((i=1; i<=5; i+=2))
+     do
+        echo "The number is $i"
+     done
+
+  that gives the output
+
+  .. code-block:: text
+
+     The number is 1
+     The number is 3
+     The number is 5
+
+  Loops may also iterate over a list, e.g.
+
+  .. code-block:: bash
+
+     for i in Sally Jesse Rafael
+     do
+        echo "The entry is $i"
+     done
+
+  that gives the output
+
+  .. code-block:: text
+
+     The entry is Sally
+     The entry is Jesse
+     The entry is Rafael
+
+  or even an array-valued variable, e.g.
+
+  .. code-block:: bash
+     
+     students=(Sally Frankie Wally Jenny Ahmad)
+     for i in "${students[@]}"
+     do
+        echo "The student is $i"
+     done
+
+  that gives the output
+
+  .. code-block:: text
+
+     The student is Sally
+     The student is Frankie
+     The student is Wally
+     The student is Jenny
+     The student is Ahmad
+  
+* If-elif-else statements may be performed via the syntax
+
+  .. code-block:: bash
+     
+     if [condition]
+     then
+        statements1
+     elif [condition]
+     then
+        statements2
+     else
+        statements3
+     fi
+
+* Functions may defined via the syntax
+
+  .. code-block:: bash
+     
+     hello()
+     {
+        echo "Hello world!"
+     }
+
+  All function definitions must have an empty set of parentheses
+  ``()`` following the function name, and the function statements must
+  be enclosed in braces ``{}``.  Function arguments may be accessed
+  with the variables ``$1``, ``$2``, etc., where the numeric value
+  corresponds to the order in which the argument was passed to the
+  function. 
+
+  When called, the ``()`` are not included (see example below).
+
 
 
 As an example, consider the following script
@@ -313,25 +446,62 @@ As an example, consider the following script
    # BASH shell script example
    # Dan Reynolds
    # May 2013
-
    
+   # define the "odd" function, takes one argument
+   odd() {
+      echo "  $1 is odd"
+   }
+   
+   # define the "even" function, takes one argument
+   even() {
+      echo "  $1 is even"
+   }
+   
+   # define the "other" function, takes one argument
+   other() {
+      echo "  $1 is neither even nor odd"
+   }
+   
+   # loop over some integers, checking even/odd
+   for i in {1..20}; do
+      m=$(($i % 2))
+      if [ $m -eq 0 ]; then
+         even $i
+      elif [ $m -eq 1 ]; then
+         odd $i
+      else
+         other $i
+      fi
+   done
+
+The structure of this example should be obvious from the preceding
+short examples, except that there are a few notable exceptions:
+
+* We perform arithmetic: these operations must be of the form
+  ``$(( arithmetic expression ))``.  
+
+* We use the "modulus" operator, ``%``.  Other allowable arithmetic
+  operators include ``+``, ``-``, ``*`` and ``/``.
+
+* We perform the logical "equality" operation via ``-eq``.  The
+  inequality logical operation is ``-ne``.  The mathematical :math:`<`,
+  :math:`\le`, :math:`>` and :math:`\ge` operators are given by
+  ``-lt``, ``-le``, ``-gt`` and ``-ge``.
+
+* BASH logic operations may be combined using the standard ``&&``
+  (and), ``||`` (or) and ``!`` (not). 
+
+* Function arguments are passed in following the function name; more
+  than one function argument may be supplied (though not shown here).
+
+
+
 **BASH exercise**
 
 Construct your own BASH shell script that performs the following
 tasks:
 
-* Loops over the integers 1 through 20
-
-* If the integer is odd, use the ``echo`` command to issue that the
-  integer is odd, e.g.
-
-  .. code-block:: text
- 
-     3 is odd
-
-* If the integer is even, use ``echo`` to state that the value is
-  even.
-
+* **FILL THIS IN**
 
 
 
@@ -339,7 +509,254 @@ tasks:
 Python scripts
 ^^^^^^^^^^^^^^^
 
-**FILL THIS IN**
+Basics of Python shell scripting:
+
+* The first line of the shell script file can include the line
+
+  .. code-block:: python
+
+     #!/usr/bin/python
+
+  to indicate that the script contents should be executed by the BASH
+  shell.  However, since Python is installed in different locations on
+  many systems, this may be inadvisable, since Python scripts are
+  typically run from within a Python environment.
+
+* Lines beginning with a ``#`` character are interpreted as comments
+  (except for the first line).
+
+* Variables may be defined in-line via setting *variable*=*value*,
+  e.g.
+ 
+  .. code-block:: python
+
+     r = 7
+     h = 6
+     pi = 3.1415926535897932
+
+  Here, ``N`` is a scalar integer variable and ``pi`` is a scalar
+  double-precision variable.  Variables may be referenced subsequently 
+  in the script by just writing the variable name, e.g.
+
+  .. code-block:: python
+
+     r = 7
+     h = 6
+     pi = 3.1415926535897932
+     Vol = pi * h * r**2
+
+  Note, Python allows the standard arithmetic operations ``+``, ``-``,
+  ``*`` and ``/``, as well as exponentiation via the ``**`` operator.
+  Additionally, the ``//`` operator performs division and rounds the
+  result down to the nearest integer, while the ``%`` operator
+  performs the modulus.
+
+* Python allows a multitude of "array" types, the two most common
+  being lists and Numpy's numerical arrays.  A Python *list* is very
+  flexible (entries can be anything), but can be very inefficient.
+  Lists are declared as a comma-separated list of items enclosed by
+  parentheses, e.g.
+ 
+  .. code-block:: python
+
+     mylist = (7, 1.e-4, 'fred')
+
+  Due to this inefficiency, the Numpy extension module to Python was
+  created with numerical array types.  Officially called ``ndarray``,
+  these are more commonly referred to by the alias ``array`` (these
+  differ from the standard Python library ``array`` class).  These may
+  be created using a combination of Numpy's ``array`` function and
+  square brackets to hold the array values, e.g.
+
+  .. code-block:: python
+
+     from numpy import *
+     tols = array([1.e-2, 1.e-4, 1.e-6, 1.e-8])
+
+  In both scenarios (lists and Numpy arrays), array elements may be
+  indexed using brackets ``[]``, with indices starting at 0, e.g.
+
+  .. code-block:: python
+
+     from numpy import *
+     tols = array([1.e-2, 1.e-4, 1.e-6, 1.e-8])
+     print tols[0]
+
+  Lastly, Python allows a simple approach to creating lists of
+  equally-spaced values, via the ``range()`` function.  A few
+  examples:
+
+  .. code-block:: python
+
+     print range(10)
+     print range(5, 10)
+     print range(0, 10, 3)
+     print range(-10, -100, -30)
+
+  which has output
+
+  .. code-block:: text
+
+     [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+     [5, 6, 7, 8, 9]
+     [0, 3, 6, 9]
+     [-10, -40, -70]
+
+  Here, when given three arguments, the first is the initial value,
+  the second is the upper bound, and the third argument is the
+  increment.  When given two arguments, an increment of 1 is
+  assumed. When given one argument, a starting value of 0 and an
+  increment of 1 are assumed. 
+
+* Loops may be performed via iteration over a list or an array:
+
+  .. code-block:: python
+
+     words = ['platypus', 'orange', 'non sequitur']
+     for w in words:
+        print w
+        print len(w)
+     print words
+
+  which has output
+
+  .. code-block:: text
+
+     platypus
+     8
+     orange
+     6
+     non sequitur
+     12
+     ['platypus', 'orange', 'non sequitur']
+
+  Note that to begin a "for" loop, the line must end in a colon
+  ``:``.  All statements within the loop must be indented equally, and
+  the loop ends with the first statement where that indention is
+  broken.
+
+  As a second example, consider
+
+  .. code-block:: python
+
+     for i in range(5):
+        print i
+
+  that gives the output
+
+  .. code-block:: text
+
+     0
+     1
+     2
+     3
+     4
+
+* Loop control statements: the ``break`` statement may be used in a
+  loop just as in C and C++, in that it will break out of the smallest
+  enclosing ``for`` or ``while`` loop surrounding the ``break``
+  statement.  Also similarly to C and C++, the ``continue`` statement
+  stops executing the statements within that iteration of the loop and
+  proceeds to the next loop iteration.
+
+* If-elif-else statements may be performed via the syntax
+
+  .. code-block:: python
+     
+     if condition1:
+        statements1
+     elif condition2:
+        statements2
+     else:
+        statements3
+
+* Functions may defined via the syntax
+
+  .. code-block:: python
+     
+     def hello():
+        echo "Hello world!"
+
+  In Python, there are no braces surrounding a function contents; just
+  as with ``if`` statents and ``for`` loops, the contents of a
+  function are determined as those statements following the colon
+  ``:``, that are indented from the ``def``, and that precede a break
+  in that indentation.
+
+  Functions may also allow input and return arguments, e.g.
+
+  .. code-block:: python
+     
+     def volume(r, h):
+        pi = 3.1415926535897932
+        Vol = pi * h * r**2
+	return Vol
+
+  Similarly, functions can allow multiple return values by enclosing
+  them in brackets, e.g.
+
+  .. code-block:: python
+     
+     def birthday():
+        month = March
+        day = 24
+	return [month, day]
+
+
+As a more lengthy example (akin to the BASH example above), consider
+the following script 
+
+.. code-block:: python
+
+   # Python shell script example
+   # Dan Reynolds
+   # May 2013
+   
+   # define the "odd" function, takes one argument
+   def odd(val):
+      print "  ", val, " is odd"
+
+   # define the "even" function, takes one argument
+   def even(val):
+      print "  ", val, " is even"
+   
+   # define the "other" function, takes one argument
+   def other(val):
+      print "  ", val, " is neither even nor odd"
+   
+   # loop over some integers, checking even/odd
+   for i in range(1,21):
+      m = i % 2
+      if m == 0:
+         even(i)
+      elif m == 1:
+         odd(i)
+      else:
+         other(i)
+
+
+As with the previous BASH example, the structure of this example
+should be obvious from the preceding explanations, except that there
+are a few notable exceptions: 
+
+* We perform the logical "equality" operation via ``==``.  The
+  inequality logical operation is ``!=``.  Similarly, ``<``, ``<=``,
+  ``>`` and ``>=`` correspond to the the mathematical :math:`<`,
+  :math:`\le`, :math:`>` and :math:`\ge` operators.   
+
+* Python logic operations may be combined using ``and``, ``or`` and
+  ``not`` (self-explanatory).
+
+
+
+
+**Python exercise**
+
+Construct your own Python shell script that performs the following
+tasks:
+
+* **FILL THIS IN**
+
 
 
 
@@ -381,6 +798,10 @@ below.
 
 BASH resources:
 
+* A Quick Introduction to BASH Programming: `Part 1
+  <http://www.codecoffee.com/tipsforlinux/articles2/043.html>`_ and
+  `Part 2 <http://www.codecoffee.com/tipsforlinux/articles2/044.html>`_ 
+
 * `BASH Programming -- Introductory How-To
   <http://tldp.org/HOWTO/Bash-Prog-Intro-HOWTO.html>`_ 
 
@@ -392,6 +813,8 @@ Python resources:
 
 * `Python short course
   <http://faculty.washington.edu/rjl/classes/am583s2013/notes/index.html#python>`_
+
+* `Numpy tutorial <http://www.scipy.org/Tentative_NumPy_Tutorial>`_
 
 * `Introductory Python Tutorial <http://www.learnpython.org/>`_
 

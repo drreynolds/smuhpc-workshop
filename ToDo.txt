@@ -1,14 +1,16 @@
 Remaining items to do before workshop:
 
-[ ] BASH script basics (variables, loops, if-then-else) (session 3)
+[X] BASH script basics (variables, loops, if-then-else) (session 3)
 
-[ ] BASH example script (session 3)
+[X] BASH example script (session 3)
 
 [ ] BASH exercise (session 3)
 
-[ ] Python basics (variables, loops, if-then-else) (session 3)
+[X] Python basics (variables, loops, if-then-else) (session 3)
 
-[ ] Python example script (session 3)
+[X] Python example script (session 3)
+
+[ ] Python exercise (session 3)
 
 [X] F90 "Hello world" program, and instructions for compiling at the
     command line. (session 3)
