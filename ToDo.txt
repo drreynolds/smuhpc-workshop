@@ -1,84 +1,90 @@
 Remaining items to do before workshop:
 
-[ ] BASH script basics (variables, loops, if-then-else)
+[ ] BASH script basics (variables, loops, if-then-else) (session 3)
 
-[ ] BASH example script
+[ ] BASH example script (session 3)
 
-[ ] BASH exercise
+[ ] BASH exercise (session 3)
 
-[ ] Python basics (variables, loops, if-then-else)
+[ ] Python basics (variables, loops, if-then-else) (session 3)
 
-[ ] Python example script
+[ ] Python example script (session 3)
 
-[ ] F90 "Hello world" program, and instructions for compiling at the
-    command line.
+[X] F90 "Hello world" program, and instructions for compiling at the
+    command line. (session 3)
 
-[ ] C "Hello world" program, and instructions for compiling at the
-    command line.
+[X] C "Hello world" program, and instructions for compiling at the
+    command line. (session 3)
 
-[ ] C++ "Hello world" program, and instructions for compiling at the
-    command line.
+[X] C++ "Hello world" program, and instructions for compiling at the
+    command line. (session 3)
 
-[ ] Lecture information on "Module" system in session 4
+[ ] Lecture information on "Module" system (session 4)
 
-[ ] Module example
+[ ] Module example (session 4)
 
-[ ] Module exercise
+[ ] Module exercise (session 4)
 
-[ ] General information on version control systems
+[ ] General information on version control systems (session 4)
 
-[ ] General info on CVS
+[ ] General info on CVS (session 4)
 
-[ ] General info on SVN
+[ ] General info on SVN (session 4)
 
-[ ] General info on Git
+[ ] General info on Git (session 4)
 
-[ ] General info on Mercurial
+[ ] General info on Mercurial (session 4)
 
-[ ] Mercurial example: clone a repository, add a file, check in, push
+[ ] Mercurial example: clone a repository, add a file, check in, push (session 4)
 
-[ ] Optimization using the PGI compiler
+[ ] Optimization using the PGI compiler (session 5)
 
-[ ] Debugging using the PGI compiler
+[ ] Debugging using the PGI compiler (session 5)
 
-[ ] Notes on how condor works
+[ ] Notes on how condor works (session 6)
 
-[ ] Explanation of the "notification" option to condor
+[ ] Explanation of the "notification" option to condor (session 6)
 
-[ ] Explanation of "NODE" in the Condor job file
+[ ] Explanation of "NODE" in the Condor job file (session 6)
 
-[ ] Listing/explanation of other Condor options/variables.
+[ ] Listing/explanation of other Condor options/variables. (session 6)
 
-[ ] Explanation/examples of Condor commands
+[ ] Explanation/examples of Condor commands (session 6)
 
-[ ] Explanation of why, exactly, anyone would want Condor SSH to job.
+[ ] Explanation of why, exactly, anyone would want Condor SSH to job. (session 6)
 
 [ ] Condor examples: single shared node job, suite of shared node jobs,
-    single whole node job, suite of whole node jobs.
+    single whole node job, suite of whole node jobs. (session 6)
 
-[ ] Condor exercises of some sort.
+[ ] Condor exercises of some sort. (session 6)
 
-[ ] Introduction on postprocessing
+[ ] Introduction on postprocessing (session 7)
 
-[ ] Executable to generate a set of files to be processed
-    (e.g. advection.exe)
+[X] Executable to generate a set of files to be postprocessed
+    (e.g. advection.exe) (session 7)
 
-[ ] Split advection post-processing script into two parts, explain each
-    in detail.
+[X] Split advection post-processing Matlab script into two parts, explain each
+    in detail. (session 7)
 
-[ ] Notes on other HPC data I/O utilities (HDF5).
+[X] Split advection post-processing Python script into two parts, explain each
+    in detail. (session 7)
 
-[ ] Postprocessing exercise
+[ ] Find out how to open graphics files on SMUHPC (png), and add to
+    instructions. (session 7)
 
-[ ] Notes on the SMUHPC networks
+[ ] Notes on other HPC data I/O utilities (HDF5). (session 7)
 
-[ ] Notes on which parts of SMUHPC can run what (batch, OpenMP, MPI)
+[ ] Postprocessing exercise (session 7)
 
-[ ] Update OpenMP notes for SMUHPC
+[ ] Notes on the SMUHPC networks (session 9)
 
-[ ] Update MPI notes for SMUHPC
+[ ] Notes on which parts of SMUHPC can run what (batch, OpenMP, MPI) (session 9)
+
+[ ] Update OpenMP notes for SMUHPC (session 9)
+
+[ ] Update MPI notes for SMUHPC (session 9)
 
 [ ] Specific sets of instructions for compiling/running on each parallel
-    portion of the cluster
+    portion of the cluster (session 9)
 
 

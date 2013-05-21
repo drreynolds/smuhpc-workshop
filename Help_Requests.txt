@@ -10,6 +10,8 @@ codes for download.
 
 What is the main purpose of smuhpc3.smu.edu?
 
+What program should be used on SMUHPC to open .png files?
+
 
 
 Web page/tutorial content help:
