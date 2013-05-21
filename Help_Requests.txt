@@ -1,17 +1,35 @@
 Software installs/updates:
-* 
+* [critical] Installed Python version is too old to use
+  post-processing example. Need Python 2.7, along with updated Numpy,
+  Matplotlib modules.  I have these installed in my home directory,
+  inside ~dreynolds/sw/yt_dev/ if needed.
+* [critical] Mercurial.  Again, I have it installed in my home
+  directory, inside ~dreynolds/sw/bin
+* [critical] Git
+* [not critical] Module for updated GNU compilers (default is 4.1.2).
+  Again, I have much newer versions compiled in my home directory
+  (4.7.1), in ~dreynolds/sw/bin
+* [not critical] Module for mvapich2 using updated GNU compilers.
+
+
 
 Which room in Fondren Library?
-
-I need login access to gpu2
 
 I'd like a place to host this set of web tutorials (a basic web
 server, not a content manager), including space to place all example
 codes for download.  
 
-What is the main purpose of smuhpc3.smu.edu?
+I need login access to gpu2
 
-What program should be used on SMUHPC to open .png files?
+What is the main purpose of smuhpc3.smu.edu?  And why do I not have
+login access to this machine?
+
+What program should be used on SMUHPC to open .png files?  If one is
+not available, I'd like to request "eog".
+
+Why is Matlab not in the default PATH on the login nodes (is it even
+on the compute nodes)?  There isn't even a module available for it.
+
 
 
 
@@ -42,4 +60,7 @@ SMUHPC:
   portions of SMUHPC, if it has been at all simplified from how it was
   before. 
 
+General:
+* Ideas on an exercise for students to do with BASH scripts?
+* Ideas on an exercise for students to do with Python scripts?
 

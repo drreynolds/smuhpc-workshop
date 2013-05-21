@@ -69,6 +69,9 @@ Remaining items to do before workshop:
 [X] Split advection post-processing Python script into two parts, explain each
     in detail. (session 7)
 
+[ ] Add instructions for adding Matlab to the PATH for running
+    post-processing examples.  (session 7)
+
 [ ] Find out how to open graphics files on SMUHPC (png), and add to
     instructions. (session 7)
 
