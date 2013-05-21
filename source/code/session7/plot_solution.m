@@ -7,20 +7,13 @@
 % Daniel R. Reynolds
 % SMU HPC Workshop
 % 20 May 2013
-
 clear
 
 % input general problem information
-load u_sol_meta.txt;
-nx = u_sol_meta(1);
-ny = u_sol_meta(2);
-nt = u_sol_meta(3);
+[nx,ny,nt] = load_info();
 
 % loop over time steps
 for tstep = 0:nt
-
-   % set output file name
-   pfile = sprintf('u_surf.%03i.png',tstep);
 
    % load time step data
    [t,u] = load_data_2d(tstep);
@@ -34,11 +27,11 @@ for tstep = 0:nt
    axis([0, 1, 0, 1, -1, 1])
    xlabel('x','FontSize',14), ylabel('y','FontSize',14)
    title(sprintf('u(x,y) at t = %g, mesh = %ix%i',t,nx,ny),'FontSize',14)
+   pfile = sprintf('u_surf.%03i.png',tstep);
    saveas(h,pfile);
    
    %disp('pausing: hit enter to continue')
    %pause
-   
 end
 
 % end of script

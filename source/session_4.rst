@@ -242,9 +242,7 @@ Module example
 Module exercise
 ^^^^^^^^^^^^^^^^^^^
 
-**FILL THIS IN: set up relevant modules to use a set of packages, then set
-  up Makefile to use new environment variables to easily build a piece
-  of source code.**
+**FILL THIS IN: set up relevant modules to use a set of packages, then set up Makefile to use new environment variables to easily build a piece of source code.**
 
 
 Module resources:

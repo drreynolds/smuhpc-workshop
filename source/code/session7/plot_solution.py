@@ -8,16 +8,15 @@
 # SMU HPC Workshop
 # 20 May 2013
 
-# imports
+# import the requisite modules
 from pylab import *
 import numpy as np
 from os import *
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm
 import matplotlib.pyplot as plt
-from load_data_2d import load_info
+from load_info import load_info
 from load_data_2d import load_data_2d
-
 
 # input general problem information
 nx,ny,nt = load_info()
@@ -53,6 +52,5 @@ for tstep in range(nt):
     #plt.show()
     #ioff()
     #raw_input('pausing: hit enter to continue')
-
 
 # end of script

@@ -74,7 +74,7 @@ Remaining items to do before workshop:
 
 [ ] Notes on other HPC data I/O utilities (HDF5). (session 7)
 
-[ ] Postprocessing exercise (session 7)
+[ ] Postprocessing exercise instructions (session 7) 
 
 [ ] Notes on the SMUHPC networks (session 9)
 
