@@ -92,4 +92,5 @@ Remaining items to do before workshop:
 [ ] Specific sets of instructions for compiling/running on each parallel
     portion of the cluster (session 9)
 
+[ ] Change all references to "emacs" to instead be "gedit"
 
