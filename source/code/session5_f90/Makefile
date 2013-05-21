@@ -2,8 +2,8 @@
 # Makefile for SMU HPC Workshop, session 5 (Advanced programming)
 #
 # Daniel R. Reynolds
-# SMU Mathematics
-# 19 May 2013
+# SMU HPC Workshop
+# 21 May 2013
 ###################################################################
 
 FC  = gfortran

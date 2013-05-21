@@ -1,13 +1,11 @@
 /* Daniel R. Reynolds
-   SMU Mathematics
-   Math 6370
-   13 January 2013 */
+   SMU HPC Workshop
+   20 May 2013 */
 
 
 // Inclusions
 #include <stdlib.h>   // new, delete
 #include <stdio.h>    // printf()
-#include <time.h>     // clock()
 #include <math.h>     // sqrt()
 
 

@@ -1,15 +1,13 @@
 /* Daniel R. Reynolds
-   SMU Mathematics
-   Math 6370
-   20 January 2011 */
+   SMU HPC Workshop
+   20 May 2013 */
 
 
 /* Inclusions */
 #include <stdlib.h>   /* malloc(), free() */
 #include <stdio.h>    /* printf() */
-#include <time.h>     /* time() */
+#include <time.h>     /* clock() */
 #include <math.h>     /* pow() */
-#include <stdint.h>   /* INT32_MAX */
 
 
 /* Prototypes */
@@ -57,7 +55,7 @@ int main(int argc, char* argv[]) {
 	y[i][j][k] = random() / (pow(2.0,31.0) - 1.0);
 
   /* start timer */
-  time_t stime = time(NULL);
+  clock_t stime = clock();
 
   /* call the vector routines a number of times */
   double a;
@@ -69,8 +67,8 @@ int main(int argc, char* argv[]) {
   }
 
   /* stop timer */
-  time_t ftime = time(NULL);
-  double runtime = ((double) (ftime - stime));
+  clock_t ftime = clock();
+  double runtime = ((double) (ftime - stime))/CLOCKS_PER_SEC;
 
   /* output solution time */
   printf(" Total run time = %.12e\n",runtime);

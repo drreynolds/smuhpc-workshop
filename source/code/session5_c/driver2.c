@@ -1,15 +1,12 @@
 /* Daniel R. Reynolds
-   SMU Mathematics
-   Math 6370
-   20 January 2011 */
+   SMU HPC Workshop
+   20 May 2013 */
 
 
 /* Inclusions */
 #include <stdlib.h>   /* malloc(), free() */
 #include <stdio.h>    /* printf() */
-#include <time.h>     /* time() */
 #include <math.h>     /* sqrt() */
-#include <stdint.h>   /* INT32_MAX */
 
 
 /* Prototypes */

@@ -1,7 +1,6 @@
 /* Daniel R. Reynolds
-   SMU Mathematics
-   Math 6370
-   20 January 2011 */
+   SMU HPC Workshop
+   20 May 2013 */
 
 
 /* Inclusions */

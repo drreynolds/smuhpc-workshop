@@ -1,7 +1,6 @@
 /* Daniel R. Reynolds
-   SMU Mathematics
-   Math 6370
-   13 January 2013 */
+   SMU HPC Workshop
+   20 May 2013 */
 
 // Inclusions
 #include <stdlib.h>   // new, delete
@@ -62,9 +61,9 @@ double vector_infnorm(int l, int m, int n, double ***x) {
 
   // loop over the dimensions to compute the vector sum
   double norm=0.0;
-  for (int k=0; k<n; k++)
+  for (int i=0; i<l; i++)
     for (int j=0; j<m; j++)
-      for (int i=0; i<l; i++)
+      for (int k=0; k<n; k++)
 	norm = (fabs(x[i][j][k]) > norm) ? fabs(x[i][j][k]) : norm;
   return norm;
 
@@ -86,8 +85,8 @@ double vector_dotprod(int l, int m, int n, double ***x, double ***y) {
   // loop over the dimensions to compute the vector sum
   double prod=0.0;
   for (int k=0; k<n; k++)
-    for (int j=0; j<m; j++)
-      for (int i=0; i<l; i++)
+    for (int i=0; i<l; i++)
+      for (int j=0; j<m; j++)
 	prod += x[i][j][k] * y[i][j][k];
   return prod;
 

@@ -1,9 +1,8 @@
 ! -*- Mode: Fortran90; -*-
 !-----------------------------------------------------------------
 ! Daniel R. Reynolds
-! SMU, Mathematics
-! Math 6370
-! 2 January 2009
+! SMU HPC Workshop
+! 21 May 2013
 !=================================================================
 
 
@@ -25,7 +24,7 @@ subroutine vector_sum(l,m,n,x,y,z)
   !======= Declarations =========
   implicit none
   integer, intent(in) :: l, m, n
-  double precision, intent(in) :: x(l,m,n), y(l,m,n)
+  double precision, intent(in)  :: x(l,m,n), y(l,m,n)
   double precision, intent(out) :: z(l,m,n)
 
   integer :: i, j, k
@@ -33,9 +32,9 @@ subroutine vector_sum(l,m,n,x,y,z)
   !======= Internals ============
 
   ! loop over the dimensions to compute the vector sum
-  do i=1,l,1
-     do j=1,m,1
-        do k=1,n,1
+  do i=1,l
+     do j=1,m
+        do k=1,n
            z(i,j,k) = x(i,j,k) + y(i,j,k)
         enddo
      enddo
@@ -66,7 +65,7 @@ subroutine vector_scale(l,m,n,a,x,z)
   !======= Declarations =========
   implicit none
   integer, intent(in) :: l, m, n
-  double precision, intent(in) :: a, x(l,m,n)
+  double precision, intent(in)  :: a, x(l,m,n)
   double precision, intent(out) :: z(l,m,n)
 
   integer :: i, j, k
@@ -74,9 +73,9 @@ subroutine vector_scale(l,m,n,a,x,z)
   !======= Internals ============
   
   ! loop over the dimensions to compute the scaled vector
-  do k=1,n,1
-     do j=1,m,1
-        do i=1,l,1
+  do k=1,n
+     do j=1,m
+        do i=1,l
            z(i,j,k) = a*x(i,j,k)
         enddo
      enddo
@@ -106,7 +105,7 @@ subroutine vector_infnorm(l,m,n,x,norm)
   !======= Declarations =========
   implicit none
   integer, intent(in) :: l, m, n
-  double precision, intent(in) :: x(l,m,n)
+  double precision, intent(in)  :: x(l,m,n)
   double precision, intent(out) :: norm
 
   integer :: i, j, k
@@ -115,10 +114,10 @@ subroutine vector_infnorm(l,m,n,x,norm)
   
   ! loop over the dimensions to compute the infinity norm
   norm = 0.d0
-  do k=1,n,1
-     do j=1,m,1
-        do i=1,l,1
-           if (abs(x(i,j,k)) > norm)  norm = abs(x(i,j,k))
+  do k=1,n
+     do j=1,m
+        do i=1,l
+           if (abs(x(i,j,k)) > norm)  norm = abs(x(i,j,k));
         enddo
      enddo
   enddo
@@ -157,9 +156,9 @@ subroutine vector_dotprod(l,m,n,x,y,prod)
   
   ! loop over the dimensions to compute the dot-product
   prod = 0.d0
-  do k=1,n,1
-     do j=1,m,1
-        do i=1,l,1
+  do i=1,l
+     do k=1,n
+        do j=1,m
            prod = prod + x(i,j,k)*y(i,j,k)
         enddo
      enddo
