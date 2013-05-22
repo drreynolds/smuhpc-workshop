@@ -15,14 +15,14 @@ relevant files at the command line:
 
 .. code-block:: bash
 
-   % cp ~dreynolds/SMUHPC_tutorial/session3.tgz .
+   $ cp ~dreynolds/SMUHPC_tutorial/session3.tgz .
 
 
 Unzip/untar this file with the command
 
 .. code-block:: bash
 
-   % tar -zxf session3.tgz
+   $ tar -zxf session3.tgz
 
 You should now see a new subdirectory entitled ``session3`` in your
 current directory.  This is where we will work for the rest of this
@@ -40,7 +40,7 @@ associated PID and status, type
 
 .. code-block:: bash
 
-   % ps
+   $ ps
 
 A process may be run in the foreground, in the background, or be
 suspended. Most Linux jobs are run in the foreground; for those jobs
@@ -62,17 +62,17 @@ a given number of seconds before continuing. Type
 
 .. code-block:: bash
 
-   % sleep 10
+   $ sleep 10
 
 This will wait 10 seconds before returning the command prompt
-``%``. Until the command prompt is returned, you can do nothing except
+``$``. Until the command prompt is returned, you can do nothing except
 wait. 
 
 To run ``sleep`` in the background, type
 
 .. code-block:: bash
 
-   % sleep 10 &
+   $ sleep 10 &
 
    [1] 6259
 
@@ -96,7 +96,7 @@ At the prompt, type
 
 .. code-block:: bash
 
-   % sleep 600
+   $ sleep 600
 
 This will not return to the prompt for 10 minutes.  You can suspend
 the process running in the foreground by typing ``^z``, i.e. hold down
@@ -105,7 +105,7 @@ in the background, type
 
 .. code-block:: bash
 
-   % bg
+   $ bg
 
 and hit "return".
 
@@ -122,7 +122,7 @@ type
 
 .. code-block:: bash
 
-   % jobs
+   $ jobs
 
 An example of a job list could be
 
@@ -136,13 +136,13 @@ To restart (foreground) a suspended or backgrounded processes, type
 
 .. code-block:: bash
 
-   % fg <jobnumber>
+   $ fg <jobnumber>
 
 For example, to bring ``sleep 600`` to the foreground, type
 
 .. code-block:: bash
 
-   % fg 1
+   $ fg 1
 
 Typing ``fg`` with no job number foregrounds the most-recently
 suspended or backgrounded process. 
@@ -157,27 +157,27 @@ the foreground, type ``^c`` (control c). For example, run
 
 .. code-block:: bash
 
-   % sleep 100
+   $ sleep 100
    ^C
 
 To kill a suspended or background process, type
 
 .. code-block:: bash
 
-   % kill %<jobnumber>
+   $ kill %<jobnumber>
 
 For example, run
 
 .. code-block:: bash
 
-   % sleep 100 &
-   % jobs
+   $ sleep 100 &
+   $ jobs
 
 If ``sleep 100`` is job number 4, type
 
 .. code-block:: bash
 
-   % kill %4
+   $ kill %4
 
 To check whether this has worked, examine the job list again to see if
 the process has been removed. 
@@ -189,8 +189,8 @@ numbers (PID) and using ``kill``
 
 .. code-block:: bash
 
-   % sleep 1000 &
-   % ps
+   $ sleep 1000 &
+   $ ps
 
    PID TT S TIME COMMAND
    20077 pts/5 S 0:05 sleep 1000
@@ -201,7 +201,7 @@ To kill off the process ``sleep 1000``, type
 
 .. code-block:: bash
 
-   % kill 20077
+   $ kill 20077
 
 and then type ``ps`` again to see if it has been removed from the
 list. 
@@ -211,7 +211,7 @@ can try using the ``-9`` option, i.e. type
 
 .. code-block:: bash
 
-   % kill -9 20077
+   $ kill -9 20077
 
 Note: It is not possible to kill off other users' processes!
 
@@ -806,7 +806,7 @@ For example, you may execute the example BASH script from above via
 
 .. code-block:: bash
 
-   % bash bash_example.sh
+   $ bash bash_example.sh
 
 Alternately, if the first line was set to 
 
@@ -819,26 +819,26 @@ then it may be executed by first changing the file permissions to
 
 .. code-block:: bash
 
-   % chmod +x bash_example.sh
+   $ chmod +x bash_example.sh
 
 and then running it like any other Linux program
 
 .. code-block:: bash
 
-   % ./bash_example.sh
+   $ ./bash_example.sh
 
 Similarly, you may execute the example Python script from above via
 
 .. code-block:: bash
 
-   % python python_example.py
+   $ python python_example.py
 
 It can also be called from an interactive Python session via 
 
    >>> exefile("python_example.py")
 
 where the ``>>>`` corresponds to the Python prompt (in contrast with
-the BASH prompt, ``%``).  Similarly to BASH, if the first line of the
+the BASH prompt, ``$``).  Similarly to BASH, if the first line of the
 Python file is set to
 
 .. code-block:: python
@@ -849,8 +849,8 @@ then it may be given execute permissions and run directly via
 
 .. code-block:: bash
 
-   % chmod +x python_example.py
-   % ./python_example.py
+   $ chmod +x python_example.py
+   $ ./python_example.py
 
 
 Additional resources on both BASH and Python scripting are provided
@@ -962,8 +962,8 @@ In the ``session3`` directory, you will notice a number of files:
 
 .. code-block:: bash
 
-   % cd session3
-   % ls
+   $ cd session3
+   $ ls
    Makefile         hello.c    hello.f    python_example.py
    bash_example.sh  hello.cpp  hello.f90
 
@@ -985,7 +985,7 @@ have no preference among these, open the C++ version:
 
 .. code-block:: bash
 
-   % gedit hello.cpp &
+   $ gedit hello.cpp &
 
 Depending on your language of choice, you should see something similar
 to the following
@@ -1059,13 +1059,13 @@ followed by the files we wish to compile, e.g. for the C code we'd use
 
 .. code-block:: bash
 
-   % gcc hello.c
+   $ gcc hello.c
    
 or for the F77 code we'd use
 
 .. code-block:: bash
 
-   % gfortran hello.f
+   $ gfortran hello.f
    
 Both of these commands produce the same output, a new file in the
 directory named ``a.out``.  This is the standard output name for
@@ -1076,7 +1076,7 @@ handled with the command line option ``-o``, e.g.
 
 .. code-block:: bash
 
-   % g++ hello.cpp -o hello.exe
+   $ g++ hello.cpp -o hello.exe
 
 Compile the program in the language of your choice, naming the
 executable ``hello.exe``.  Once this has been compiled, you can run it
@@ -1084,7 +1084,7 @@ just like any other Linux program, via
 
 .. code-block:: bash
 
-   % ./hello.exe
+   $ ./hello.exe
 
 
 .. note::
@@ -1098,7 +1098,7 @@ just like any other Linux program, via
 
    .. code-block:: bash
 
-      % ls -l hello.exe
+      $ ls -l hello.exe
       -rwxr-xr-x 1 dreynolds math 8.0K May 22 11:32 hello.exe
  
    The three "x" characters in the string of characters a the left of
@@ -1201,14 +1201,14 @@ First create a download directory
 
 .. code-block:: bash
 
-   % mkdir download
+   $ mkdir download
 
 Download the software using ``wget`` into your new download directory
 
 .. code-block:: bash
 
-   % cd download
-   % wget http://faculty.smu.edu/reynolds/unixtut/units-1.74.tar.gz
+   $ cd download
+   $ wget http://faculty.smu.edu/reynolds/unixtut/units-1.74.tar.gz
 
 
 **Extracting the source code**
@@ -1217,7 +1217,7 @@ List the contents of your download directory
 
 .. code-block:: bash
 
-   % ls -l
+   $ ls -l
 
 As you can see, the filename ends in tar.gz. The ``tar`` command turns
 several files and directories into one single ".tar" file. This is
@@ -1228,20 +1228,20 @@ First unzip the file using the ``gunzip`` command. This will create a .tar file
 
 .. code-block:: bash
 
-   % gunzip units-1.74.tar.gz
+   $ gunzip units-1.74.tar.gz
 
 Then extract the contents of the tar file.  
 
 .. code-block:: bash
 
-   % tar -xvf units-1.74.tar
+   $ tar -xvf units-1.74.tar
 
 Again, list the contents of the directory, then go to the ``units-1.74`` sub-directory
 
 .. code-block:: bash
 
-   % ls -l 
-   % cd units-1.74
+   $ ls -l 
+   $ cd units-1.74
 
 
 **Configuring and creating the Makefile**
@@ -1252,7 +1252,7 @@ information on how to compile and run the software
 
 .. code-block:: bash
 
-   % less README
+   $ less README
 
 (use the arrow keys to scroll up/down; hit ``q`` to exit).
 
@@ -1264,13 +1264,13 @@ directory
 
 .. code-block:: bash
 
-   % mkdir ~/units-1.7.4
+   $ mkdir ~/units-1.7.4
 
 Then run the ``configure`` utility setting the installation path to this
 
 .. code-block:: bash
 
-   % ./configure --prefix=$HOME/units-1.7.4
+   $ ./configure --prefix=$HOME/units-1.7.4
 
 NOTE: The ``$HOME`` variable is an example of an environment
 variable. The value of ``$HOME`` is the path to your home
@@ -1278,7 +1278,7 @@ directory. Type
 
 .. code-block:: bash
 
-   % echo $HOME 
+   $ echo $HOME 
 
 to show the value of this variable.
 
@@ -1294,7 +1294,7 @@ Now you can go ahead and build the package by running the ``make`` command
 
 .. code-block:: bash
 
-   % make
+   $ make
 
 After a short while (depending on the speed of the computer), the
 executables will be created. You can check to see everything compiled
@@ -1302,13 +1302,13 @@ successfully by typing
 
 .. code-block:: bash
 
-   % make check
+   $ make check
 
 If everything is okay, you can now install the package.  
 
 .. code-block:: bash
 
-   % make install
+   $ make install
 
 This will install the files into the ``~/units-1.7.4`` directory you created earlier.
 
@@ -1322,7 +1322,7 @@ current directory:
 
 .. code-block:: bash
 
-   % units
+   $ units
 
 Instead, you must executables that are not in your ``PATH`` by
 providing the pathname to the executable.  One option for this is to
@@ -1330,14 +1330,14 @@ provide the path name from your current location, e.g.
 
 .. code-block:: bash
 
-   % ./units-1.7.4/bin/units
+   $ ./units-1.7.4/bin/units
 
 Alternately, you can navigate through the directory structure until
 you are in the same directory as the executable,
 
 .. code-block:: bash
 
-   % cd ~/units-1.7.4
+   $ cd ~/units-1.7.4
 
 If you list the contents of the units directory, you will see a number of subdirectories.
 
@@ -1356,7 +1356,7 @@ To run the program, change to the ``bin`` directory and type
 
 .. code-block:: bash
 
-   % ./units
+   $ ./units
 
 As an example, convert 6 feet to meters,
 
@@ -1377,4 +1377,4 @@ To read the full documentation, change into the ``info`` directory and type
 
 .. code-block:: bash
 
-   % info --file=units.info
+   $ info --file=units.info

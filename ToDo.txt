@@ -25,7 +25,7 @@ Remaining items to do before workshop:
 
 [ ] Module exercise (session 4)
 
-[ ] General information on version control systems (session 4)
+[X] General information on version control systems (session 4)
 
 [ ] General info on CVS (session 4)
 
@@ -35,11 +35,10 @@ Remaining items to do before workshop:
 
 [ ] General info on Mercurial (session 4)
 
-[ ] Mercurial example: clone a repository, add a file, check in, push (session 4)
+[X] Mercurial example: clone a repository, add a file, check in, push (session 4)
 
-[ ] Optimization using the PGI compiler (session 5)
-
-[ ] Debugging using the PGI compiler (session 5)
+[ ] Convert existing exercise(s) to example(s), and add a more
+    challenging exercise for the students to work on?  (session 5)
 
 [ ] Notes on how condor works (session 6)
 
@@ -72,7 +71,7 @@ Remaining items to do before workshop:
 [ ] Add instructions for adding Matlab to the PATH for running
     post-processing examples.  (session 7)
 
-[ ] Find out how to open graphics files on SMUHPC (png), and add to
+[X] Find out how to open graphics files on SMUHPC (png), and add to
     instructions. (session 7)
 
 [X] Notes on other HPC data I/O utilities (HDF5). (session 7)

@@ -29,7 +29,7 @@ relevant files at the command line:
 
 .. code-block:: bash
 
-   % cp ~dreynolds/SMUHPC_tutorial/session7.tgz .
+   $ cp ~dreynolds/SMUHPC_tutorial/session7.tgz .
 
 Unzip this file, and build the executable with ``make``.
 
@@ -140,7 +140,7 @@ metadata file.  First. let's view the contents of the metadata file:
 
 .. code-block:: text
 
-   % cat u_sol_meta.txt 
+   $ cat u_sol_meta.txt 
    50
    50
    25
@@ -524,14 +524,14 @@ Run this code as usual, using either Matlab or Python.
 
 .. code-block:: bash
 
-   % matlab -r plot_solution
-   % python ./plot_solution.py
+   $ matlab -r plot_solution
+   $ python ./plot_solution.py
 
 You should then see a set of ``.png`` images in the directory:
 
 .. code-block:: bash
 
-   % ls
+   $ ls
    Makefile          plot_solution.m   u_sol.012.txt  u_sol_meta.txt  u_surf.013.png
    advection.cpp     plot_solution.py  u_sol.013.txt  u_surf.000.png  u_surf.014.png
    advection.exe     u_sol.000.txt     u_sol.014.txt  u_surf.001.png  u_surf.015.png
@@ -553,14 +553,14 @@ You can view these plots on SMUHPC with the command, e.g.
 
 .. code-block:: bash
 
-   % display u_surf.009.png
+   $ display u_surf.009.png
 
 Alternately, you can open them all and cycle through them by
 right-clicking and selecting "Next":
 
 .. code-block:: bash
 
-   % display u_surf.*.png
+   $ display u_surf.*.png
 
 
 

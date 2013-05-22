@@ -6,6 +6,10 @@ Session 5: Advanced Programming
 *Assistants: Amit Kumar, Merlin Wilkerson, Doug Tucker*
 
 
+**CONVERT THESE EXERCISES INTO EXAMPLES, AND ADD A MORE CHALLENGING FOR THEM TO DO?**
+
+
+
 Getting started
 ------------------
 
@@ -19,9 +23,9 @@ with one of the following 3 commands:
 
 .. code-block:: bash
 
-   % cp ~dreynolds/SMUHPC_tutorial/session5_c.tgz .
-   % cp ~dreynolds/SMUHPC_tutorial/session5_cxx.tgz .
-   % cp ~dreynolds/SMUHPC_tutorial/session5_f90.tgz .
+   $ cp ~dreynolds/SMUHPC_tutorial/session5_c.tgz .
+   $ cp ~dreynolds/SMUHPC_tutorial/session5_cxx.tgz .
+   $ cp ~dreynolds/SMUHPC_tutorial/session5_f90.tgz .
 
 
 Profiling and performance analysis
@@ -56,7 +60,7 @@ the profiling data that relates to the executable. Run the command
 
 .. code-block:: bash
 
-   % gprof driver1.exe
+   $ gprof driver1.exe
 
 When you run ``gprof``, it outputs all of the profiling information to
 the screen.  To enable easier examination of these results, you should
@@ -65,7 +69,7 @@ the file ``profiling_data.txt`` with the command
 
 .. code-block:: bash
 
-   % gprof driver1.exe > profiling_data.txt
+   $ gprof driver1.exe > profiling_data.txt
 
 You will then have the readable file ``profiling_data.txt`` with the
 relevant profiling information. 
@@ -91,7 +95,7 @@ use ``grep`` to find which file contains the routine:
 
 .. code-block:: bash
 
-   % grep -i routine_name *
+   $ grep -i routine_name *
 
 where ``routine_name`` is the function that you identified from
 the previous step.  Save a copy of this file using the ``cp`` command
@@ -143,11 +147,6 @@ hand-optimized code to then allow the compiler to optimize as well.
 How does this perform in comparison to the other three runs? 
 
 
-Optimization with the PGI compiler
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-**FILL THIS IN**
-
 
 
 Debugging and debuggers
@@ -156,7 +155,7 @@ Debugging and debuggers
 Enabling Debugging Information
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In most compilers (include GNU and PGI), you can enable debugging
+In most compilers (including GNU and PGI), you can enable debugging
 information through adding the ``-g`` compiler flag. Add this flag to
 the compilation commands in the ``Makefile`` for the target
 ``driver2.exe``, and then compile the executable (``make
@@ -175,7 +174,7 @@ command
 
 .. code-block:: bash
  
-   % gdb driver2.exe
+   $ gdb driver2.exe
 
 At the ``gdb`` prompt, type ``run`` to start the executable. It will
 automatically stop at the line where the segmentation fault occurs.
@@ -217,7 +216,7 @@ function and the arguments that the function expects to receive.
 Upon finding and fixing the bug causing the segmentation fault, the
 correctly-executing program should write the following line: 
 
-.. code-block:: bash
+.. code-block:: text
 
    2-norm of product = 1.414213562373E+00
 
@@ -228,7 +227,34 @@ first and last entries, which should be 1.
 
 
 
-Debugging with the PGI compiler
+More advanced debuggers
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-**FILL THIS IN**
+There are many freely-available Linux debugging utilites in addition
+to `gdb <https://www.gnu.org/software/gdb/>`_.  Most of these are
+graphical (i.e. point-and-click), and in fact use ``gdb`` under the
+hood.  Some of the more popular of these debuggers include:  `ddd
+<https://www.gnu.org/software/ddd/>`_, `nemiver
+<http://projects.gnome.org/nemiver/>`_, `eclipse
+<http://www.eclipse.org/eclipse/debug/>`_, `zerobugs
+<https://zerobugs.codeplex.com/>`_, `edb
+<http://www.woodmann.com/collaborative/tools/index.php/EDB_Linux_Debugger>`_.
+However, of these the SMUHPC cluster only currently has ``gdb`` installed. 
+
+Additionally, there are some highly advanced non-free
+Linux debugging utilities available (all typically graphical),
+including `TotalView
+<http://www.roguewave.com/products/totalview.aspx>`_, `DDT
+<http://www.allinea.com/products/ddt/>`_, `idb
+<http://software.intel.com/en-us/articles/idb-linux>`_ (only works
+with the Intel compilers), and PGI's `pgdebug
+<http://www.pgroup.com/products/pgdbg.htm>`_ (graphical) and `pgdbg`
+(text version).  Of these, the SMUHPC cluster has both ``pgdebug`` and
+``pgdbg``.  
+
+The usage of most of the above debuggers is similar to ``gdb``, except
+that in graphical debuggers it can be easier to see the
+data/instruction stack.  The primary benefit of the non-free debuggers
+is their support for debugging parallel jobs that use OpenMP,
+MPI, or hybrid MPI/OpenMP computing approaches (see session 9).
+

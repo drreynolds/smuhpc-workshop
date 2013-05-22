@@ -33,13 +33,13 @@ on SMUHPC at the command line:
 
 .. code-block:: bash
 
-   % cp ~dreynolds/SMUHPC_workshop/session9_OpenMP.tgz .
+   $ cp ~dreynolds/SMUHPC_workshop/session9_OpenMP.tgz .
 
 Unpack these files as usual
 
 .. code-block:: bash
 
-   % tar -zxf session9_OpenMP.tgz
+   $ tar -zxf session9_OpenMP.tgz
 
 In the resulting directory, you will find a number of files, including
 ``Makefile``, ``driver.cpp``, ``vectors.cpp``.  You may have noticed
@@ -53,7 +53,7 @@ OpenMP using the command
 
 .. code-block:: bash
 
-   % icc -openmp driver.cpp vectors.cpp -lm -o driver.exe
+   $ icc -openmp driver.cpp vectors.cpp -lm -o driver.exe
 
 or by typing ``make`` on the command line (you will notice the above
 lines in the ``Makefile``). This builds a threaded version of the code
@@ -75,7 +75,7 @@ Run the executable ``driver.exe`` from the command line:
 
 .. code-block:: bash
 
-   % ./driver.exe
+   $ ./driver.exe
 
 In fact, this executable did not run using more than one thread, since
 the default behavior of OpenMP programs on Stampede is to only use a
@@ -87,20 +87,20 @@ set to the default value of 1 (or it may be blank):
 
 .. code-block:: bash
 
-   % echo $OMP_NUM_THREADS
+   $ echo $OMP_NUM_THREADS
 
 Recalling from session 2 of the workshop, the method for re-setting
 this environment variable will depend on our login shell. For CSH/TCSH
 users, 
 .. code-block:: bash
 
-   % setenv OMP_NUM_THREADS 2
+   $ setenv OMP_NUM_THREADS 2
 
 will adjust this variable to 2; the same may be accomplished in BASH/SH/KSH users with the command
 
 .. code-block:: bash
 
-   % export OMP_NUM_THREADS=2
+   $ export OMP_NUM_THREADS=2
 
 Run ``driver.exe`` first using 1 and then using 2 OpenMP
 threads. Notice the speedup when running with multiple threads. 
@@ -114,14 +114,14 @@ can see which one you are on with
 
 .. code-block:: bash
 
-   % echo $HOSTNAME
+   $ echo $HOSTNAME
 
 However, this login node is shared by a large number of users, you can
 see them all with the command 
 
 .. code-block:: bash
 
-   % finger
+   $ finger
 
 As a result of their increased load, it may not be possible to trust
 the timings reported by running programs on the login nodes of a
@@ -188,7 +188,7 @@ example, we can submit the job specified by the input script
 
 .. code-block:: bash
 
-   % sbatch t8.job
+   $ sbatch t8.job
 
 This submits your request to the batch system. You may submit many
 jobs to the queue at once -- the queueing system will keep track of
@@ -202,7 +202,7 @@ the command
 
 .. code-block:: bash
 
-   % squeue -u tg457291
+   $ squeue -u tg457291
 
 A typical output from squeue will be something like:
 
@@ -228,7 +228,7 @@ the ``scancel`` command. For example, if we wished to remove the job
 
 .. code-block:: bash
 
-   % scancel 35543
+   $ scancel 35543
 
 Once your code runs, the results that were typically written to the
 screen ("Final rms norm" and "Total run time") will be included in the
@@ -252,13 +252,13 @@ on SMUHPC at the command line:
 
 .. code-block:: bash
 
-   % cp ~dreynolds/SMUHPC_workshop/session9_MPI.tgz .
+   $ cp ~dreynolds/SMUHPC_workshop/session9_MPI.tgz .
 
 Unpack these files as usual
 
 .. code-block:: bash
 
-   % tar -zxf session0_MPI.tgz
+   $ tar -zxf session0_MPI.tgz
 
 
 Compiling MPI Programs on SMUHPC (hard way)
@@ -291,7 +291,7 @@ would be:
 
 .. code-block:: bash
 
-   % g++ driver.cpp -lm -o driver.exe -I/usr/local/mpich2-1.4.1p1/include
+   $ g++ driver.cpp -lm -o driver.exe -I/usr/local/mpich2-1.4.1p1/include
 
 Unfortunately, when you try that out, the compiler still doesn't know
 how to link with the internal MPI functions and subroutines that we
@@ -337,7 +337,7 @@ Compile your program ``driver.cpp`` on SMUHPC with the ``mpicxx`` wrapper script
 
 .. code-block:: bash
 
-   % mpicxx driver.cpp -lm -o driver.exe
+   $ mpicxx driver.cpp -lm -o driver.exe
 
 This is much easier than doing it all by hand, don't you think?
 
@@ -392,7 +392,7 @@ MPICH script mpiexec. The calling syntax of mpiexec is
 
 .. code-block:: bash
 
-   % mpiexec <mpiexec_options> <program_name> <program_options>
+   $ mpiexec <mpiexec_options> <program_name> <program_options>
 
 The primary mpiexec option that we will use on zeno is ``-n p``, that
 tells ``mpiexec`` how many processors (p) to use in running the
@@ -402,7 +402,7 @@ Run the program ``driver.exe`` using 1 process:
 
 .. code-block:: bash
 
-   % mpiexec -n 1 ./driver.exe
+   $ mpiexec -n 1 ./driver.exe
 
 Note: if you did not yet add ``/usr/local/bin`` to your ``PATH``, you will need to run the program with the full path name, ``/usr/local/bin/mpiexec``.
 
@@ -410,13 +410,13 @@ Run the program ``driver.exe`` using 2 process:
 
 .. code-block:: bash
 
-   % mpiexec -n 2 ./driver.exe
+   $ mpiexec -n 2 ./driver.exe
 
 Run the program ``driver.exe`` using 4 processes:
 
 .. code-block:: bash
 
-   % mpiexec -n 4 ./driver.exe
+   $ mpiexec -n 4 ./driver.exe
 
 All of these will run the MPI processes as separate threads on Zeno,
 since it is a shared-memory server. 
@@ -438,7 +438,7 @@ program ``driver.cpp``:
 
 .. code-block:: bash
 
-   % mpicxx driver.cpp -lm -o driver.exe
+   $ mpicxx driver.cpp -lm -o driver.exe
 
 Because Stampede has a queueing system to regulate who uses the
 computing resources, and how much individuals can use, you cannot run

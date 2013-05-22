@@ -356,8 +356,8 @@ Once your job is running, you can log into it via the commands
 
 .. code-block:: bash
 
-   % source /grid/condor/condor.sh
-   % condor_ssh_to_job [job#]
+   $ source /grid/condor/condor.sh
+   $ condor_ssh_to_job [job#]
 
 where here ``[job#]`` is the integer ID number for your running job.
 
