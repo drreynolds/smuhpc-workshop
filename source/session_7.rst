@@ -1,5 +1,13 @@
-Postprocessing (Thu. AM)
+Session 7: Postprocessing
 ========================================================
+
+*Instructor: Dan Reynolds*
+
+*Assistants: Amit Kumar, Merlin Wilkerson, Doug Tucker*
+
+
+Getting started
+----------------
 
 Scientific simulation is worthless unless the results of those
 simulations can be analyzed and understood.  Unfortunately, most
@@ -485,6 +493,8 @@ and then the Python code, ``plot_solution.py``:
        #plt.show()
        #ioff()
        #raw_input('pausing: hit enter to continue')
+
+       plt.close()
    
    # end of script
 
@@ -539,14 +549,20 @@ You should then see a set of ``.png`` images in the directory:
 
 
 
-You can view these plots on SMUHPC with the command
+You can view these plots on SMUHPC with the command, e.g.
 
 .. code-block:: bash
 
-   % eog u_surf.000.png
+   % display u_surf.009.png
 
-(you can cycle from one picture to the next with the left/right arrow
-keys).
+Alternately, you can open them all and cycle through them by
+right-clicking and selecting "Next":
+
+.. code-block:: bash
+
+   % display u_surf.*.png
+
+
 
 
 

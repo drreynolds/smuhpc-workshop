@@ -1,5 +1,34 @@
-Introduction to Scripts and Programs (Tue. AM)
+Session 3: Introduction to Scripts and Programs
 ========================================================
+
+*Instructor: Dan Reynolds*
+
+*Assistants: Amit Kumar, Merlin Wilkerson, Doug Tucker*
+
+
+Getting started
+------------------
+
+Retrieve the set of files for this session either through
+:download:`clicking here <code/session3.tgz>` or by copying the
+relevant files at the command line:
+
+.. code-block:: bash
+
+   % cp ~dreynolds/SMUHPC_tutorial/session3.tgz .
+
+
+Unzip/untar this file with the command
+
+.. code-block:: bash
+
+   % tar -zxf session3.tgz
+
+You should now see a new subdirectory entitled ``session3`` in your
+current directory.  This is where we will work for the rest of this
+session.
+
+
 
 
 Linux Processes
@@ -166,7 +195,7 @@ numbers (PID) and using ``kill``
    PID TT S TIME COMMAND
    20077 pts/5 S 0:05 sleep 1000
    21563 pts/5 T 0:00 firefox
-   21873 pts/5 S 0:25 emacs
+   21873 pts/5 S 0:25 gedit
 
 To kill off the process ``sleep 1000``, type
 
@@ -312,6 +341,20 @@ Basics of BASH shell scripting:
 
      $CXX driver.cpp -o driver.exe
 
+* Arrays may also be created by merely using the syntax
+
+  .. code-block:: bash
+
+     a[0] = 1
+     a[1] = 0
+     a[2] = 0
+
+  Entries of an array may be accessed using ``$`` and braces ``{}``, e.g.
+
+  .. code-block:: bash
+
+     ${a[1]}
+
 * Loops may be performed via iteration over a range (version 3.0+):
 
   .. code-block:: bash
@@ -404,6 +447,13 @@ Basics of BASH shell scripting:
      The student is Jenny
      The student is Ahmad
   
+* Loop control statements: the ``break`` statement may be used in a
+  loop just as in C and C++, in that it will break out of the smallest
+  enclosing loop surrounding the ``break`` statement.  Also similarly
+  to C and C++, the ``continue`` statement stops executing the
+  statements within that iteration of the loop and jumps to the next
+  loop iteration. 
+
 * If-elif-else statements may be performed via the syntax
 
   .. code-block:: bash
@@ -478,7 +528,7 @@ The structure of this example should be obvious from the preceding
 short examples, except that there are a few notable exceptions:
 
 * We perform arithmetic: these operations must be of the form
-  ``$(( arithmetic expression ))``.  
+  ``$(( expression ))``.  
 
 * We use the "modulus" operator, ``%``.  Other allowable arithmetic
   operators include ``+``, ``-``, ``*`` and ``/``.
@@ -496,15 +546,6 @@ short examples, except that there are a few notable exceptions:
 
 
 
-**BASH exercise**
-
-Construct your own BASH shell script that performs the following
-tasks:
-
-* **FILL THIS IN**
-
-
-
 
 Python scripts
 ^^^^^^^^^^^^^^^
@@ -515,7 +556,7 @@ Basics of Python shell scripting:
 
   .. code-block:: python
 
-     #!/usr/bin/python
+     #!/usr/bin/env python
 
   to indicate that the script contents should be executed by the BASH
   shell.  However, since Python is installed in different locations on
@@ -657,7 +698,7 @@ Basics of Python shell scripting:
   enclosing ``for`` or ``while`` loop surrounding the ``break``
   statement.  Also similarly to C and C++, the ``continue`` statement
   stops executing the statements within that iteration of the loop and
-  proceeds to the next loop iteration.
+  jumps to the next loop iteration.
 
 * If-elif-else statements may be performed via the syntax
 
@@ -708,10 +749,11 @@ the following script
 
 .. code-block:: python
 
+   #!/usr/bin/env python
    # Python shell script example
    # Dan Reynolds
    # May 2013
-   
+
    # define the "odd" function, takes one argument
    def odd(val):
       print "  ", val, " is odd"
@@ -750,16 +792,6 @@ are a few notable exceptions:
 
 
 
-**Python exercise**
-
-Construct your own Python shell script that performs the following
-tasks:
-
-* **FILL THIS IN**
-
-
-
-
 Executing shell scripts
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -770,28 +802,56 @@ Linux program, through entering the script name at the command prompt.
 Alternately, a script may be executed by supplying the file name as an
 argument to the appropriate shell.
 
-For example, you may execute your shell script from above by calling
-either 
+For example, you may execute the example BASH script from above via
 
 .. code-block:: bash
 
-   % bash myscript.sh
+   % bash bash_example.sh
 
-or by first changing the file permissions to "executable"
-
-.. code-block:: bash
-
-   % chmod +x myscript.sh
-
-and then running it like any other executable
+Alternately, if the first line was set to 
 
 .. code-block:: bash
 
-   % ./myscript.sh
+   #!/bin/bash
 
-These instructions should work for any type of
-appropriately-constructed script file (e.g. BASH, TCSH, Python,
-etc.). 
+then it may be executed by first changing the file permissions to
+"executable" 
+
+.. code-block:: bash
+
+   % chmod +x bash_example.sh
+
+and then running it like any other Linux program
+
+.. code-block:: bash
+
+   % ./bash_example.sh
+
+Similarly, you may execute the example Python script from above via
+
+.. code-block:: bash
+
+   % python python_example.py
+
+It can also be called from an interactive Python session via 
+
+   >>> exefile("python_example.py")
+
+where the ``>>>`` corresponds to the Python prompt (in contrast with
+the BASH prompt, ``%``).  Similarly to BASH, if the first line of the
+Python file is set to
+
+.. code-block:: python
+
+   #!/usr/bin/env python
+
+then it may be given execute permissions and run directly via
+
+.. code-block:: bash
+
+   % chmod +x python_example.py
+   % ./python_example.py
+
 
 Additional resources on both BASH and Python scripting are provided
 below. 
@@ -820,6 +880,36 @@ Python resources:
 
 * `The Definitive Python Tutorial <http://docs.python.org/2/tutorial/>`_ 
 
+
+
+
+
+Scripting exercise
+^^^^^^^^^^^^^^^^^^^^^^
+
+Construct your own BASH or Python script that uses the 
+`Sieve of Eratosthenes
+<https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes>`_ 
+to find all of the prime numbers between 2 and 1000:
+
+1. Create an array of candidate primes of length 1001, where all
+   entries are initialized to the value 1.
+
+2. Eliminate 0 and 1 from the list of primes by setting the 0th and 1st
+   entries of the array to 0.
+
+3. Initialize a variable ``p`` to 2.
+
+4. Starting from ``p``, eliminate all multiples of ``p`` from the list
+   by setting the values at those points to 0.
+
+5. Find the first number greater than ``p`` in the list that has not
+   been eliminated.  If there is no such number, stop.  Otherwise, let
+   ``p`` now equal that number (which is the next prime), and repeat
+   from step 4.
+
+6. When the algorithm terminates, all entries that have not been
+   eliminated are prime; output that list to the screen.
 
 
 
@@ -856,12 +946,178 @@ To do all these steps by hand is complicated and beyond the capability
 of the ordinary user. A number of utilities and tools have been
 developed for programmers and end-users to simplify these steps. 
 
+A single session of a week-long workshop is an insufficient amount of
+time to teach any compiled programming language, so we'll primarily
+discuss how to use codes that you've written within a Linux
+environment, and provide some links on tutorial pages for two of most
+popular/advanced languages for modern high-performance computing (C++
+and Fortran90).
+
 
 
 Compiling your own codes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-**FILL THIS IN**
+In the ``session3`` directory, you will notice a number of files:
+
+.. code-block:: bash
+
+   % cd session3
+   % ls
+   Makefile         hello.c    hello.f    python_example.py
+   bash_example.sh  hello.cpp  hello.f90
+
+We've already seen some of these (``bash_example.sh`` and
+``python_example.py``); we'll now investigate the ``hello`` files.
+These implement the archetypal "Hello world" program in a variety of
+languages prevalent within high-performance computing:
+
+* ``hello.c`` -- written in the C programming language
+
+* ``hello.cpp`` -- written in the C++ programming language
+
+* ``hello.f`` -- written in the Fortran-77 programming language
+
+* ``hello.f90`` -- written in the Fortran-90 programming language
+
+Open the file written in your preferred programming language.  If you
+have no preference among these, open the C++ version:
+
+.. code-block:: bash
+
+   % gedit hello.cpp &
+
+Depending on your language of choice, you should see something similar
+to the following
+
+.. code-block:: c++
+
+   // Daniel R. Reynolds
+   // SMU HPC Workshop
+   // 20 May 2013
+
+   // Inclusions
+   #include <iostream>
+
+   // Example "hello world" routine
+   int main() {
+
+     // print message to stdout
+     std::cout << "Hello World!\n";
+
+     return 0;
+   }
+
+For those of you familar to the "Windows" (and even OS X's "Xcode")
+approach for programming, you're used to seeing this within an
+*Integrated Desktop Environment* (IDE), where you enter your code and
+click icons that will handle compilation and execution of your program
+for you.  While IDEs exist in the Linux world, they are rarely used in
+high-performance computing since the compilation approach on your
+laptop typically cannot create code that will execute on the
+worker-nodes of a cluster.
+
+Hence, we'll now learn the (rather simple) approach for compiling
+codes at the command-line in Linux.  
+
+The first step in compilation is knowing which compiler to use.
+Nearly every Linux system is installed with the GNU compiler
+collection, `GCC <http://gcc.gnu.org/>`_:
+
+* ``gcc`` -- the GNU C compiler
+
+* ``g++`` -- the GNU C++ compiler
+
+* ``gfortran`` -- the GNU Fortran compiler (handles both F77 and F90)
+
+* ``gcj`` -- the GNU Java compiler
+
+However, if you have a very old version of the GNU compiler suite,
+instead of ``gfortran`` you may have ``g77``, that only works with F77
+code (no F90).
+
+The GNU compiler suite is open-source (i.e. you can modify it if you
+want), free, and is available for all major computer architectures
+(even Windows); however, it does not always produce the most efficient
+code.  As a result, the `SMU Center for Scientific Computation
+<http://www.smu.edu/Academics/CSC>`_ has purchased the `PGI
+<http://www.pgroup.com/>`_ compiler suite:
+
+* ``pgcc`` - the PGI C compiler
+
+* ``pgc++`` - the PGI C++ compiler
+
+* ``pgfortran`` - the PGI Fortran compiler (both F77 and F90)
+
+In my experience, with some applications a program compiled with the
+PGI compilers can run 50% faster than the same code compiled with the
+GNU compilers.  We'll discuss how to use the PGI compiler on SMUHPC in
+session 4 later today.
+
+To compile an executable, we merely call the relevant compiler,
+followed by the files we wish to compile, e.g. for the C code we'd use
+
+.. code-block:: bash
+
+   % gcc hello.c
+   
+or for the F77 code we'd use
+
+.. code-block:: bash
+
+   % gfortran hello.f
+   
+Both of these commands produce the same output, a new file in the
+directory named ``a.out``.  This is the standard output name for
+executables produced by compilers.  However, since a computer on which
+every program was named "a.out" would be entirely unusable, it is
+typical to name your program something more descriptive.  This is
+handled with the command line option ``-o``, e.g.
+
+.. code-block:: bash
+
+   % g++ hello.cpp -o hello.exe
+
+Compile the program in the language of your choice, naming the
+executable ``hello.exe``.  Once this has been compiled, you can run it
+just like any other Linux program, via
+
+.. code-block:: bash
+
+   % ./hello.exe
+
+
+.. note::
+
+   The extension on executable files in Linux can be anything; I just
+   choose ".exe" to provide a sense of familiarity for those coming
+   from the Windows world.  In fact, all that actually matters for a
+   Linux program is that it has "execute" permissions (and that it was
+   compiled correctly).  You can verify that the files generated by
+   the compiler have the correct permissions via
+
+   .. code-block:: bash
+
+      % ls -l hello.exe
+      -rwxr-xr-x 1 dreynolds math 8.0K May 22 11:32 hello.exe
+ 
+   The three "x" characters in the string of characters a the left of
+   the line states state that the program may be executed by the owner
+   (dreynolds), the group (math), and others (anyone on the system),
+   respectively. 
+
+
+For those who would like additional information on learning computing
+languages, I'd recommend that you pursue some of the following links,
+and look through some of the provided code for this workshop.  The
+best ways to learn a new language are through following examples and
+practicing; if you'd like some programming "homework" for practice,
+ask me after class.  Also, `Google <http://google.com>`_ is a great
+resource if you're ever in trouble when programming, since the odds
+are good that someone else has had the same questions as you, which
+have been answered on public forums.  Just describe your question and
+do a web search.
+
 
 Fortran resources:
 
@@ -882,15 +1138,6 @@ C++ resources:
 
 * `Interactive C++ Tutorial (focuses on object-oriented programming)
   <http://www.learncpp.com/>`_
-
-
-
-
-Example: compiling an example "hello world" program
-""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-**FILL THIS IN**
-
 
 
 

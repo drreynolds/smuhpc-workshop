@@ -1,5 +1,9 @@
-Linux II (Mon. PM)
+Session 2: Linux II
 =========================================
+
+*Instructor: Tom Coan*
+
+*Assistants: Amit Kumar, Merlin Wilkerson, Doug Tucker*
 
 
 Permissions and environment variables

@@ -1,6 +1,13 @@
-Advanced Programming (Wed. AM)
+Session 5: Advanced Programming
 ========================================================
 
+*Instructor: Dan Reynolds*
+
+*Assistants: Amit Kumar, Merlin Wilkerson, Doug Tucker*
+
+
+Getting started
+------------------
 
 In this session, we will use examples in either C, C++ or Fortran90.
 Choose your preferred language of the three and download the files to

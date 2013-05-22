@@ -3,42 +3,40 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to the 2013 SMU HPC Summer Workshop
+2013 SMU HPC Summer Workshop
 =============================================
 
-Each of the following pages contains a set of tutorials and hands-on
-exercises for the 2013 SMU HPC Summer workshop, sponsored by the `SMU
-Center for Scientific Computation <http://www.smu.edu/academics/csc>`_.
+Welcome to the main site for the tutorials and hands-on
+exercises associated with the 2013 SMU HPC Summer workshop, sponsored
+by the `SMU Center for Scientific Computation
+<http://www.smu.edu/academics/csc>`_. 
 
-`Information and Registration <http://www.smu.edu/BusinessFinance/OIT/StayInformed/SMUHPC>`_
+* **Location**: Fondren Library, room 103c
 
-Location: Fondren Library, room TBD
+* **Dates**: June 3-7, 2013
 
-Dates: June 3-7, 2013
+* **Times**: Morning sessions 8-11, afternoon sessions 12-3
 
-Times: Morning sessions begin at 9:00, afternoon sessions begin at 1:00
+* **Instructors**: Tom Coan (Mon); Dan Reynolds (Tue-Fri)
+
+* **Assistants**: Amit Kumar, Merlin Wilkerson, Doug Tucker
+
+* `Additional Information and Registration <http://www.smu.edu/BusinessFinance/OIT/StayInformed/SMUHPC>`_
 
 
-
-Contents:
+**Schedule**:
 
 .. toctree::
    :maxdepth: 1
 
-   session_1
-   session_2
-   session_3
-   session_4
-   session_5
-   session_6
-   session_7
-   session_8
-   session_9
+   Introduction to Linux (Mon. AM) <session_1>
+   Introduction to Linux II (Mon. PM) <session_2>
+   Intro. Scripts & Programs (Tue. AM) <session_3>
+   More Programming (Tue. PM) <session_4>
+   Advanced Programming (Wed. AM) <session_5>
+   Using SMUHPC (Wed. PM) <session_6>
+   Postprocessing (Thu. AM) <session_7>
+   Intro. Parallel Computing (Thu. PM) <session_8>
+   Parallel Computing on SMUHPC (Fri. AM) <session_9>
 
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`search`
 

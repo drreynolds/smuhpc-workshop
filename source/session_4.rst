@@ -1,5 +1,9 @@
-More Programming (Tue. PM)
+Session 4: More Programming
 ============================
+
+*Instructor: Dan Reynolds*
+
+*Assistants: Amit Kumar, Merlin Wilkerson, Doug Tucker*
 
 
 
@@ -176,9 +180,9 @@ the command
 
 .. code-block:: bash
 
-   % emacs Makefile &
+   % gedit Makefile &
 
-to have ``emacs`` create the file ``Makefile`` in the background, so
+to have ``gedit`` create the file ``Makefile`` in the background, so
 that while you edit the ``Makefile`` you can still use the terminal
 window to try out ``make`` as you add commands.
 

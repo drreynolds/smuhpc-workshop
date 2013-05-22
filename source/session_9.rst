@@ -1,6 +1,9 @@
-Parallel Computing on SMUHPC (Fri. AM)
+Session 9: Parallel Computing on SMUHPC
 ========================================================
 
+*Instructor: Dan Reynolds*
+
+*Assistants: Amit Kumar, Merlin Wilkerson, Doug Tucker*
 
 
 SMUHPC network
@@ -61,7 +64,7 @@ the ``-mp`` flag, and the GNU compilers use the ``-fopenmp`` flag, instead of
 Intel's ``-openmp`` flag.
 
 Open the file ``vectors.cpp`` with your editor of choice
-(e.g. emacs). You will notice that the loops in each subroutine in
+(e.g. ``gedit``). You will notice that the loops in each subroutine in
 this file have been parallelized with OpenMP directives. 
 
 

@@ -41,7 +41,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'SMU HPC Summer Workshop'
-copyright = u'2013, Dan Reynolds, Amit Kumar'
+copyright = u'2013, Daniel R. Reynolds'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -105,9 +105,9 @@ html_theme = 'agogo'
 html_theme_options = {
     "bodyfont": "Arial",
     "headerfont": "Arial",
-    "pagewidth": "80em",
-    "documentwidth": "55em",
-    "sidebarwidth": "25em"
+    #"pagewidth": "80em",
+    #"documentwidth": "55em",
+    #"sidebarwidth": "25em"
     }
 
 # default options

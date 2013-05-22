@@ -1,5 +1,13 @@
-Using SMUHPC (Wed. PM)
+Session 6: Using SMUHPC
 ========================================================
+
+*Instructor: Dan Reynolds*
+
+*Assistants: Amit Kumar, Merlin Wilkerson, Doug Tucker*
+
+
+What is SMUHPC?
+------------------
 
 While we've technically been using the SMUHPC cluster throughout this
 workshop, in reality we've only been using standard Linux tools as if
@@ -9,10 +17,12 @@ throughput computing*) and/or its ability to run jobs that span
 multiple processors at once (a.k.a. *high performance computing* or
 *parallel computing*).
 
+**ADD INFO ON WHERE IT CAME FROM, ETC**
+
 
 
 Basic hardware components
-------------------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **UPDATE WITH HELP FROM SYSADMINS**
 
@@ -22,19 +32,22 @@ simple categories: *login nodes*, *batch worker nodes*, *parallel
 nodes*, *interactive nodes* and *disk nodes*.
 
 
-**Login nodes**: 
+Login nodes
+""""""""""""""""
 
 * ``smuhpc.smu.edu`` -- main login node, used for compiling source code,
   setting up job submission files, input files, transferring data
   to/from SMUHPC, etc..  This node *should not* be used for running
   intensive calculations.
 * ``smuhpc2.smu.edu`` -- clone of ``smuhpc.smu.edu``, with identical usage.
-* ``smuhpc3.smu.edu`` -- clone of ``smuhpc.smu.edu``, primarily used for??
+* ``smuhpc3.smu.edu`` -- interactive login node, used for interactive
+  computations, such as using Matlab, Mathematica, Python or R.
 * ``smuhpc4.smu.edu`` -- clone of ``smuhpc.smu.edu``, primarily used for
   interacting with the parallel nodes.
 
 
-**Batch worker nodes**:
+Batch worker nodes
+""""""""""""""""""""
 
 * 107 nodes have 8 cores each (for 856 in total).  Each node has 48 GB
   of RAM and and 250 GB of local disk space.  [``wnode1-27``, ``cnode1-80``]
@@ -45,7 +58,8 @@ nodes*, *interactive nodes* and *disk nodes*.
 * all batch nodes are connected with a gigabit ethernet network.
 
 
-**Parallel nodes**:
+Parallel nodes
+""""""""""""""""""""
 
 * 16 nodes have 8 cores each (for 128 in total).  Each node has 48 GB
   of RAM and 500 GB of local disk space.  These are connected via a
@@ -58,7 +72,8 @@ nodes*, *interactive nodes* and *disk nodes*.
   network.  [``iwnode1-32``]
 
 
-**Interactive nodes**:
+Interactive nodes
+"""""""""""""""""""""
 
 * 2 high-memory data analysis and shared-memory parallel nodes.  Both
   have 8 cores each, 144 GB of RAM and 3 TB of local disk space.
@@ -73,14 +88,16 @@ nodes*, *interactive nodes* and *disk nodes*.
     Each of these GPU cards has 512 GPU cores and 6 GB of RAM.
 
 
-**Disk nodes**:
+Disk nodes
+"""""""""""""""
 
 * One 320 TB parallel Lustre file system is attached to all nodes, and
   is managed by the nodes diskarraynfs, diskarray, diskarray2-6,
   diskarray2b-6b. 
 
 
-**General SMUHPC information**:
+General SMUHPC information
+"""""""""""""""""""""""""""""""
 
 * OS: Scientific Linux 5.5 (64 bit).
 
@@ -106,6 +123,8 @@ nodes*, *interactive nodes* and *disk nodes*.
 
 Condor and job submission scripts
 ------------------------------------------------------
+
+**ADD DISCUSSION ON WHAT A SCHEDULER IS**
 
 In this session we'll focus on the *high throughput* portion of the
 SMUHPC cluster, i.e. the portion of the cluster that should be used

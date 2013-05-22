@@ -1,5 +1,9 @@
-Introduction to Linux (Mon. AM)
-=========================================
+Session 1: Introduction to Linux
+======================================
+
+*Instructor: Tom Coan*
+
+*Assistants: Amit Kumar, Merlin Wilkerson, Doug Tucker*
 
 
 What are operating systems?  Why use Linux?
