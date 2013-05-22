@@ -53,4 +53,6 @@ for tstep in range(nt):
     #ioff()
     #raw_input('pausing: hit enter to continue')
 
+    plt.close()
+    
 # end of script
