@@ -631,6 +631,8 @@ Outline:
 
 CVS resources:
 
+* `Main CVS site <http://cvs.nongnu.org/>`_
+
 * `CVS tutorial <http://www-mrsrl.stanford.edu/~brian/cvstutorial/>`_
 
 
@@ -650,6 +652,8 @@ Outline:
 
 SVN resources:
 
+* `Main SVN site <https://subversion.apache.org/>`_
+
 * `SVN tutorial <http://svnbook.red-bean.com/en/1.7/index.html>`_
 
 
@@ -668,6 +672,8 @@ Outline:
 
 
 Git resources:
+
+* `Main Git site <http://git-scm.com/>`_
 
 * `Git tutorials <http://www.atlassian.com/git/tutorial>`_
 
