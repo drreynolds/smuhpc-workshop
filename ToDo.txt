@@ -40,20 +40,20 @@ Remaining items to do before workshop:
 [ ] Convert existing exercise(s) to example(s), and add a more
     challenging exercise for the students to work on?  (session 5)
 
-[ ] Notes on how condor works (session 6)
+[X] Notes on how condor works (session 6)
 
-[ ] Explanation of the "notification" option to condor (session 6)
+[X] Explanation of the "notification" option to condor (session 6)
 
-[ ] Explanation of "NODE" in the Condor job file (session 6)
+[X] Explanation of "NODE" in the Condor job file (session 6)
 
-[ ] Listing/explanation of other Condor options/variables. (session 6)
+[X] Listing/explanation of other Condor options/variables. (session 6)
 
-[ ] Explanation/examples of Condor commands (session 6)
+[X] Explanation/examples of Condor commands (session 6)
 
-[ ] Explanation of why, exactly, anyone would want Condor SSH to job. (session 6)
+[X] Explanation of why, exactly, anyone would want Condor SSH to job. (session 6)
 
-[ ] Condor examples: single shared node job, suite of shared node jobs,
-    single whole node job, suite of whole node jobs. (session 6)
+[X] Condor examples: single shared node job, suite of shared node jobs,
+    single whole node job. (session 6)
 
 [ ] Condor exercises of some sort. (session 6)
 

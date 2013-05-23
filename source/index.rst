@@ -37,6 +37,6 @@ by the `SMU Center for Scientific Computation
    Using SMUHPC (Wed. PM) <session_6>
    Postprocessing (Thu. AM) <session_7>
    Intro. Parallel Computing (Thu. PM) <session_8>
-   Parallel Computing on SMUHPC (Fri. AM) <session_9>
+   Parallel Comp. on SMUHPC (Fri. AM) <session_9>
 
 

@@ -105,9 +105,9 @@ html_theme = 'agogo'
 html_theme_options = {
     "bodyfont": "Arial",
     "headerfont": "Arial",
-    #"pagewidth": "80em",
-    #"documentwidth": "55em",
-    #"sidebarwidth": "25em"
+    "pagewidth": "68em",
+    "documentwidth": "50em",
+    "sidebarwidth": "18em"
     }
 
 # default options
