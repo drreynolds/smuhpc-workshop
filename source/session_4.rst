@@ -225,19 +225,32 @@ Make resources:
 Modules
 -----------
 
-**FILL THIS IN**
+The *module* system is a command-line tool to help users manage their
+Linux environment variables (e.g. PATH, LD_LIBRARY_PATH).  It works by
+grouping related environment variable settings together based on
+various usage scenarios, such as
 
-Outline:
+* Adding executables to a user's ``PATH``
 
-* links to documentation on our Module system (if it exists)
+* Adding the location of specific software libraries to a user's ``LD_LIBRARY_PATH``
 
-* list of module highlights
+* Adding documentation manual pages "man pages" to a user's ``MANPATH``
 
-* high-level description of how module works
+* Creating custom environment variables to define the global path
+  where a specific package is installed, e.g. ``FFTWHOME``
+
+These modules may be added/removed dynamically, allowing
+a user to have a great amount of control over her/his environment.
+
+Possibly one of the greatest assets of the module system is that it
+provides a simple user interface, and can be queried to learn all of
+the available modules on a system, making it easier to know which
+packages are or aren't already installed on a system.  
 
 
-
-Module functions:
+The module system operates through the Linux executable, ``module``,
+followed by the desired command.  The primary module commands are as
+follows: 
 
 * ``module avail`` -- displays a list of all available modules on the
   system, e.g.
@@ -621,12 +634,44 @@ A typical scenario goes like this:
 CVS
 ^^^^^
 
-**FILL THIS IN**
+Originally developed in 1990, `CVS
+<https://en.wikipedia.org/wiki/Concurrent_Versions_System>`_ is one of
+the oldest version systems still in use today.  It follows a
+client-server approach, in which all repository duties are handled by
+a server, to which clients connect to "check out" and "check in"
+files.
 
-Outline: 
+The primary CVS commands are:
 
-* high-level description, including date it was invented
-* listing of main commands
+* ``cvs add`` --  adds a new file/directory to the repository
+
+* ``cvs admin`` -- administration front end for the underlying
+  revision control system
+
+* ``cvs checkout`` -- checkout sources for editing
+
+* ``cvs commit`` -- checks files into the repository
+
+* ``cvs diff`` -- checks for differences between revisions
+
+* ``cvs history`` -- shows status of files and users
+
+* ``cvs import`` -- import sources into CVS
+
+* ``cvs remove`` -- removes an entry from the repository
+
+* ``cvs status`` -- status info on the revisions
+
+* ``cvs tag`` -- add a tag to checked out version
+
+* ``cvs update`` -- brings work tree in sync with repository
+
+While there are many `criticisms
+<https://en.wikipedia.org/wiki/Concurrent_Versions_System#Criticism>`_
+of CVS, it's longevity has resulted in `CVS support by a large number
+of *Integrated Desktop Environments* (IDEs)
+<https://en.wikipedia.org/wiki/Concurrent_Versions_System#IDEs_with_support_for_CVS>`_
+on all major operating systems with native support for CVS-hosted projects.
 
 
 CVS resources:
@@ -641,13 +686,85 @@ CVS resources:
 SVN
 ^^^^^
 
-**FILL THIS IN**
+`Apache Subversion <https://en.wikipedia.org/wiki/Apache_Subversion>`_
+(SVN) was initially released in 2000, as an effort to write an
+open-source version control system that behaved similarly to CVS, but
+with a variety of bug fixes and feature improvements.  Resultingly,
+SVN similarly relies on a client-server approach, and it's commands
+are quite similar to those for CVS.
 
-Outline: 
+The primary SVN commands include:
 
-* high-level description, including date it was invented
-* listing of main commands
-* listing of free public repositories supporting SVN
+* ``svn help`` -- provides a summary of the available commands.
+
+* ``svn checkout`` or ``svn co`` -- pulls an SVN tree from the server
+  (you should only need to do this once).
+
+* ``svn add`` -- adds a newly-created file or directory to the repository.
+
+* ``svn delete`` or ``svn del`` or ``svn remove`` or ``svn rm`` --
+  deletes the local file immediately, and notifies the repository that
+  on the next commit, the file should be deleted from there as well.
+
+* ``svn status`` or ``svn stat`` --  displays the status of working directories and files.
+
+* ``svn update`` or ``svn up`` -- synchronizes your local version of
+  the code with the server. If you have made local changes, it will
+  try and merge any changes on the server with your changes on your
+  machine. 
+
+* ``svn commit`` or ``svn ci`` -- recursively sends your changes to
+  the SVN server.
+
+  * If called with specific files/directories as arguments, it will
+    send only those.
+
+  * If given no arguments it will send all changes.
+
+  * The ``-m`` option should always be used to pass a log message to the command.
+
+* ``svn diff`` -- shows all changes between the local version of a
+  file and the version in the repository.  May also be used to see
+  changes between specific versions of the file with the syntax ``svn diff -r
+  revision1:revision2 FILENAME``
+
+* ``svn move SRC DEST`` or ``svn mv SRC DEST`` or ``svn rename SRC
+  DEST`` or ``svn ren SRC DEST`` --  moves a file from one directory
+  to another or renames a file in your local directory immediately,
+  and performs the same changes on the server upon committing.
+
+* ``svn revert`` -- replaces a local file(s) with the one in the repository.
+
+* ``svn log`` –- displays the log messages from checkins to to the repository.
+
+* ``svn resolve`` -- if an update showed a conflict (a file marked
+  with a "C"), then once you have manually merged the two versions of
+  file, this command will set the file's status to "resolved".
+
+
+As with any project, SVN also has a number of `criticisms
+<https://en.wikipedia.org/wiki/Apache_Subversion#Limitations_and_problems>`_,
+but again since it has been widely used for over a decade, subversion
+support has been integrated into a vareity of `GUI front-ends and IDEs
+<https://en.wikipedia.org/wiki/List_of_software_that_uses_Subversion>`_.
+
+
+In addition, there are a number of web sites that will host
+open-source SVN-based software projects free of charge, including:
+
+* `Google code <http://code.google.com/hosting/>`_
+
+* `SourceForge <http://sourceforge.net/>`_
+
+* `CloudForge <http://info.cloudforge.com/freeplan.html>`_
+
+* `Bounty Source <http://www.bountysource.com/>`_
+
+* `Assembla
+  <http://offers.assembla.com/free-subversion-hosting/?affiliate=ianterrell>`_
+
+* `BerliOS Developer <http://developer.berlios.de/>`_
+
 
 
 SVN resources:
@@ -662,13 +779,51 @@ SVN resources:
 Git
 ^^^^^
 
-**FILL THIS IN**
+Originally released in 2005 (by `Linus Torvalds
+<https://en.wikipedia.org/wiki/Linus_Torvalds>`_ himself!), `Git
+<https://en.wikipedia.org/wiki/Git_(software)>`_ was one of the first
+version control systems that followed a *distributed revision control*
+model (DRCS), in which there is no longer a single server that all clients
+connect with.  Instead, this follows a peer-to-peer approach. in which
+each peer's working copy of the codebase is a fully-functional
+repository. These work by exchanging patches (sets of changes) between
+peers, resulting in some `key benefits over previous centralized systems
+<https://en.wikipedia.org/wiki/Distributed_revision_control#Distributed_vs._centralized>`_ 
 
-Outline: 
+The `commands
+<https://confluence.atlassian.com/display/STASH/Basic+Git+commands>`_
+used for interacting with Git are nearly identical to those for SVN,
+with a few additions/exceptions: 
 
-* high-level description, including date it was invented
-* listing of main commands
-* listing of free public repositories supporting Git
+* ``git clone`` -- this is the primary mechanism for retrieving a
+  local copy of a Git repository.  Unlike the CVS and SVN ``checkout``
+  commands, the result is a full repository that may act as a server
+  for other client repositories.
+
+* ``git pull`` -- this fetches and merges changes on the remote server
+  to your working repository.
+
+* ``git push`` -- the opposite of ``pull``, this sends all changes in
+  your local repository to a remote repository.
+
+
+While distributed version control systems no longer require a main
+server, it is often useful to have a centralized, "agreed-upon" main
+repository that all users can access.  As with subversion, there are a
+number of web sites that will host open-source Git-based software
+projects free of charge, including: 
+
+* `Bitbucket <https://bitbucket.org/dashboard/overview>`_
+
+* `GitHub <https://github.com/>`_
+
+* `Gitorious <https://gitorious.org/>`_
+
+* `CloudForge <http://www.cloudforge.com/>`_
+
+* `ProjectLocker <http://projectlocker.com/>`_
+
+* `Assembla <http://offers.assembla.com/free-git-hosting/>`_
 
 
 Git resources:
@@ -684,16 +839,64 @@ Git resources:
 Mercurial
 ^^^^^^^^^^^^
 
-**FILL THIS IN**
+(my favorite)
+
+Like Git, `Mercurial
+<https://en.wikipedia.org/wiki/Mercurial_(software)>`_ was first
+released in 2005, and is a widely-used distributed revision control
+system.  It is primarily implemented using Python, and is available on
+all major operating systems.  
+
+Again, like Git, Mercurial commands are similar to CVS and SVN, with a
+few notable exceptions (note that ``hg`` is the chemical symbol for
+mercury): 
+
+* ``hg clone`` -- the primary mechanism for retrieving a local copy of
+  a mercurial repository; the result of which is a full repository
+  that may act as a server for other client repositories.
+
+* ``hg pull`` -- this fetches all changes on the remote server and
+  adds them to your working repository, but *unlike Git it does not
+  merge them in*, allowing you control over which remote changesets
+  are incorporated into your local sandbox, and which are not.
+
+* ``hg up`` -- this is the command that updates your local sandbox
+  with changes that have been pulled into your working repository.
+
+* ``hg push`` -- like Git, this command sends all changes in
+  your local repository to a remote repository.
 
 
-Outline: 
+As with Git and Subversion, there are a variety of web sites that will
+host open-source Mercurial repositories free of charge, including: 
 
-* high-level description, including date it was invented
-* listing of main commands
-* listing of free public repositories supporting Mercurial
-* example of cloning a repository, adding a file, checking it in,
-  pushing back to main repository.
+* `Bitbucket <https://bitbucket.org/dashboard/overview>`_
+
+* `Assembla <http://www.assembla.com/>`_
+
+* `Google code <http://code.google.com/projecthosting/>`_
+
+* `SourceForge <http://sourceforge.net/>`_
+
+* `CodePlex <http://www.codeplex.com/>`_
+
+* `Pikacode <http://pikacode.com/>`_
+
+* `Beanstalk <http://beanstalkapp.com/>`_
+
+* `Kiln <http://www.fogcreek.com/kiln/>`_
+
+
+Mercurial resources:
+
+* `Main mercurial site <http://mercurial.selenic.com/>`_
+
+* `TortoiseHG -- multi-platform, graphical mercurial client
+  <http://tortoisehg.bitbucket.org/>`_ 
+
+* `Mercurial guide <http://hgbook.red-bean.com/>`_
+
+* `Mercurial tutorial <http://mercurial.selenic.com/wiki/Tutorial>`_
 
 
 Mercurial example
@@ -719,7 +922,8 @@ When the command completes, you should have a new directory named
 
    $ cd smuhpc-workshop-example
    $ ls
-   driver.cpp  one_norm.cpp  vector_difference.cpp  vector_product.cpp vector_sum.cpp
+   driver.cpp     vector_difference.cpp   vector_sum.cpp
+   one_norm.cpp   vector_product.cpp 
 
 You should notice the files we used earlier in this session.  Since
 Mercurial is a *distributed* version control system (so is Git), this
@@ -825,13 +1029,3 @@ changes from the shared repository, you ``push`` via
 
 
 
-Mercurial resources:
-
-* `Main mercurial site <http://mercurial.selenic.com/>`_
-
-* `TortoiseHG -- multi-platform, graphical mercurial client
-  <http://tortoisehg.bitbucket.org/>`_ 
-
-* `Mercurial guide <http://hgbook.red-bean.com/>`_
-
-* `Mercurial tutorial <http://mercurial.selenic.com/wiki/Tutorial>`_

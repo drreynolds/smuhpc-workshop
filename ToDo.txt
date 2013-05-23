@@ -19,21 +19,21 @@ Remaining items to do before workshop:
 [X] C++ "Hello world" program, and instructions for compiling at the
     command line. (session 3)
 
-[ ] Lecture information on "Module" system (session 4)
+[X] Lecture information on "Module" system (session 4)
 
-[ ] Module example (session 4)
+[X] Module example (session 4)
 
-[ ] Module exercise (session 4)
+[X] Module exercise (session 4)
 
 [X] General information on version control systems (session 4)
 
-[ ] General info on CVS (session 4)
+[X] General info on CVS (session 4)
 
-[ ] General info on SVN (session 4)
+[X] General info on SVN (session 4)
 
-[ ] General info on Git (session 4)
+[X] General info on Git (session 4)
 
-[ ] General info on Mercurial (session 4)
+[X] General info on Mercurial (session 4)
 
 [X] Mercurial example: clone a repository, add a file, check in, push (session 4)
 
