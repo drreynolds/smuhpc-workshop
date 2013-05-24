@@ -6,23 +6,46 @@ Session 9: Parallel Computing on SMUHPC
 *Assistants: Amit Kumar, Merlin Wilkerson, Doug Tucker*
 
 
-SMUHPC network
+SMU HPC network
 --------------------------------------------------------
 
 **FILL THIS IN**
+
+Outline: 
+
+* gigabit ethernet network connecting disks, login nodes and batch
+  workers.
+
+* Quadrics infiniband network for older parallel nodes.
+
+* QLogic infiniband network for newer parallel nodes.
+
+(Do we have any numbers to mention the performance differences of
+these networks?)
 
 
 
 Compiling and running parallel programs
 --------------------------------------------------------
 
-**FILL THIS IN WITH AN INTRODUCTION TO WHICH PARTS OF SMUHPC CAN RUN
+**FILL THIS IN WITH AN INTRODUCTION TO WHICH PARTS OF SMU HPC CAN RUN
 WHAT**
 
 
 
 OpenMP
 ^^^^^^^^^^
+
+Outline:
+
+* Compiling with GNU
+
+* Compiling with PGI
+
+* Using 8-core nodes
+
+* Using 12-core nodes
+
 
 **Update for SMUHPC**
 
@@ -241,6 +264,22 @@ argument.
 
 MPI
 ^^^^^^^^^^
+
+
+Outline:
+
+* GNU on batch
+
+* PGI on batch
+
+* GNU on new section
+
+* PGI on new section
+
+* GNU on old section
+
+* PGI on old section
+
 
 
 **Update for SMUHPC**
