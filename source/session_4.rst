@@ -1,3 +1,5 @@
+.. _session4:
+
 Session 4: More Programming
 ============================
 
@@ -666,9 +668,9 @@ The primary CVS commands are:
 
 * ``cvs update`` -- brings work tree in sync with repository
 
-While there are many `criticisms
-<https://en.wikipedia.org/wiki/Concurrent_Versions_System#Criticism>`_
-of CVS, it's longevity has resulted in `CVS support by a large number
+While there are many `criticisms of CVS
+<https://en.wikipedia.org/wiki/Concurrent_Versions_System#Criticism>`_,
+it's longevity has resulted in `CVS support by a large number 
 of *Integrated Desktop Environments* (IDEs)
 <https://en.wikipedia.org/wiki/Concurrent_Versions_System#IDEs_with_support_for_CVS>`_
 on all major operating systems with native support for CVS-hosted projects.

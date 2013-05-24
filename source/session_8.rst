@@ -1,3 +1,5 @@
+.. _session8:
+
 Session 8: Introduction to Parallel Computing
 ========================================================
 
@@ -748,6 +750,7 @@ vectors :math:`b`.
    :align: center
 
 
+.. _parallel_computing_metrics:
 
 Parallel computing metrics
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^

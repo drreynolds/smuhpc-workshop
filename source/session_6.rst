@@ -1,3 +1,5 @@
+.. _session6:
+
 Session 6: Using SMU HPC
 ========================================================
 
@@ -291,7 +293,7 @@ The main options on SMU HPC are as follows:
 
   .. code-block:: text
 
-     arguments = arg1 arg2 arg3
+     arguments = "arg1 arg2 arg3"
 
   Argument rules:
 
@@ -674,6 +676,7 @@ information, and the output file should have our desired results.
 
 
 
+.. _running_multiple_condor_jobs:
 
 Running a set of shared node jobs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -822,6 +825,7 @@ After the run finishes, find the 4326th prime number (on line 4326 of
 test3.out) with the command
 
 .. code-block:: bash
+
    $ sed -n 4326p test3.out
 
 
