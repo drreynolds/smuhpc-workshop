@@ -51,6 +51,8 @@ parallel (DMP) programs, typically enabled by MPI.  In the table
 below, we outline the maximum numbers of cores that may be used in
 each paradigm by each portion of the cluster.
 
+|
+
 .. table:: Maximum job sizes that can be run of each type.
 
    ============  ===============  =================
@@ -62,6 +64,8 @@ each paradigm by each portion of the cluster.
    parallel2 	 12 		  384
    ============  ===============  =================
 
+|
+
 Additionally, we have the choice between GNU and PGI compilers when
 compiling our codes for these different execution environments.  In
 the tutorial below, we differentiate between different
@@ -70,57 +74,57 @@ instructions for each approach.  You need not use all of these
 approaches, but they are provided for future reference.
 
 The following links will take you directly to the subsections that
-detail each approach:
+detail each compilation/execution approach:
 
-* OpenMP:
+* Shared-memory programs using OpenMP:
 
-  * :ref:`session9-compiling_OpenMP_GNU`
+  * :ref:`Compiling with GNU <session9-compiling_OpenMP_GNU>`
 
-  * :ref:`session9-compiling_OpenMP_PGI`
+  * :ref:`Compiling with PGI <session9-compiling_OpenMP_PGI>`
 
-  * :ref:`session9-running_OpenMP_commandline`
+  * :ref:`Running at the command line <session9-running_OpenMP_commandline>`
 
-  * :ref:`session9-running_OpenMP_batch1`
+  * :ref:`Running on batch1 <session9-running_OpenMP_batch1>`
 
-  * :ref:`session9-running_OpenMP_batch2`
+  * :ref:`Running on batch2 <session9-running_OpenMP_batch2>`
 
-  * :ref:`session9-running_OpenMP_parallel1`
+  * :ref:`Running on parallel1 <session9-running_OpenMP_parallel1>`
 
-  * :ref:`session9-running_OpenMP_parallel2`
+  * :ref:`Running on parallel2 <session9-running_OpenMP_parallel2>`
 
-* MPI:
+* Distributed memory programs using MPI:
 
-  * :ref:`session9-compiling_MPI_programs`
+  * :ref:`MPI compiler wrappers <session9-compiling_MPI_programs>`
 
-  * batch1 and batch2:
+  * The batch1 and batch2 clusters:
 
-    * :ref:`session9-compiling_MPI_GNU_batch`
+    * :ref:`Compiling with GNU <session9-compiling_MPI_GNU_batch>`
 
-    * :ref:`session9-running_MPI_GNU_batch`
+    * :ref:`Running with GNU <session9-running_MPI_GNU_batch>`
 
-    * :ref:`session9-compiling_MPI_PGI_batch`
+    * :ref:`Compiling with PGI <session9-compiling_MPI_PGI_batch>`
 
-    * :ref:`session9-running_MPI_PGI_batch`
+    * :ref:`Running with PGI <session9-running_MPI_PGI_batch>`
  
-  * parallel1:
+  * The parallel1 cluster:
 
-    * :ref:`session9-compiling_MPI_GNU_parallel1`
+    * :ref:`Compiling with GNU <session9-compiling_MPI_GNU_parallel1>`
 
-    * :ref:`session9-running_MPI_GNU_parallel1`
+    * :ref:`Running with GNU <session9-running_MPI_GNU_parallel1>`
 
-    * :ref:`session9-compiling_MPI_PGI_parallel1`
+    * :ref:`Compiling with PGI <session9-compiling_MPI_PGI_parallel1>`
 
-    * :ref:`session9-running_MPI_PGI_parallel1`
+    * :ref:`Running with PGI <session9-running_MPI_PGI_parallel1>`
 
-  * parallel2:
+  * The parallel2 cluster:
 
-    * :ref:`session9-compiling_MPI_GNU_parallel2`
+    * :ref:`Compiling with GNU <session9-compiling_MPI_GNU_parallel2>`
 
-    * :ref:`session9-running_MPI_GNU_parallel2`
+    * :ref:`Running with GNU <session9-running_MPI_GNU_parallel2>`
 
-    * :ref:`session9-compiling_MPI_PGI_parallel2`
+    * :ref:`Compiling with PGI <session9-compiling_MPI_PGI_parallel2>`
 
-    * :ref:`session9-running_MPI_PGI_parallel2`
+    * :ref:`Running with PGI <session9-running_MPI_PGI_parallel2>`
 
 
 
@@ -537,7 +541,7 @@ commands
   .. code-block:: bash
 
      $ pgc++ driver.cpp -I/grid/software/mpich2-1.3.2/include \
-       -L/grid/software/mpich2-1.3.2/lib -lmpich -lmpl -o driver.exe
+       -L/grid/software/mpich2-1.3.2/lib -lmpich -lmpl -lm -o driver.exe
 
 
 Clearly, specifying the specific instructions for including and
@@ -561,13 +565,14 @@ Depending on your programming language and the specific MPI
 implementation, these wrapper scripts can have different names. The
 typical names for these MPI wrapper scripts are below: 
 
-* C++: ``mpicxx`` or ``mpiCC`` or ``mpic++`` or ``openmpicxx``
+* C++: ``mpicxx``, ``mpiCC``, ``mpic++`` or ``openmpicxx``
 
 * C: ``mpicc`` or ``openmpicc``
 
 * Fortran 90/95: ``mpif90`` or ``openmpif90``
 
-* Fortran 77: ``mpif77`` or ``openmpif77``
+* Fortran 77: ``mpif77`` or ``openmpif77`` (typically, the Fortran
+  90/95 wrapper will also work for these)
 
 In order to use these wrapper scripts on SMU HPC, we must first load
 the correct module environment.  We'll discuss each of these in the
@@ -581,11 +586,39 @@ the myriad compilers and clusters we wish to use.
 Compiling MPI code with the GNU compilers for batch1 and batch2
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+Compilation can occur on any SMU HPC login node.
+
+First, load the ``mpich2/1.1.1/gcc`` module,
+
+.. code-block:: bash
+
+   $ module load mpich2/1.1.1/gcc
+
+Second, compile your executable using one of the MPI wrapper scripts:
+``mpicc``, ``mpicxx``, ``mpif90`` or ``mpif77``.  For example, we may
+compile the example executable as
+
+.. code-block:: bash
+
+   $ mpicxx driver.cpp -lm -o driver_GNU_batch.exe
+
+Note: since the MPI libraries vary based on where we wish to run and
+on which compilers we use, I recommend naming the executable
+appropriately to distinguish it from other compilation approaches.  Of
+course, this is not required.
+
+
 
 .. _session9-running_MPI_GNU_batch:
 
 Running MPI code with the GNU compilers on batch1 and batch2
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+You must launch the job from ``smuhpc.smu.edu`` or
+``smuhpc2.smu.edu``.
+
+**FILL THIS IN**
+
 
 
 .. _session9-compiling_MPI_PGI_batch:
@@ -593,11 +626,39 @@ Running MPI code with the GNU compilers on batch1 and batch2
 Compiling MPI code with the PGI compilers for batch1 and batch2
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+Compilation can occur on any SMU HPC login node.
+
+First, load the ``mpich2/1.3.2/pgi`` module,
+
+.. code-block:: bash
+
+   $ module load mpich2/1.3.2/pgi
+
+Second, compile your executable using one of the MPI wrapper scripts:
+``mpicc``, ``mpicxx``, ``mpif90`` or ``mpif77``.  For example, we may
+compile the example executable as
+
+.. code-block:: bash
+
+   $ mpicxx driver.cpp -lm -o driver_PGI_batch.exe
+
+Note: since the MPI libraries vary based on where we wish to run and
+on which compilers we use, I recommend naming the executable
+appropriately to distinguish it from other compilation approaches.  Of
+course, this is not required.
+
+
 
 .. _session9-running_MPI_PGI_batch:
 
 Running MPI code with the PGI compilers on batch1 and batch2
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+You must launch the job from ``smuhpc.smu.edu`` or
+``smuhpc2.smu.edu``.
+
+**FILL THIS IN**
+
 
 
 .. _session9-compiling_MPI_GNU_parallel1:
@@ -605,11 +666,37 @@ Running MPI code with the PGI compilers on batch1 and batch2
 Compiling MPI code with the GNU compilers for parallel1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+Compilation must occur on ``smuhpc4.smu.edu``.
+
+First, load the ``mvapich2/1.9a2/gcc`` module,
+
+.. code-block:: bash
+
+   $ module load mvapich2/1.9a2/gcc
+
+Second, compile your executable using one of the MPI wrapper scripts:
+``mpicc``, ``mpicxx``, ``mpif90`` or ``mpif77``.  For example, we may
+compile the example executable as
+
+.. code-block:: bash
+
+   $ mpicxx driver.cpp -lm -o driver_GNU_parallel1.exe
+
+Note: since the MPI libraries vary based on where we wish to run and
+on which compilers we use, I recommend naming the executable
+appropriately to distinguish it from other compilation approaches.  Of
+course, this is not required.
+∑
 
 .. _session9-running_MPI_GNU_parallel1:
 
 Running MPI code with the GNU compilers on parallel1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+You must launch the job from ``smuhpc4.smu.edu``.
+
+**FILL THIS IN**
+
 
 
 .. _session9-compiling_MPI_PGI_parallel1:
@@ -617,11 +704,37 @@ Running MPI code with the GNU compilers on parallel1
 Compiling MPI code with the PGI compilers for parallel1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+Compilation must occur on ``smuhpc4.smu.edu``.
+
+First, load the ``mvapich2/1.6/pgi`` module,
+
+.. code-block:: bash
+
+   $ module load mvapich2/1.6/pgi
+
+Second, compile your executable using one of the MPI wrapper scripts:
+``mpicc``, ``mpicxx``, ``mpif90`` or ``mpif77``.  For example, we may
+compile the example executable as
+
+.. code-block:: bash
+
+   $ mpicxx driver.cpp -lm -o driver_PGI_parallel1.exe
+
+Note: since the MPI libraries vary based on where we wish to run and
+on which compilers we use, I recommend naming the executable
+appropriately to distinguish it from other compilation approaches.  Of
+course, this is not required.
+
 
 .. _session9-running_MPI_PGI_parallel1:
 
 Running MPI code with the PGI compilers on parallel1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+You must launch the job from ``smuhpc4.smu.edu``.
+
+**FILL THIS IN**
+
 
 
 
@@ -630,11 +743,38 @@ Running MPI code with the PGI compilers on parallel1
 Compiling MPI code with the GNU compilers for parallel2
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+Compilation must occur on ``smuhpc.smu.edu``, ``smuhpc2.smu.edu`` or
+``smuhpc3.smu.edu``, but **not** on ``smuhpc4``.
+
+First, load the ``mvapich2/1.6/gcc-QL`` module,
+
+.. code-block:: bash
+
+   $ module load mvapich2/1.6/gcc-QL
+
+Second, compile your executable using one of the MPI wrapper scripts:
+``mpicc``, ``mpicxx``, ``mpif90`` or ``mpif77``.  For example, we may
+compile the example executable as
+
+.. code-block:: bash
+
+   $ mpicxx driver.cpp -lm -o driver_GNU_parallel2.exe
+
+Note: since the MPI libraries vary based on where we wish to run and
+on which compilers we use, I recommend naming the executable
+appropriately to distinguish it from other compilation approaches.  Of
+course, this is not required.
+
 
 .. _session9-running_MPI_GNU_parallel2:
 
 Running MPI code with the GNU compilers on parallel2
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+You must launch the job from ``smuhpc4.smu.edu`` (even though you
+could not compile it on that node -- sorry).
+
+**FILL THIS IN**
 
 
 
@@ -643,16 +783,46 @@ Running MPI code with the GNU compilers on parallel2
 Compiling MPI code with the PGI compilers for parallel2
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+Compilation must occur on ``smuhpc.smu.edu``, ``smuhpc2.smu.edu`` or
+``smuhpc3.smu.edu``, but **not** on ``smuhpc4``.
+
+First, load the ``mvapich2/1.6/pgi-QL`` module,
+
+.. code-block:: bash
+
+   $ module load mvapich2/1.6/pgi-QL
+
+Second, compile your executable using one of the MPI wrapper scripts:
+``mpicc``, ``mpicxx``, ``mpif90`` or ``mpif77``.  For example, we may
+compile the example executable as
+
+.. code-block:: bash
+
+   $ mpicxx driver.cpp -lm -o driver_PGI_parallel2.exe
+
+Note: since the MPI libraries vary based on where we wish to run and
+on which compilers we use, I recommend naming the executable
+appropriately to distinguish it from other compilation approaches.  Of
+course, this is not required.
+
 
 .. _session9-running_MPI_PGI_parallel2:
 
 Running MPI code with the PGI compilers on parallel2
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+You must launch the job from ``smuhpc4.smu.edu`` (even though you
+could not compile it on that node -- sorry).
+
+**FILL THIS IN**
 
 
 
 
+
+
+MPI exercise
+"""""""""""""""
 
 
 Set up submission scripts to run the executable driver.exe using 1, 2,
