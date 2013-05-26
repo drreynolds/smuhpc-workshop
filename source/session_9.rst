@@ -184,7 +184,7 @@ flags for well-known compilers include:
 Compiling OpenMP code with the GNU compilers
 """""""""""""""""""""""""""""""""""""""""""""
 
-You can compile the executable driver.exe with the GNU compiler and
+You can compile the executable ``driver.exe`` with the GNU compiler and
 OpenMP using the command 
 
 .. code-block:: bash
@@ -201,7 +201,8 @@ Compiling OpenMP code with the PGI compilers
 """""""""""""""""""""""""""""""""""""""""""""
 
 Assuming that you have already loaded the PGI module, you can compile
-the executable driver.exe with the PGI compiler and OpenMP using the command 
+the executable ``driver.exe`` with the PGI compiler and OpenMP using
+the command  
 
 .. code-block:: bash
 
@@ -686,16 +687,121 @@ Note: since the MPI libraries vary based on where we wish to run and
 on which compilers we use, I recommend naming the executable
 appropriately to distinguish it from other compilation approaches.  Of
 course, this is not required.
-∑
+
+
 
 .. _session9-running_MPI_GNU_parallel1:
 
 Running MPI code with the GNU compilers on parallel1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+**VERIFY THESE INSTRUCTIONS**
+
 You must launch the job from ``smuhpc4.smu.edu``.
 
-**FILL THIS IN**
+The key to launching MPI jobs that utilize more than one node using
+either parallel1 or parallel2 is that you must supply an "executable"
+to condor that handles the process of launching your program
+appropriately.  This Condor/MPI interaction is handled through
+incorporating a few specific items into your condor submission script,
+along with a customized executable script that handles the launching
+of your executable.
+
+This executable script is named ``mvapich2_script``, and is included
+in the ``session9_MPI`` directory that you downloaded above.  You
+should not need to edit this script file except for more advanced
+usage scenarios, which we will not cover during this tutorial.
+
+However, the example condor submission file, ``mpi_condor.sub`` does
+contain specific items that you will need to modify for your usage
+scenario.  This file is reproduced here:
+
+.. code-block:: bash
+
+   # FILENAME mpi_condor.sub
+   # Use this script to submit MPI jobs.
+   # Read the instructions carefully and 
+   # report any issues to your system admins. 
+
+   ###############################################
+   # Edit the following lines to set up your run #
+   ###############################################
+
+   # Your actual executable file name along with arguments goes here
+   arguments     = "./driver.exe"
+
+   # Total number of nodes you would like to run your code on
+   machine_count = 8
+
+   # The particular node type you wish to use,
+   # valid values are {inode,iwnode,cnode}
+   mynodetype    = "inode"
+
+   # Here you define the specific environment variables
+   # _LOAD_MODULE  MPI module required for your job
+   # _WAY=Specify  Number of MPI processes to run on each node
+   environment   = "_LOAD_MODULE=mvapich2/1.9a2/gcc _WAY=3"
+
+   # Select the appropriate file name for your output files.
+   output = out.txt
+   error  = err.txt
+   log    = log.txt
+
+   ###################################
+   # Do not edit the following lines #
+   ###################################
+   universe     = parallel
+   executable   = mvapich2_script
+   getenv       = true
+   requirements = regexp($(mynodetype), Machine)
+   +WantParallelSchedulingGroups = TRUE
+   queue
+
+As should be clear from the structure of this file, you only need to
+modify the first few blocks of options:
+
+* ``arguments`` -- this should include *both* your executable file
+  name and any command-line arguments that it requires.  If more than
+  one item is listed (i.e. if your program uses any command-line
+  arguments), they should be enclosed in double-quotation marks.
+
+* ``machine_count`` -- this should be the number of nodes that you
+  wish to use for your program.  Recall that each node on parallel1
+  has 8 cores.
+
+* ``mynodetype`` -- this is the type of node you wish to use, here it
+  uses "inode", which is the name of the nodes comprisong parallel1.
+
+* ``environment`` -- in addition to any environment variables you wish
+  to specify on your own, you must specify the following two:
+ 
+  * ``_LOAD_MODULE`` -- this is the MPI module required to compile
+    your job.  For GNU on parallel1, the module is
+    ``mvapich2/1.9a2/gcc``, as entered here.
+
+  * ``_WAY`` -- this is the number of cores on each of your requested
+    nodes that you wish to use (1 :math:`\le`  ``_WAY`` :math:`\le`
+    8).  For example, if you chose 8 nodes and 3 way, you would run
+    with 24 total MPI processes.
+
+* ``output``, ``error`` and ``log`` are as usual.
+
+You should not modify any arguments below the lines
+
+.. code-block:: bash
+
+   ###################################
+   # Do not edit the following lines #
+   ###################################
+
+Once you have finished setting up this file, you can submit it as
+usual (only from the  ``smuhpc4`` login node),
+
+.. code-block:: bash
+
+   $ condor_submit ./mpi_condor.sub
+
+
 
 
 
@@ -731,9 +837,113 @@ course, this is not required.
 Running MPI code with the PGI compilers on parallel1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+**VERIFY THESE INSTRUCTIONS**
+
 You must launch the job from ``smuhpc4.smu.edu``.
 
-**FILL THIS IN**
+The key to launching MPI jobs that utilize more than one node using
+either parallel1 or parallel2 is that you must supply an "executable"
+to condor that handles the process of launching your program
+appropriately.  This Condor/MPI interaction is handled through
+incorporating a few specific items into your condor submission script,
+along with a customized executable script that handles the launching
+of your executable.
+
+This executable script is named ``mvapich2_script``, and is included
+in the ``session9_MPI`` directory that you downloaded above.  You
+should not need to edit this script file except for more advanced
+usage scenarios, which we will not cover during this tutorial.
+
+However, the example condor submission file, ``mpi_condor.sub`` does
+contain specific items that you will need to modify for your usage
+scenario.  This file, modified for the PGI/parallel1 usage scenario,
+is reproduced here: 
+
+.. code-block:: bash
+
+   # FILENAME mpi_condor.sub
+   # Use this script to submit MPI jobs.
+   # Read the instructions carefully and 
+   # report any issues to your system admins. 
+
+   ###############################################
+   # Edit the following lines to set up your run #
+   ###############################################
+
+   # Your actual executable file name along with arguments goes here
+   arguments     = "./driver.exe"
+
+   # Total number of nodes you would like to run your code on
+   machine_count = 8
+
+   # The particular node type you wish to use,
+   # valid values are {inode,iwnode,cnode}
+   mynodetype    = "inode"
+
+   # Here you define the specific environment variables
+   # _LOAD_MODULE  MPI module required for your job
+   # _WAY=Specify  Number of MPI processes to run on each node
+   environment   = "_LOAD_MODULE=mvapich2/1.6/pgi _WAY=3"
+
+   # Select the appropriate file name for your output files.
+   output = out.txt
+   error  = err.txt
+   log    = log.txt
+
+   ###################################
+   # Do not edit the following lines #
+   ###################################
+   universe     = parallel
+   executable   = mvapich2_script
+   getenv       = true
+   requirements = regexp($(mynodetype), Machine)
+   +WantParallelSchedulingGroups = TRUE
+   queue
+
+As should be clear from the structure of this file, you only need to
+modify the first few blocks of options:
+
+* ``arguments`` -- this should include *both* your executable file
+  name and any command-line arguments that it requires.  If more than
+  one item is listed (i.e. if your program uses any command-line
+  arguments), they should be enclosed in double-quotation marks.
+
+* ``machine_count`` -- this should be the number of nodes that you
+  wish to use for your program.  Recall that each node on parallel1
+  has 8 cores.
+
+* ``mynodetype`` -- this is the type of node you wish to use, here it
+  uses "inode", which is the name of the nodes comprisong parallel1.
+
+* ``environment`` -- in addition to any environment variables you wish
+  to specify on your own, you must specify the following two:
+ 
+  * ``_LOAD_MODULE`` -- this is the MPI module required to compile
+    your job.  For PGI on parallel1, the module is
+    ``mvapich2/1.6/pgi``, as entered here.
+
+  * ``_WAY`` -- this is the number of cores on each of your requested
+    nodes that you wish to use (1 :math:`\le`  ``_WAY`` :math:`\le`
+    8).  For example, if you chose 8 nodes and 3 way, you would run
+    with 24 total MPI processes.
+
+* ``output``, ``error`` and ``log`` are as usual.
+
+You should not modify any arguments below the lines
+
+.. code-block:: bash
+
+   ###################################
+   # Do not edit the following lines #
+   ###################################
+
+Once you have finished setting up this file, you can submit it as
+usual (only from the  ``smuhpc4`` login node),
+
+.. code-block:: bash
+
+   $ condor_submit ./mpi_condor.sub
+
 
 
 
@@ -771,10 +981,115 @@ course, this is not required.
 Running MPI code with the GNU compilers on parallel2
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+**VERIFY THESE INSTRUCTIONS**
+
 You must launch the job from ``smuhpc4.smu.edu`` (even though you
 could not compile it on that node -- sorry).
 
-**FILL THIS IN**
+The key to launching MPI jobs that utilize more than one node using
+either parallel1 or parallel2 is that you must supply an "executable"
+to condor that handles the process of launching your program
+appropriately.  This Condor/MPI interaction is handled through
+incorporating a few specific items into your condor submission script,
+along with a customized executable script that handles the launching
+of your executable.
+
+This executable script is named ``mvapich2_script``, and is included
+in the ``session9_MPI`` directory that you downloaded above.  You
+should not need to edit this script file except for more advanced
+usage scenarios, which we will not cover during this tutorial.
+
+However, the example condor submission file, ``mpi_condor.sub`` does
+contain specific items that you will need to modify for your usage
+scenario.  This file, modified for the GNU/parallel2 usage scenario,
+is reproduced here: 
+
+.. code-block:: bash
+
+   # FILENAME mpi_condor.sub
+   # Use this script to submit MPI jobs.
+   # Read the instructions carefully and 
+   # report any issues to your system admins. 
+
+   ###############################################
+   # Edit the following lines to set up your run #
+   ###############################################
+
+   # Your actual executable file name along with arguments goes here
+   arguments     = "./driver.exe"
+
+   # Total number of nodes you would like to run your code on
+   machine_count = 8
+
+   # The particular node type you wish to use,
+   # valid values are {inode,iwnode,cnode}
+   mynodetype    = "iwnode"
+
+   # Here you define the specific environment variables
+   # _LOAD_MODULE  MPI module required for your job
+   # _WAY=Specify  Number of MPI processes to run on each node
+   environment   = "_LOAD_MODULE=mvapich2/1.6/gcc-QL _WAY=11"
+
+   # Select the appropriate file name for your output files.
+   output = out.txt
+   error  = err.txt
+   log    = log.txt
+
+   ###################################
+   # Do not edit the following lines #
+   ###################################
+   universe     = parallel
+   executable   = mvapich2_script
+   getenv       = true
+   requirements = regexp($(mynodetype), Machine)
+   +WantParallelSchedulingGroups = TRUE
+   queue
+
+As should be clear from the structure of this file, you only need to
+modify the first few blocks of options:
+
+* ``arguments`` -- this should include *both* your executable file
+  name and any command-line arguments that it requires.  If more than
+  one item is listed (i.e. if your program uses any command-line
+  arguments), they should be enclosed in double-quotation marks.
+
+* ``machine_count`` -- this should be the number of nodes that you
+  wish to use for your program.  Recall that each node on parallel1
+  has 8 cores.
+
+* ``mynodetype`` -- this is the type of node you wish to use, here it
+  uses "inode", which is the name of the nodes comprisong parallel1.
+
+* ``environment`` -- in addition to any environment variables you wish
+  to specify on your own, you must specify the following two:
+ 
+  * ``_LOAD_MODULE`` -- this is the MPI module required to compile
+    your job.  For GNU on parallel2, the module is
+    ``mvapich2/1.6/gcc-QL``, as entered here.
+
+  * ``_WAY`` -- this is the number of cores on each of your requested
+    nodes that you wish to use (1 :math:`\le`  ``_WAY`` :math:`\le`
+    12).  For example, if you chose 8 nodes and 11 way, you would run
+    with 88 total MPI processes.
+
+* ``output``, ``error`` and ``log`` are as usual.
+
+You should not modify any arguments below the lines
+
+.. code-block:: bash
+
+   ###################################
+   # Do not edit the following lines #
+   ###################################
+
+Once you have finished setting up this file, you can submit it as
+usual (only from the  ``smuhpc4`` login node),
+
+.. code-block:: bash
+
+   $ condor_submit ./mpi_condor.sub
+
+
 
 
 
@@ -811,10 +1126,114 @@ course, this is not required.
 Running MPI code with the PGI compilers on parallel2
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+
+**VERIFY THESE INSTRUCTIONS**
+
 You must launch the job from ``smuhpc4.smu.edu`` (even though you
 could not compile it on that node -- sorry).
 
-**FILL THIS IN**
+The key to launching MPI jobs that utilize more than one node using
+either parallel1 or parallel2 is that you must supply an "executable"
+to condor that handles the process of launching your program
+appropriately.  This Condor/MPI interaction is handled through
+incorporating a few specific items into your condor submission script,
+along with a customized executable script that handles the launching
+of your executable.
+
+This executable script is named ``mvapich2_script``, and is included
+in the ``session9_MPI`` directory that you downloaded above.  You
+should not need to edit this script file except for more advanced
+usage scenarios, which we will not cover during this tutorial.
+
+However, the example condor submission file, ``mpi_condor.sub`` does
+contain specific items that you will need to modify for your usage
+scenario.  This file, modified for the PGI/parallel2 usage scenario,
+is reproduced here: 
+
+.. code-block:: bash
+
+   # FILENAME mpi_condor.sub
+   # Use this script to submit MPI jobs.
+   # Read the instructions carefully and 
+   # report any issues to your system admins. 
+
+   ###############################################
+   # Edit the following lines to set up your run #
+   ###############################################
+
+   # Your actual executable file name along with arguments goes here
+   arguments     = "./driver.exe"
+
+   # Total number of nodes you would like to run your code on
+   machine_count = 8
+
+   # The particular node type you wish to use,
+   # valid values are {inode,iwnode,cnode}
+   mynodetype    = "iwnode"
+
+   # Here you define the specific environment variables
+   # _LOAD_MODULE  MPI module required for your job
+   # _WAY=Specify  Number of MPI processes to run on each node
+   environment   = "_LOAD_MODULE=mvapich2/1.6/pgi-QL _WAY=11"
+
+   # Select the appropriate file name for your output files.
+   output = out.txt
+   error  = err.txt
+   log    = log.txt
+
+   ###################################
+   # Do not edit the following lines #
+   ###################################
+   universe     = parallel
+   executable   = mvapich2_script
+   getenv       = true
+   requirements = regexp($(mynodetype), Machine)
+   +WantParallelSchedulingGroups = TRUE
+   queue
+
+As should be clear from the structure of this file, you only need to
+modify the first few blocks of options:
+
+* ``arguments`` -- this should include *both* your executable file
+  name and any command-line arguments that it requires.  If more than
+  one item is listed (i.e. if your program uses any command-line
+  arguments), they should be enclosed in double-quotation marks.
+
+* ``machine_count`` -- this should be the number of nodes that you
+  wish to use for your program.  Recall that each node on parallel1
+  has 8 cores.
+
+* ``mynodetype`` -- this is the type of node you wish to use, here it
+  uses "inode", which is the name of the nodes comprisong parallel1.
+
+* ``environment`` -- in addition to any environment variables you wish
+  to specify on your own, you must specify the following two:
+ 
+  * ``_LOAD_MODULE`` -- this is the MPI module required to compile
+    your job.  For PGI on parallel2, the module is
+    ``mvapich2/1.6/pgi-QL``, as entered here.
+
+  * ``_WAY`` -- this is the number of cores on each of your requested
+    nodes that you wish to use (1 :math:`\le`  ``_WAY`` :math:`\le`
+    12).  For example, if you chose 8 nodes and 11 way, you would run
+    with 88 total MPI processes.
+
+* ``output``, ``error`` and ``log`` are as usual.
+
+You should not modify any arguments below the lines
+
+.. code-block:: bash
+
+   ###################################
+   # Do not edit the following lines #
+   ###################################
+
+Once you have finished setting up this file, you can submit it as
+usual (only from the  ``smuhpc4`` login node),
+
+.. code-block:: bash
+
+   $ condor_submit ./mpi_condor.sub
 
 
 
@@ -824,9 +1243,6 @@ could not compile it on that node -- sorry).
 MPI exercise
 """""""""""""""
 
-
-Set up submission scripts to run the executable driver.exe using 1, 2,
-4, 8, 16, 32 and 64 cores. For the 1, 2, 4, and 8 processor jobs, just
-use one node. For the 16 processor job, try it both using 16 cores on
-one node and 8 cores on 2 nodes. Run the 32 and 64 processor jobs
-using 16 cores/node.
+Set up submission scripts to run the executable ``driver.exe`` using
+1, 2, 4, 8, 16, 32 and 64 cores.  For the 1, 2, 4, and 8 processor jobs, just
+use one node. Run the 16, 32 and 64 processor jobs using 8 cores/node.
