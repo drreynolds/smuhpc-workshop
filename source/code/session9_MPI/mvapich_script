@@ -56,7 +56,7 @@ shift
 # TODO *****
 # Perform sanity check if the files exists and env's are defined?
 
-source  /grid/software/Modules/3.2.9/init/sh
+#source  /grid/software/Modules/3.2.9/init/sh
 
 module load $_LOAD_MODULE
 module list

@@ -1,0 +1,14 @@
+#!/bin/sh
+#**********************************************************************
+# Script to launch MPI jobs on the "batch" side of the SMU HPC cluster
+#**********************************************************************
+
+EXECUTABLE=$1
+
+# initialize the appropriate mpich module
+module load $_LOAD_MODULE
+module list
+
+# run the actual MPI job
+echo -e "\nmpirun -n $_NPROCS $EXECUTABLE $@" 
+mpirun -n $_NPROCS $EXECUTABLE $@

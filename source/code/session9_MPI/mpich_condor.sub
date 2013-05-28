@@ -8,32 +8,31 @@
 ###############################################
 
 # Your actual executable file name along with arguments goes here
-arguments     = "./driver.exe"
-
-# Total number of nodes you would like to run your code on
-machine_count = 8
+arguments = "./driver_GNU_batch.exe"
 
 # The particular node type you wish to use,
-# valid values are {inode,iwnode,cnode}
-mynodetype    = "inode"
+# valid values are {wnode,cnode,cwnode}
+mynodetype = "cnode"
 
 # Here you define the specific environment variables
-# _LOAD_MODULE  MPI module required for your job
-# _WAY=Specify  Number of MPI processes to run on each node
-environment   = "_LOAD_MODULE=mvapich2/1.6/gcc _WAY=2"
+# _LOAD_MODULE     MPI module required for your job
+# _NPROCS=Specify  Number of MPI processes to run on the node
+environment = "_LOAD_MODULE=mpich2/1.1.1/gcc _NPROCS=7"
 
 # Select the appropriate file name for your output files.
 output = out.txt
 error  = err.txt
 log    = log.txt
 
-
 ###################################
 # Do not edit the following lines #
 ###################################
-universe     = parallel
-executable   = mvapich2_script
-getenv       = true
-requirements = regexp($(mynodetype), Machine)
+universe              = vanilla
+executable            = mpich_script
+getenv                = true
+requirements          = regexp($(mynodetype), Machine)
+machine_count         = 1
+Requirements          = CAN_RUN_WHOLE_MACHINE
++RequiresWholeMachine = True
 +WantParallelSchedulingGroups = TRUE
 queue
