@@ -592,6 +592,9 @@ Condor resources:
 Condor Examples
 -------------------
 
+We will perform this session of the workshop on the ``smuhpc2`` login
+node, so log in there to begin.
+
 In the following, we have a few example Condor usage scenarios to
 familiarize you with how to interact with the high-throughput portion
 of the SMU HPC cluster.

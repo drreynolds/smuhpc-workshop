@@ -11,6 +11,9 @@ Session 3: Introduction to Scripts and Programs
 Getting started
 ------------------
 
+We will perform this session of the workshop on the ``smuhpc3`` login
+node, so log in there to begin.
+
 Retrieve the set of files for this session either through
 :download:`clicking here <code/session3.tgz>` or by copying the
 relevant files at the command line:
@@ -28,7 +31,11 @@ Unzip/untar this file with the command
 
 You should now see a new subdirectory entitled ``session3`` in your
 current directory.  This is where we will work for the rest of this
-session.
+session, so go ahead and enter that subdirectory:
+
+.. code-block:: bash
+
+   $ cd session3
 
 
 
@@ -160,7 +167,7 @@ the foreground, type ``^c`` (control c). For example, run
 .. code-block:: bash
 
    $ sleep 100
-   ^C
+   ^c
 
 To kill a suspended or background process, type
 
@@ -194,16 +201,17 @@ numbers (PID) and using ``kill``
    $ sleep 1000 &
    $ ps
 
-   PID TT S TIME COMMAND
-   20077 pts/5 S 0:05 sleep 1000
-   21563 pts/5 T 0:00 firefox
-   21873 pts/5 S 0:25 gedit
+     PID TTY          TIME CMD
+   32093 ?        00:00:00 sshd
+   32094 pts/3    00:00:00 bash
+   32259 pts/3    00:00:00 sleep
+   32260 pts/3    00:00:00 ps
 
 To kill off the process ``sleep 1000``, type
 
 .. code-block:: bash
 
-   $ kill 20077
+   $ kill 32259
 
 and then type ``ps`` again to see if it has been removed from the
 list. 
@@ -213,7 +221,7 @@ can try using the ``-9`` option, i.e. type
 
 .. code-block:: bash
 
-   $ kill -9 20077
+   $ kill -9 32259
 
 Note: It is not possible to kill off other users' processes!
 
@@ -225,8 +233,8 @@ Summary of commands for interacting with running processes:
 Command                 Meaning
 ======================  ==============================================
 *command* &             run *command* in background
-^C                      kill the job running in the foreground
-^Z                      suspend the job running in the foreground
+^c                      kill the job running in the foreground
+^z                      suspend the job in the foreground
 bg                      background the currently-suspended job
 jobs                    list current jobs launched from this shell
 fg 1                    foreground job number 1
@@ -449,12 +457,15 @@ Basics of BASH shell scripting:
      The student is Jenny
      The student is Ahmad
   
-* Loop control statements: the ``break`` statement may be used in a
-  loop just as in C and C++, in that it will break out of the smallest
-  enclosing loop surrounding the ``break`` statement.  Also similarly
-  to C and C++, the ``continue`` statement stops executing the
-  statements within that iteration of the loop and jumps to the next
-  loop iteration. 
+* Loop control statements: 
+
+  * ``break`` may be used in a loop just as in C and C++, in that it
+    will break out of the smallest enclosing loop surrounding the
+    ``break`` statement.  
+
+  * Also similarly to C and C++, ``continue`` stops executing the
+    statements within that iteration of the smallest enclosing loop
+    and jumps to the next loop iteration.
 
 * If-elif-else statements may be performed via the syntax
 
@@ -490,7 +501,7 @@ Basics of BASH shell scripting:
 
 
 
-As an example, consider the following script
+As an example, consider the following script (in ``bash_example.sh``):
 
 .. code-block:: bash
 
@@ -695,12 +706,15 @@ Basics of Python shell scripting:
      3
      4
 
-* Loop control statements: the ``break`` statement may be used in a
-  loop just as in C and C++, in that it will break out of the smallest
-  enclosing ``for`` or ``while`` loop surrounding the ``break``
-  statement.  Also similarly to C and C++, the ``continue`` statement
-  stops executing the statements within that iteration of the loop and
-  jumps to the next loop iteration.
+* Loop control statements: 
+  
+  * ``break`` may be used in a loop just as in C and C++, in that it
+    will break out of the smallest enclosing ``for`` or ``while`` loop
+    surrounding the ``break`` statement.  
+
+  * Also similarly to C and C++, ``continue`` stops executing the
+    statements within that iteration of the smallest enclosing loop
+    and jumps to the next loop iteration.
 
 * If-elif-else statements may be performed via the syntax
 
@@ -747,7 +761,7 @@ Basics of Python shell scripting:
 
 
 As a more lengthy example (akin to the BASH example above), consider
-the following script 
+the following script (in ``python_example.py``):
 
 .. code-block:: python
 
@@ -810,7 +824,7 @@ For example, you may execute the example BASH script from above via
 
    $ bash bash_example.sh
 
-Alternately, if the first line was set to 
+Alternately, since the first line of the script was set to 
 
 .. code-block:: bash
 
@@ -835,13 +849,25 @@ Similarly, you may execute the example Python script from above via
 
    $ python python_example.py
 
-It can also be called from an interactive Python session via 
+It can also be called from an interactive Python session; first enter
+an interactive Python session via the shell command
 
-   >>> exefile("python_example.py")
+.. code-block:: bash
+
+   $ python
+
+and then at the Python prompt enter the command:
+
+.. code-block:: python
+
+   >>> execfile("python_example.py")
 
 where the ``>>>`` corresponds to the Python prompt (in contrast with
-the BASH prompt, ``$``).  Similarly to BASH, if the first line of the
-Python file is set to
+the BASH prompt, ``$``).  To exit the interactive Python session,
+press ``^d`` (as in [control]-[d]).  
+
+Similarly to BASH, since the the first line of this Python script is
+set to 
 
 .. code-block:: python
 
@@ -1017,7 +1043,7 @@ click icons that will handle compilation and execution of your program
 for you.  While IDEs exist in the Linux world, they are rarely used in
 high-performance computing since the compilation approach on your
 laptop typically cannot create code that will execute on the
-worker-nodes of a cluster.
+worker nodes of a cluster.
 
 Hence, we'll now learn the (rather simple) approach for compiling
 codes at the command-line in Linux.  
@@ -1069,12 +1095,12 @@ or for the F77 code we'd use
 
    $ gfortran hello.f
    
-Both of these commands produce the same output, a new file in the
-directory named ``a.out``.  This is the standard output name for
-executables produced by compilers.  However, since a computer on which
-every program was named "a.out" would be entirely unusable, it is
-typical to name your program something more descriptive.  This is
-handled with the command line option ``-o``, e.g.
+Both of these commands produce the same output, a new file named
+``a.out``.  This is the [entirely nondescriptive] standard output name
+for executables produced by compilers.  However, since a computer on
+which every program was named "a.out" would be entirely unusable, it
+is typical to name your program something more useful.  This is
+handled with the command line option ``-o``, e.g. 
 
 .. code-block:: bash
 
@@ -1101,9 +1127,9 @@ just like any other Linux program, via
    .. code-block:: bash
 
       $ ls -l hello.exe
-      -rwxr-xr-x 1 dreynolds math 8.0K May 22 11:32 hello.exe
+      -rwxr-xr-x 1 dreynolds math 8166 May 29 12:26 hello.exe
  
-   The three "x" characters in the string of characters a the left of
+   The three "x" characters in the string at the left of
    the line states state that the program may be executed by the owner
    (dreynolds), the group (math), and others (anyone on the system),
    respectively. 
@@ -1238,6 +1264,13 @@ Then extract the contents of the tar file.
 
    $ tar -xvf units-1.74.tar
 
+Alternatively, since tarred-and-zipped files are so prevalent (often
+called "tarballs"), these two commands may be combined together via
+
+.. code-block:: bash
+
+   $ tar -zxvf units-1.74.tar.gz
+
 Again, list the contents of the directory, then go to the ``units-1.74`` sub-directory
 
 .. code-block:: bash
@@ -1317,6 +1350,12 @@ This will install the files into the ``~/units-1.7.4`` directory you created ear
 
 **Running the software**
 
+Go back to the top of your home directory:
+
+.. code-block:: bash
+
+   $ cd
+
 You are now ready to run the software (assuming everything worked).
 Unlike most of the commands you have used so far, the new ``units``
 executable is not in your ``PATH``, so you cannot run it from your
@@ -1354,7 +1393,13 @@ share         Shared data files
 ==========    ===================================
 
 
-To run the program, change to the ``bin`` directory and type 
+To run the program, change to the ``bin`` directory:
+
+.. code-block:: bash
+
+   $ cd bin
+
+and type:
 
 .. code-block:: bash
 
@@ -1367,7 +1412,8 @@ As an example, convert 6 feet to meters,
    You have: 6 feet
    You want: meters 
 
-   * 1.8288
+           * 1.8288
+           / 0.54680665
 
 If you get the answer 1.8288, congratulations, it worked. Type
 ``^c`` to exit the program.
@@ -1380,3 +1426,11 @@ To read the full documentation, change into the ``info`` directory and type
 .. code-block:: bash
 
    $ info --file=units.info
+
+Here, you can scroll around the page using the arrow keys, use [enter]
+to select a topic, or [n] to go to the next topic, [p] to go back to
+the previous topic, or [u] to go back to the main menu.  
+
+Once you're finished reading up on the ``units`` command, press [q] to
+exit back to the command prompt.
+

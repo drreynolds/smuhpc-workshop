@@ -89,7 +89,7 @@ Remaining items to do before workshop:
 [X] Specific sets of instructions for compiling/running on each parallel
     portion of the cluster (session 9)
 
-[ ] Update all instructions for compiling/running on smuhpc2, smuhpc4
+[X] Update all instructions for compiling/running on smuhpc2, smuhpc4
     with new module system (once sysadmins iron out the bugs).
 
 [X] Change all references to "emacs" to instead be "gedit"

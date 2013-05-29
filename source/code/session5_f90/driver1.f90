@@ -50,6 +50,7 @@ program Driver
   if (etime < stime) then
      etime = etime + 24*3.6d3
   endif
+  write(*,'(A,es16.9)') ' Result from computatoin =',a
   write(*,'(A,es16.9)') ' Total run time =',etime-stime
 
 end program Driver

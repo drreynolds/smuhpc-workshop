@@ -8,6 +8,12 @@ Session 9: Parallel Computing on SMUHPC
 *Assistants: Amit Kumar, Merlin Wilkerson, Doug Tucker*
 
 
+We will perform this session of the workshop using both the
+``smuhpc2`` and ``smuhpc4`` login nodes, so open two windows, one on
+each server.
+
+
+
 SMU HPC network
 --------------------------------------------------------
 
@@ -898,11 +904,11 @@ Compiling MPI code with the GNU compilers for parallel1
 
 Compilation must occur on ``smuhpc4.smu.edu``.
 
-First, load the ``mvapich2/1.9a2/gcc`` module,
+First, load the ``mvapich2/1.6/gcc`` module,
 
 .. code-block:: bash
 
-   $ module load mvapich2/1.9a2/gcc
+   $ module load mvapich2/1.6/gcc
 
 Second, compile your executable using one of the MPI wrapper scripts:
 ``mpicc``, ``mpicxx``, ``mpif90`` or ``mpif77``.  For example, we may

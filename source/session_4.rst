@@ -8,6 +8,10 @@ Session 4: More Programming
 *Assistants: Amit Kumar, Merlin Wilkerson, Doug Tucker*
 
 
+We will perform this session of the workshop on the ``smuhpc3`` login
+node, so log in there to begin.
+
+
 
 Makefiles
 --------------
@@ -53,11 +57,9 @@ section.  Inside this directory you will see a number of files:
 
 .. code-block:: bash
 
-   driver.cpp
-   one_norm.cpp
-   vector_difference.cpp
-   vector_product.cpp
-   vector_sum.cpp
+   driver.cpp      vector_difference.cpp    vector_sum.cpp
+   one_norm.cpp    vector_product.cpp
+
 
 Here, the main program is held in the file ``driver.cpp``, and
 supporting subroutines are held in the remaining files. To compile
@@ -95,8 +97,8 @@ This creates an executable file named ``a.out``, which is the default
 (entirely non-descriptive) name given by most compilers to the
 resulting executable.  The additional argument ``-lm`` is used to tell
 ``g++`` to link these functions against the built-in math library (so
-that we can link with the absolute value function, ``fabs()``, that is
-called inside the ``one_norm.cpp`` file.
+that we can use the absolute value function, ``fabs()``, that is
+called inside the ``one_norm.cpp`` file. 
 
 You can instead give your executable a more descriptive name with the
 ``-o`` option:
@@ -144,43 +146,82 @@ A few rules about ``Makefiles``:
   *target* is run.
 
 As an example, examine the Makefile from session 3.  Here, all of the
-lines are either blank or are comment lines except for the two: 
+lines are either blank or are comment lines except for the four sets: 
 
 .. code-block:: makefile
 
-   main.exe : main.cpp
-         g++ -o main.exe main.cpp
+   hello_cpp.exe : hello.cpp
+           g++ hello.cpp -o hello_cpp.exe
 
-Here, the build target is ``main.exe`` (it is traditional to give the
-target the same name as the output of the build commands). The
-executable depends on the source code file ``main.cpp``. The ``make``
-program then builds ``main.exe`` by issuing the command ``g++ -o
-main.exe main.cpp``, which does the compilation, assembly and linking
-all in one step (since there is only one source code file).  
+   hello_c.exe : hello.c
+           gcc hello.c -o hello_c.exe
+
+   hello_f90.exe : hello.f90
+           gfortran hello.f90 -o hello_f90.exe
+
+   hello_f77.exe : hello.f
+           gfortran hello.f -o hello_f.exe
+
+Here, each of the items to the left of the colons are called *build
+targets*; here we have four targets, ``hello_cpp.exe``,
+``hello_c.exe``, ``hello_f90.exe`` and ``hello_f77.exe`` (it is
+traditional to give the target the same name as the output of the
+build commands).  
+
+Each of these targets depend a source code file
+listed to the right of the colon; here these are ``hello.cpp``,
+``hello.c``, ``hello.f90`` and ``hello.f``, respectively.  
+
+The indented lines (each require a single [tab] character) under each
+target contain the instructions on how to build that executable.  For
+example, ``make`` will build ``hello_cpp.exe`` by issuing the command
+``g++ hello.cpp -o hello_cpp.exe``, which does the compilation,
+assembly and linking all in one step (since there is only one source
+code file). 
 
 Alternatively, this Makefile could have been written:
 
 .. code-block:: makefile
 
-   main.exe : main.cpp
-         g++ -c main.cpp
-         g++ -o main.exe main.o
+   hello_cpp.exe : hello.cpp
+           g++ -c hello.cpp
+           g++ hello.o -o hello_cpp.exe
+
+   hello_c.exe : hello.c
+           gcc -c hello.c
+           gcc hello.o -o hello_c.exe
+
+   hello_f90.exe : hello.f90
+           gfortran -c hello.f90
+           gfortran hello.o -o hello_f90.exe
+
+   hello_f77.exe : hello.f
+           gfortran -c hello.f
+           gfortran hello.o -o hello_f.exe
 
 or even as
 
 .. code-block:: makefile
 
-   main.exe :
-         g++ -c main.cpp
-         g++ -o main.exe main.o
+   hello_cpp.exe : 
+           g++ hello.cpp -o hello_cpp.exe
 
-(which ignores the dependency on ``main.cpp``).
+   hello_c.exe : 
+           gcc hello.c -o hello_c.exe
 
-Create a ``Makefile`` to compile the executable ``driver.exe`` out of
-the files ``driver.cpp``, ``one_norm.cpp``, ``vector_difference.cpp``,
-``vector_product.cpp`` and ``vector_sum.cpp``.  This should encode all
-of the commands that we earlier needed to do by hand. Start out with
-the command 
+   hello_f90.exe : 
+           gfortran hello.f90 -o hello_f90.exe
+
+   hello_f77.exe : 
+           gfortran hello.f -o hello_f.exe
+
+(which ignores the dependency on the source code files ``main.cpp``).
+
+Create a ``Makefile`` to compile the executable ``driver.exe`` for
+session 4, out of the files ``driver.cpp``, ``one_norm.cpp``,
+``vector_difference.cpp``, ``vector_product.cpp`` and
+``vector_sum.cpp``.  This should encode all of the commands that we
+earlier needed to do by hand. Start out with the command 
 
 .. code-block:: bash
 
@@ -190,18 +231,21 @@ to have ``gedit`` create the file ``Makefile`` in the background, so
 that while you edit the ``Makefile`` you can still use the terminal
 window to try out ``make`` as you add commands.
 
-You can incorparate additional targets into your ``Makefile``.  The
-first target in the file will be executed by a ``make`` command
-without any arguments.  Any other targets may be executed through the
-command ``make target``, where ``target`` is the name you have
-specified for a target in the ``Makefile``.  For example, a standard
-``Makefile`` target is to clean up the temporary files created during
-compilation of the executable, typically entitled ``clean``.  In our 
-compilation process, we created the temporary files ``driver.o``,
-``one_norm.o``, ``vector_product.o``, ``vector_sum.o`` and
-``vector_difference.o``.  These could be cleaned up with the single
-command ``make clean`` if we add the following lines to the
-``Makefile``, after your commands to create the executable: 
+As with the example from session 3, you can incorporate more than one
+target into your ``Makefile``.  The first target in the file will be
+executed by a ``make`` command without any arguments.  All other
+targets may be executed through the command ``make target``, where
+``target`` is the name you have specified for a target in the
+``Makefile``.  
+
+For example, a standard ``Makefile`` target is to clean up the
+temporary files created during compilation of the executable,
+typically entitled ``clean``.  In our compilation process, we created
+the temporary files ``driver.o``, ``one_norm.o``,
+``vector_product.o``, ``vector_sum.o`` and ``vector_difference.o``.
+These could be cleaned up with the single command ``make clean`` if we
+add the following lines to the ``Makefile``, after your commands to
+create ``driver.exe``:
 
 .. code-block:: makefile
 
@@ -260,26 +304,40 @@ follows:
   .. code-block:: bash
 
      $ module avail
+     Rebuilding cache file, please wait ... done.
+     
+     --------------- /grid/software/modulefiles/applications ---------------
+        R-2.10.0          meep/1.2                            (D)
+        R-2.15.3          mercurial-2.6.1
+        R-3.0.0           namd/2.9/x86_64/infiniband/non-smp
+        ROOT/5.32         namd/2.9/x86_64/infiniband/smp      (D)
+        abinit            namd/2.9/x86_64/multicore/CUDA
+        java-1.7          python-2.6.5
+        mathematica       python-2.7.5
+        meep/1.1.1
+     
+     ---------------- /grid/software/modulefiles/compilers -----------------
+        g95/0.92/32bit          gcc/4.5.1          pgi/10.5-64bit
+        g95/0.92/64bit  (D)     gcc/4.8.0  (D)     pgi/13.2-64bit  (D)
+     
+     ---------------- /grid/software/modulefiles/libraries -----------------
+        fftw                      mvapich2/1.6/gcc-QL
+        gsl/1.9                   mvapich2/1.6/gcc
+        gsl/1.15          (D)     mvapich2/1.6/pgi-QL
+        hdf5/1.8.3                mvapich2/1.6/pgi     (D)
+        mpich2/1.1.1/gcc          mvapich2/1.9a2/gcc
+        mpich2/1.3.2/pgi
+     
+     ----------------- /grid/software/modulefiles/physics ------------------
+        clhep/2.0.4.5       clhep/2.0.4.7       clhep/2.1.2.3  (D)
+     
+       Where:
+        (D):  Default Module
+     
+     Use "module spider" to find all possible modules. 
+     Use "module keyword key1 key2 ..." to search for all possible modules 
+     matching any of the "keys". 
 
-     ----------- /grid/software/Modules/smu-modules/applications -----------
-     R                                  meep/1.2
-     ROOT/5.32                          namd/2.9/x86_64/infiniband/non-smp
-     abinit                             namd/2.9/x86_64/infiniband/smp
-     mathematica                        namd/2.9/x86_64/multicore/CUDA
-     meep/1.1.1
-     
-     ------------ /grid/software/Modules/smu-modules/libraries -------------
-     fftw                mpich2/1.1.1/gcc    mvapich2/1.6/pgi
-     gsl/1.15            mpich2/1.3.2/pgi    mvapich2/1.6/pgi-QL
-     gsl/1.9             mvapich2/1.6/gcc    mvapich2/1.9a2/gcc
-     hdf5/1.8.3          mvapich2/1.6/gcc-QL
-     
-     ------------ /grid/software/Modules/smu-modules/compilers -------------
-     g95/0.92/32bit g95/0.92/64bit pgi/10.5/64bit pgi/13.2/64bit
-     
-     ------------- /grid/software/Modules/smu-modules/physics --------------
-     ATLASLocalRootBase clhep/2.0.4.7
-     clhep/2.0.4.5      clhep/2.1.2.3
 
 * ``module list`` -- lists all currently loaded modules in your
   working environment.  At first, we have none:
@@ -287,7 +345,10 @@ follows:
   .. code-block:: bash
 
      $ module list
-     No Modulefiles Currently Loaded.
+     Rebuilding cache file, please wait ... done.
+     
+     
+     Lmod Warning: No modules installed
 
 * ``module add`` and ``module load`` -- loads a module into your
   working environment.  For example, at the moment the PGI C compiler
@@ -311,8 +372,9 @@ follows:
   .. code-block:: bash
 
      $ module list
-     Currently Loaded Modulefiles:
-       1) pgi/13.2/64bit
+
+     Currently Loaded Modules:
+       1) pgi/13.2-64bit
 
 * ``module rm`` and ``module unload`` -- undoes a previous "add" or
   "load" command, removing the module from your working environment,
@@ -320,14 +382,16 @@ follows:
 
   .. code-block:: bash
 
-     $ module load mathematica
+     $ module load fftw
      $ module list
-     Currently Loaded Modulefiles:
-       1) pgi/13.2/64bit   2) mathematica
-     $ module unload mathematica
+
+     Currently Loaded Modules:
+       1) pgi/13.2-64bit    2) fftw
+     $ module unload fftw
      $ module list
-     Currently Loaded Modulefiles:
-       1) pgi/13.2/64bit
+
+     Currently Loaded Modules:
+       1) pgi/13.2-64bit
 
 * ``module switch`` and ``module swap`` -- this does a combination
   unload/load, swapping out one module for another, e.g.
@@ -336,11 +400,11 @@ follows:
 
      $ module load mvapich2/1.6/gcc
      $ module list
-     Currently Loaded Modulefiles:
+     Currently Loaded Modules:
        1) pgi/13.2/64bit     2) mvapich2/1.6/gcc
      $ module swap mvapich2/1.6/gcc mvapich2/1.6/gcc-QL
      $ module list
-     Currently Loaded Modulefiles:
+     Currently Loaded Modules:
        1) pgi/13.2/64bit        2) mvapich2/1.6/gcc-QL
 
 * ``module display`` and ``module show`` -- this shows detaled
@@ -349,38 +413,26 @@ follows:
  
   .. code-block:: bash
 
-     $ module show R
-     -------------------------------------------------------------------
-     /grid/software/Modules/smu-modules/applications/R:
-     
-     module-whatis	 loads R executables in current environment 
-     setenv		 R_HOME /grid/software/R-2.10.0 
-     prepend-path	 PATH /grid/software/R-2.10.0/bin 
-     prepend-path	 LD_LIBRARY_PATH /grid/software/R-2.10.0/lib64 
-     -------------------------------------------------------------------
+     $ module show R-3.0.0
+     Rebuilding cache file, please wait ... done.
+
+     ------------------------------------------------------------
+        /grid/software/modulefiles/applications/R-3.0.0.lua:
+     ------------------------------------------------------------
+     whatis("loads R executables in current environment")
+     setenv("R_HOME", "/grid/software/R-3.0.0")
+     prepend_path("PATH", "/grid/software/R-3.0.0/bin:/grid/software/gcc-4.8
+     .0/bin")
+     prepend_path("MANPATH", "/grid/software/R-3.0.0/share/man")
+     prepend_path("LD_LIBRARY_PATH", "/grid/software/R-3.0.0/lib64:/grid/sof
+     tware/R-3.0.0/lib64:/grid/software/gcc-4.8.0/lib64:/grid/software/gcc-4
+     .8.0/lib:/grid/software/gmp-5.1.1/lib:/grid/software/mpfr-3.1.2/lib:/gr
+     id/software/mpc-1.0.1/lib")
 
 * ``module help`` -- This displays a set of descriptive information
   about the module (what it does, the version number of the
-  software, etc.), e.g.
-
-  .. code-block:: bash
-
-     $ module help fftw
-     
-     ----------- Module Specific Help for 'fftw' -----------------------
-     
-        Loads FFTW - 'A free collection of fast C routines forcomputing 
-         the Discrete Fourier Transform in one or more dimensions'
-
-        This adds /grid/software/fftw-3.2.2/* to several of the
-        environment variables.
-     
-        FFTW Version 3.2.2
-     
-     
-        fftw-wisdom-to-conf
-        fftw-wisdom
-
+  software, etc.).  This only applies to packages where their "help"
+  pages have been installed (none yet on SMU HPC).
 
 
 
@@ -418,10 +470,21 @@ Module exercise
 ^^^^^^^^^^^^^^^^^^
 
 Run Mathematica on SMUHPC, using it to integrate the function
-:math:`f(x) = \log(x^3-2)`.  Once in Mathematica, you can use the
-"Help"->"Documentation Center" menu and search for "Integration".
-*Hint: to execute a Mathematica command, after entering the command
-you should press [shift]-[enter]*. 
+:math:`f(x) = \log(x^3-2)`.  
+
+Hints:
+
+* Find/load the appropriate module.
+
+* Use ``mathematica`` at the command-line.
+
+* Click "Notebook".
+
+* Once in Mathematica, use the "Help"->"Documentation Center" menu and
+  search for "Integration". 
+
+* At the Mathematica prompt, after entering a Mathematica command it
+  may be executed with [shift]-[enter]. 
 
 
 
@@ -462,8 +525,8 @@ past without realizing it. Do you have an directories with files like this?
 
 * my_function_even_older.c
 
-It's why we use "Save As". You want to save the new file without
-obliterating the old one.  It's a common problem, and solutions are
+It's why we use "Save As"; you want to save the new file without
+writing over the old one.  It's a common problem, and solutions are
 usually like this: 
 
 * Make a *single backup copy* (e.g. Document.old.txt).
@@ -472,7 +535,7 @@ usually like this:
   e.g. Document_V1.txt, DocumentMarch2012.txt.
 
 * We may even use a *shared folder* so other people can see and edit
-  files without sending them over email.  Hopefully they rename the 
+  files without sending them by email.  Hopefully they rename the 
   file after they save it. 
 
 
@@ -480,11 +543,10 @@ So Why Do We Need A Version Control System (VCS)?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Our shared folder/naming system is fine for class projects or one-time
-papers.  But software projects?
-
-Do you imagine that the Windows source code sits in a shared folder
-like "Windows7-Latest-New", for anyone to edit?  Or that every
-programmer just works on different files in the same folder?
+papers, but is exceptionally bad for software projects.  Do you
+imagine that the Windows source code sits in a shared folder named
+something like "Windows7-Latest-New", for anyone to edit?  Or that
+every programmer just works on different files in the same folder?
 
 Large, fast-changing projects with multiple authors need a Version Control
 System (think: "file database") to track changes and avoid
@@ -525,12 +587,13 @@ general chaos. A good VCS does the following:
   (tracking changes separately). Later, you can merge your work back
   into the common area. 
 
-Shared folders are quick and simple, but can't beat these features.
+Shared folders are quick and simple, but can't provide these critical
+features. 
 
 
 
-General definitions
-^^^^^^^^^^^^^^^^^^^^^
+General VCS definitions
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 Most version control systems involve the following concepts, though
 the labels may be different. 
@@ -614,21 +677,21 @@ A typical scenario goes like this:
 * Alice adds a file (ShoppingList.txt) to the repository. 
 
 * Alice checks out the file, makes a change (puts "milk" on the list),
-  and checks it back in with a checkin message ("Added required
-  item."). 
+  and checks it back in with a checkin message ("Added delicious beverage."). 
 
 * The next morning, Bob updates his local working set and sees the
   latest revision of ShoppingList.txt, which contains "milk".
 
-* Bob adds "eggs" to the list, while Alice also adds "bread" to the
+* Bob adds "donuts" to the list, while Alice also adds "eggs" to the
   list.
 
-* Bob checks the list in.
+* Bob checks the list in, with a checking message `"Mmmmm, donuts"
+  <https://www.youtube.com/watch?v=8-4P1WPE-Qg>`_. 
 
 * Alice updates her copy of the list before checking it in, and
   notices that there is a conflict.  Realizing that the order of items
-  doesn't matter, she merges the changes by putting both "eggs" and
-  "bread" on the list, and checks in the final version.
+  doesn't matter, she merges the changes by putting both "donuts" and
+  "eggs" on the list, and checks in the final version.
 
 
 
@@ -747,7 +810,7 @@ The primary SVN commands include:
 As with any project, SVN also has a number of `criticisms
 <https://en.wikipedia.org/wiki/Apache_Subversion#Limitations_and_problems>`_,
 but again since it has been widely used for over a decade, subversion
-support has been integrated into a vareity of `GUI front-ends and IDEs
+support has been integrated into a variety of `GUI front-ends and IDEs
 <https://en.wikipedia.org/wiki/List_of_software_that_uses_Subversion>`_.
 
 
@@ -785,11 +848,12 @@ Originally released in 2005 (by `Linus Torvalds
 <https://en.wikipedia.org/wiki/Linus_Torvalds>`_ himself!), `Git
 <https://en.wikipedia.org/wiki/Git_(software)>`_ was one of the first
 version control systems that followed a *distributed revision control*
-model (DRCS), in which there is no longer a single server that all clients
-connect with.  Instead, this follows a peer-to-peer approach. in which
-each peer's working copy of the codebase is a fully-functional
-repository. These work by exchanging patches (sets of changes) between
-peers, resulting in some `key benefits over previous centralized systems
+model (DRCS), in which it is no longer required to have a single
+server that all clients connect with.  Instead, DRCS follows a
+peer-to-peer approach. in which each peer's working copy of the
+codebase is a fully-functional repository. These work by exchanging
+patches (sets of changes) between peers, resulting in some `key
+benefits over previous centralized systems 
 <https://en.wikipedia.org/wiki/Distributed_revision_control#Distributed_vs._centralized>`_ 
 
 The `commands
@@ -905,11 +969,18 @@ Mercurial example
 """"""""""""""""""""
 
 We'll get a little experience with using Mercurial to "collaborate" on
-a shared project.  The first step in using an version control system
+a shared project.  The first step in using a version control system
 on an existing repository it to do the initial download of the code
 from the main repository.  This repository can often be on a
 standalone server, on the web, or it can even reside in someone else's
 home directory.  Here, we'll use one that I've set up for this class.
+
+We'll first need to load the Mercurial module:
+
+.. code-block:: bash
+
+   $ module load mercurial-2.6.1
+
 In Mercurial, the initial download of the code uses the ``clone``
 command:
 
@@ -928,8 +999,8 @@ When the command completes, you should have a new directory named
    one_norm.cpp   vector_product.cpp 
 
 You should notice the files we used earlier in this session.  Since
-Mercurial is a *distributed* version control system (so is Git), this
-directory is now a new source code repository of your own. 
+Mercurial is a *distributed* version control system, this
+directory is now a new repository of your own. 
 
 In this directory, add a new file of the form *lastname.txt*
 containing your first name, e.g.
@@ -997,9 +1068,16 @@ should first retrieve all changes that have been pushed by others:
    $ hg pull
    $ hg update
 
-If the ``update`` command complains about changes needing to be merged
-(meaning that someone else checked things in, so your changes need to
-be merged with his/hers), then you can ``merge`` via
+If the ``update`` command returns successfully, then you can push your
+changes back to my example repository with the command
+
+.. code-block:: bash
+
+   $ hg push
+
+However, if the ``update`` command complained about changes needing to
+be merged (meaning that someone else checked things in, so your
+changes need to be merged with his/hers), then you can ``merge`` via
 
 .. code-block:: bash
 

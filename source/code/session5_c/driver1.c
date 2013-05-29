@@ -71,6 +71,7 @@ int main(int argc, char* argv[]) {
   double runtime = ((double) (ftime - stime))/CLOCKS_PER_SEC;
 
   /* output solution time */
+  printf(" Result from computation = %.12e\n",a);
   printf(" Total run time = %.12e\n",runtime);
 
   /* free data arrays */

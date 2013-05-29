@@ -11,6 +11,9 @@ Session 7: Postprocessing
 Getting started
 ----------------
 
+We will perform this session of the workshop on the ``smuhpc3`` login
+node, so log in there to begin.
+
 Scientific simulation is worthless unless the results of those
 simulations can be analyzed and understood.  Unfortunately, most
 classes on scientific computing focus almost exclusively on how to
