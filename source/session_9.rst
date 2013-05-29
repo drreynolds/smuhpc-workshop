@@ -667,7 +667,7 @@ scenario.  This file is reproduced here:
    ###############################################
 
    # Your actual executable file name along with arguments goes here
-   arguments   = "./driver_GNU_batch.exe"
+   arguments   = "driver_GNU_batch.exe"
 
    # The particular node type you wish to use,
    # valid values are {wnode,cnode,cwnode}
@@ -675,13 +675,18 @@ scenario.  This file is reproduced here:
 
    # Here you define the specific environment variables
    # _LOAD_MODULE  MPI module required for your job
-   # _NPROCS=Specify  Number of MPI processes to run on the node
+   # _NPROCS       Number of MPI processes to run on the node
    environment = "_LOAD_MODULE=mpich2/1.1.1/gcc _NPROCS=7"
 
    # Select the appropriate file name for your output files.
    output = out.txt
    error  = err.txt
    log    = log.txt
+
+   # Set email notification settings here
+   notification = Always
+   notify_user  = username@smu.edu
+
 
    ###################################
    # Do not edit the following lines #
@@ -690,8 +695,7 @@ scenario.  This file is reproduced here:
    executable            = mpich_script
    getenv                = true
    requirements          = regexp($(mynodetype), Machine)
-   machine_count         = 1
-   Requirements          = CAN_RUN_WHOLE_MACHINE
+   requirements          = CAN_RUN_WHOLE_MACHINE
    +RequiresWholeMachine = True
    +WantParallelSchedulingGroups = TRUE
    queue
@@ -803,28 +807,33 @@ usual (only from the ``smuhpc`` or ``smuhpc2`` login nodes),
       # Use this script to submit MPICH jobs on batch1 and batch2
       # Read the instructions carefully and 
       # report any issues to your system admins. 
-
+   
       ###############################################
       # Edit the following lines to set up your run #
       ###############################################
-
+   
       # Your actual executable file name along with arguments goes here
-      arguments   = "./driver_PGI_batch.exe"
-
+      arguments   = "driver_PGI_batch.exe"
+   
       # The particular node type you wish to use,
       # valid values are {wnode,cnode,cwnode}
       mynodetype  = "cwnode"
-
+   
       # Here you define the specific environment variables
       # _LOAD_MODULE  MPI module required for your job
-      # _NPROCS=Specify  Number of MPI processes to run on the node
+      # _NPROCS       Number of MPI processes to run on the node
       environment = "_LOAD_MODULE=mpich2/1.3.2/pgi _NPROCS=11"
-
+   
       # Select the appropriate file name for your output files.
       output = out.txt
       error  = err.txt
       log    = log.txt
-
+   
+      # Set email notification settings here
+      notification = Always
+      notify_user  = username@smu.edu
+   
+   
       ###################################
       # Do not edit the following lines #
       ###################################
@@ -832,8 +841,7 @@ usual (only from the ``smuhpc`` or ``smuhpc2`` login nodes),
       executable            = mpich_script
       getenv                = true
       requirements          = regexp($(mynodetype), Machine)
-      machine_count         = 1
-      Requirements          = CAN_RUN_WHOLE_MACHINE
+      requirements          = CAN_RUN_WHOLE_MACHINE
       +RequiresWholeMachine = True
       +WantParallelSchedulingGroups = TRUE
       queue
@@ -938,7 +946,7 @@ scenario.  This file is reproduced here:
 .. code-block:: bash
 
    # FILENAME mvapich_condor.sub
-   # Use this script to submit MPI jobs.
+   # Use this script to submit MPI jobs on parallel1 and parallel2.
    # Read the instructions carefully and 
    # report any issues to your system admins. 
 
@@ -947,7 +955,7 @@ scenario.  This file is reproduced here:
    ###############################################
 
    # Your actual executable file name along with arguments goes here
-   arguments     = "./driver_GNU_parallel1.exe"
+   arguments     = "driver_GNU_parallel1.exe"
 
    # Total number of nodes you would like to run your code on
    machine_count = 2
@@ -958,13 +966,18 @@ scenario.  This file is reproduced here:
 
    # Here you define the specific environment variables
    # _LOAD_MODULE  MPI module required for your job
-   # _WAY=Specify  Number of MPI processes to run on each node
-   environment   = "_LOAD_MODULE=mvapich2/1.9a2/gcc _WAY=3"
+   # _WAY          Number of MPI processes to run on each node
+   environment   = "_LOAD_MODULE=mvapich2/1.6/gcc _WAY=3"
 
    # Select the appropriate file name for your output files.
    output = out.txt
    error  = err.txt
    log    = log.txt
+
+   # Set email notification settings here
+   notification = Always
+   notify_user  = username@smu.edu
+
 
    ###################################
    # Do not edit the following lines #
@@ -996,7 +1009,7 @@ modify the first few blocks of options:
  
   * ``_LOAD_MODULE`` -- this is the MPI module required to compile
     your job.  For GNU on parallel1, the module is
-    ``mvapich2/1.9a2/gcc``, as entered here.
+    ``mvapich2/1.6/gcc``, as entered here.
 
   * ``_WAY`` -- this is the number of cores on each of your requested
     nodes that you wish to use (1 :math:`\le`  ``_WAY`` :math:`\le`
@@ -1083,7 +1096,7 @@ scenario.  This file is reproduced here:
 .. code-block:: bash
 
    # FILENAME mvapich_condor.sub
-   # Use this script to submit MPI jobs.
+   # Use this script to submit MPI jobs on parallel1 and parallel2.
    # Read the instructions carefully and 
    # report any issues to your system admins. 
 
@@ -1092,7 +1105,7 @@ scenario.  This file is reproduced here:
    ###############################################
 
    # Your actual executable file name along with arguments goes here
-   arguments     = "./driver_PGI_parallel1.exe"
+   arguments     = "driver_PGI_parallel1.exe"
 
    # Total number of nodes you would like to run your code on
    machine_count = 3
@@ -1103,13 +1116,18 @@ scenario.  This file is reproduced here:
 
    # Here you define the specific environment variables
    # _LOAD_MODULE  MPI module required for your job
-   # _WAY=Specify  Number of MPI processes to run on each node
+   # _WAY          Number of MPI processes to run on each node
    environment   = "_LOAD_MODULE=mvapich2/1.6/pgi _WAY=4"
 
    # Select the appropriate file name for your output files.
    output = out.txt
    error  = err.txt
    log    = log.txt
+
+   # Set email notification settings here
+   notification = Always
+   notify_user  = username@smu.edu
+
 
    ###################################
    # Do not edit the following lines #
@@ -1120,6 +1138,7 @@ scenario.  This file is reproduced here:
    requirements = regexp($(mynodetype), Machine)
    +WantParallelSchedulingGroups = TRUE
    queue
+
 
 As should be clear from the structure of this file, you only need to
 modify the first few blocks of options:
@@ -1141,12 +1160,12 @@ modify the first few blocks of options:
  
   * ``_LOAD_MODULE`` -- this is the MPI module required to compile
     your job.  For GNU on parallel1, the module is
-    ``mvapich2/1.9a2/gcc``, as entered here.
+    ``mvapich2/1.6/pgi``, as entered here.
 
   * ``_WAY`` -- this is the number of cores on each of your requested
     nodes that you wish to use (1 :math:`\le`  ``_WAY`` :math:`\le`
-    8).  For example, if you chose 8 nodes and 3 way, you would run
-    with 24 total MPI processes.
+    8).  For example, if you chose 3 nodes and 4 way, you would run
+    with 12 total MPI processes.
 
 * ``output``, ``error`` and ``log`` are as usual.
 
@@ -1230,35 +1249,40 @@ is reproduced here:
 
 .. code-block:: bash
 
-   # FILENAME mpi_condor.sub
-   # Use this script to submit MPI jobs.
+   # FILENAME mvapich_condor.sub
+   # Use this script to submit MPI jobs on parallel1 and parallel2.
    # Read the instructions carefully and 
    # report any issues to your system admins. 
-
+   
    ###############################################
    # Edit the following lines to set up your run #
    ###############################################
-
+   
    # Your actual executable file name along with arguments goes here
-   arguments     = "./driver_GNU_parallel2.exe"
-
+   arguments     = "driver_GNU_parallel2.exe"
+   
    # Total number of nodes you would like to run your code on
    machine_count = 2
-
+   
    # The particular node type you wish to use,
-   # valid values are {inode,iwnode,cnode}
+   # valid values are {inode,iwnode}
    mynodetype    = "iwnode"
-
+   
    # Here you define the specific environment variables
    # _LOAD_MODULE  MPI module required for your job
-   # _WAY=Specify  Number of MPI processes to run on each node
-   environment   = "_LOAD_MODULE=mvapich2/1.6/gcc-QL _WAY=11"
-
+   # _WAY          Number of MPI processes to run on each node
+   environment = "_LOAD_MODULE=mvapich2/1.6/gcc-QL _WAY=11"
+   
    # Select the appropriate file name for your output files.
    output = out.txt
    error  = err.txt
    log    = log.txt
-
+   
+   # Set email notification settings here
+   notification = Always
+   notify_user  = username@smu.edu
+   
+   
    ###################################
    # Do not edit the following lines #
    ###################################
@@ -1268,6 +1292,7 @@ is reproduced here:
    requirements = regexp($(mynodetype), Machine)
    +WantParallelSchedulingGroups = TRUE
    queue
+
 
 As should be clear from the structure of this file, you only need to
 modify the first few blocks of options:
@@ -1374,35 +1399,40 @@ is reproduced here:
 
 .. code-block:: bash
 
-   # FILENAME mpi_condor.sub
-   # Use this script to submit MPI jobs.
+   # FILENAME mvapich_condor.sub
+   # Use this script to submit MPI jobs on parallel1 and parallel2.
    # Read the instructions carefully and 
    # report any issues to your system admins. 
-
+   
    ###############################################
    # Edit the following lines to set up your run #
    ###############################################
-
+   
    # Your actual executable file name along with arguments goes here
-   arguments     = "./driver_PGI_parallel2.exe"
-
+   arguments     = "driver_PGI_parallel2.exe"
+   
    # Total number of nodes you would like to run your code on
    machine_count = 3
-
+   
    # The particular node type you wish to use,
-   # valid values are {inode,iwnode,cnode}
+   # valid values are {inode,iwnode}
    mynodetype    = "iwnode"
-
+   
    # Here you define the specific environment variables
    # _LOAD_MODULE  MPI module required for your job
-   # _WAY=Specify  Number of MPI processes to run on each node
-   environment   = "_LOAD_MODULE=mvapich2/1.6/pgi-QL _WAY=11"
-
+   # _WAY          Number of MPI processes to run on each node
+   environment = "_LOAD_MODULE=mvapich2/1.6/pgi-QL _WAY=10"
+   
    # Select the appropriate file name for your output files.
    output = out.txt
    error  = err.txt
    log    = log.txt
-
+   
+   # Set email notification settings here
+   notification = Always
+   notify_user  = username@smu.edu
+   
+   
    ###################################
    # Do not edit the following lines #
    ###################################
@@ -1412,6 +1442,8 @@ is reproduced here:
    requirements = regexp($(mynodetype), Machine)
    +WantParallelSchedulingGroups = TRUE
    queue
+
+
 
 As should be clear from the structure of this file, you only need to
 modify the first few blocks of options:
@@ -1437,8 +1469,8 @@ modify the first few blocks of options:
 
   * ``_WAY`` -- this is the number of cores on each of your requested
     nodes that you wish to use (1 :math:`\le`  ``_WAY`` :math:`\le`
-    12).  For example, if you chose 3 nodes and 11 way, you would run
-    with 33 total MPI processes.
+    12).  For example, if you chose 3 nodes and 10 way, you would run
+    with 30 total MPI processes.
 
 * ``output``, ``error`` and ``log`` are as usual.
 

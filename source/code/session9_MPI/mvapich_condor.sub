@@ -1,5 +1,5 @@
-# FILENAME mpi_condor.sub
-# Use this script to submit MPI jobs.
+# FILENAME mvapich_condor.sub
+# Use this script to submit MPI jobs on parallel1 and parallel2.
 # Read the instructions carefully and 
 # report any issues to your system admins. 
 
@@ -8,28 +8,28 @@
 ###############################################
 
 # Your actual executable file name along with arguments goes here
-arguments = "driver_GNU_parallel1.exe"
+arguments     = "driver_GNU_parallel1.exe"
 
 # Total number of nodes you would like to run your code on
 machine_count = 2
 
 # The particular node type you wish to use,
 # valid values are {inode,iwnode}
-mynodetype = "inode"
+mynodetype    = "inode"
 
 # Here you define the specific environment variables
 # _LOAD_MODULE  MPI module required for your job
-# _WAY=Specify  Number of MPI processes to run on each node
+# _WAY          Number of MPI processes to run on each node
 environment = "_LOAD_MODULE=mvapich2/1.6/gcc _WAY=3"
 
 # Select the appropriate file name for your output files.
-output = out6.txt
-error  = err6.txt
-log    = log6.txt
+output = out.txt
+error  = err.txt
+log    = log.txt
 
 # Set email notification settings here
 notification = Always
-notify_user  = reynolds@smu.edu
+notify_user  = username@smu.edu
 
 
 ###################################

@@ -31,8 +31,8 @@ int main(int argc, char* argv[]) {
 
   // determine this proc's interval in overall problem domain
   // (assumes homogeneous system, giving all procs equal work)
-  is = floor(1.0*n/numprocs)*myid + 1;
-  ie = floor(1.0*n/numprocs)*(myid+1);
+  is = (int) (floor(1.0*n/numprocs)*myid + 1);
+  ie = (int) (floor(1.0*n/numprocs)*(myid+1));
   if (myid == numprocs-1)  ie = n;
 
   // initialize the vectors (only those parts that reside on this proc)
