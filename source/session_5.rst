@@ -8,9 +8,6 @@ Session 5: Advanced Programming
 *Assistants: Amit Kumar, Merlin Wilkerson, Doug Tucker*
 
 
-..
-   **CONVERT THESE EXERCISES INTO EXAMPLES, AND ADD A MORE CHALLENGING FOR THEM TO DO?**
-
 
 
 Getting started
@@ -225,7 +222,15 @@ that of using a tool to track down the bug for us.
 
 The tool we will use is the GNU debugger, which can be accessed
 through running the faulty executable program from within the
-debugging program itself.  Load the executable into ``gdb`` with the
+debugging program itself.  On ``smuhpc3``, you must first load the
+``gcc`` module before accessing ``gdb`` (on the other login nodes this
+step is not required):
+
+.. code-block:: bash
+ 
+   $ module load gdb
+
+Load the executable into ``gdb`` with the
 command 
 
 .. code-block:: bash
