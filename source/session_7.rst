@@ -36,16 +36,22 @@ relevant files at the command line:
 
    $ cp ~dreynolds/SMUHPC_tutorial/session7.tgz .
 
-Unzip this file, and build the executable with ``make``.
+Unzip this file, enter the resulting directory, and build the
+executable with ``make``.
 
-Run the executable at the command-line.  You should see a set of
-output, ending with the lines:
+Run the executable at the command-line.
+
+.. code-block:: bash
+
+   $ ./advection.exe
+
+You should see a set of output, ending with the lines:
 
 .. code-block:: text
 
    writing output file 24, step = 2399, t = 0.48
    writing output file 25, step = 2499, t = 0.5
-   total runtime = 2.0000000000000001e-01
+   total runtime = 3.1000000000000000e-01
 
 List the files in the subdirectory; you should see a new set of files
 with the names ``u_sol*.txt``.  These files contain solution data from
@@ -84,7 +90,6 @@ function used to output the two-dimensional data array ``u``:
    int output(double *u, double t, int nx, int ny, int noutput) {
 
      // set output file name
-     // Note: we reserve the first set of digits for the MPI process (unused here)
      char outname[100];
      sprintf(outname, "u_sol.%03i.txt", noutput);
 
@@ -105,7 +110,6 @@ function used to output the two-dimensional data array ``u``:
      fclose(FID);
     
      // now output a metadata file, containing general run information
-     // Note: the two 1's will be used for the MPI process dimensions (unused here)
      FID = fopen("u_sol_meta.txt","w");
      fprintf(FID, "%i\n", nx);
      fprintf(FID, "%i\n", ny);
@@ -525,11 +529,18 @@ How these work:
   * (Commented out) Pause the loop until the user hits "enter".
 
 
-Run this code as usual, using either Matlab or Python.  
+Run this code as usual, using either Matlab,
 
 .. code-block:: bash
 
+   $ module load matlab
    $ matlab -r plot_solution
+
+or Python,
+
+.. code-block:: bash
+
+   $ module load python-2.7.5
    $ python ./plot_solution.py
 
 You should then see a set of ``.png`` images in the directory:

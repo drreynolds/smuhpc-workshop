@@ -116,18 +116,31 @@ General SMU HPC information
 * The software stack for the full cluster includes a variety of high
   performance mathematics and software libraries, as well as the GNU,
   NAG and PGI compiler suites, as well as Matlab, Mathematica, R and
-  python for batch scripting and interactive data analysis.
+  Python for batch scripting and interactive data analysis.
 
 * To log into any of ``gpu1``, ``gpu2``, ``highmem1`` or ``highmem2``,
   you must first log into one of the login nodes (``smuhpc``,
   ``smuhpc2``, ``smuhpc3`` or ``smuhpc4``) and then SSH from there to
-  the relevant machine.
+  the relevant machine, e.g.
+
+  .. code-block:: bash
+
+     $ ssh -CX highmem2
 
 * Users may not log directly into any of the worker or disk nodes.
 
-* `Wiki page <https://wiki.smu.edu/display/smuhpc/SMUHPC>`_ (requires
-  SMU login).
+* The SMU HPC `wiki page
+  <https://wiki.smu.edu/display/smuhpc/SMUHPC>`_ (requires SMU login)
+  has more detailed information on the hardware and software
+  configuration of the cluster.
 
+
+
+Getting started
+---------------------
+
+We will perform this session of the workshop on the ``smuhpc2`` login
+node, so log in there to begin.
 
 
 
@@ -141,7 +154,7 @@ managed by the `Condor <http://research.cs.wisc.edu/htcondor/>`_
 job scheduler, which is a piece of software designed "to develop,
 implement, deploy, and evaluate mechanisms and policies that support
 High Throughput Computing (HTC) on large collections of distributively
-owned computing resources" [`http://research.cs.wisc.edu/htcondor
+owned computing resources" [from `http://research.cs.wisc.edu/htcondor
 <http://research.cs.wisc.edu/htcondor>`_]. 
 
 More generally, a *job scheduler* is a program that manages unattended
@@ -158,8 +171,8 @@ features of any job scheduler include:
   jobs.
 
 In the context of high-throughput and high-performance computing, the
-primary role of a job scheduler is to managing the job queue for all
-of the compute nodes of the cluster.  It's primary goal is typically
+primary role of a job scheduler is to manage the job queue for all
+of the compute nodes of the cluster.  It's goal is typically
 to schedule queued jobs so that all of the compute nodes are utilized
 to their capacity, yet doing so in a fair manner that gives priority
 to users who have used less resources and/or contributed more to the
@@ -269,24 +282,25 @@ only some are of value to a new user:
 
 
 
-The Condor job submission file
+The condor job submission file
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The way that a user interacts with Condor is through creating a *job
-submission file* that describes the job you want to run.  
+submission file* that describes the job you want to run:
 
-For lengthy lines within the submit description file, ``\`` may be
-used as a line continuation character.  Placing the backslash at
-the end of a line causes the current line's command to be continued
-with the next line of the file. 
+* For lengthy lines within the submit description file, ``\`` may be
+  used as a line continuation character.  Placing the backslash at
+  the end of a line causes the current line's command to be continued
+  with the next line of the file. 
 
-Submit file description files may contain comments, characterized as any
-line beginning with a ``#`` character. 
+* Submit file description files may contain comments, characterized as any
+  line beginning with a ``#`` character. 
 
-These submission file options are case-independent (i.e. "Universe" ==
-"uNivErSE"), although any file or path names are not.  
+* These submission file options are case-independent (i.e. "Universe" ==
+  "uNivErSE"), although any file or path names are not.  
 
-The main options on SMU HPC are as follows: 
+
+The main condor job submission file options on SMU HPC are as follows: 
 
 * **arguments** --  List of arguments to be supplied to the executable
   as part of the command line.  For example, 
@@ -342,18 +356,19 @@ The main options on SMU HPC are as follows:
      marks. 
 
 * **error** --  Path and file name indicating where Condor should put
-  the standard error (``stderr``) from your job.  For example,
+  the standard error (``stderr``) from running your job.  For example, 
 
   .. code-block:: text
 
      error = myjob.err
 
-  If the file does not begin with a ``/``, the name indicates a
-  relative path; otherwise it is an absolute path.  You must have
-  appropriate permissions to write to the supplied file.
+  * If the file does not begin with a ``/``, the name indicates a
+    relative path; otherwise it is an absolute path.  
 
-  The default is ``/dev/null``, corresponding to ignoring all error
-  messages. 
+  * You must have appropriate permissions to write to the supplied file.
+
+  * The default is ``/dev/null``, corresponding to ignoring all error
+    messages. 
 
 * **executable** -- The path and file name of your executable
   program. For example,
@@ -362,9 +377,10 @@ The main options on SMU HPC are as follows:
 
      executable  = myjob.sh
 
-  If the file does not begin with a ``/``, the name indicates a
-  relative path; otherwise it is an absolute path.  You must have
-  appropriate permissions to read/execute the supplied file.
+  * If the file does not begin with a ``/``, the name indicates a
+    relative path; otherwise it is an absolute path.  
+
+  * You must have appropriate permissions to read/execute the supplied file.
 
 * **getenv** {True, False} -- Propagates the environment variables
   present in your shell upon submitting the job to the job when it
@@ -385,11 +401,13 @@ The main options on SMU HPC are as follows:
 
      input = 100
 
-  If not specified, the default value of ``/dev/null`` (i.e. no input)
-  is used.
+  * If not specified, the default value of ``/dev/null`` (i.e. no input)
+    is used.
 
-  Note that this command does not refer to the command-line arguments
-  of the program, which are supplied by the **arguments** command.
+  * You must have appropriate permissions to read from the supplied file.
+
+  * Note that this command does not refer to the command-line arguments
+    of the program, which are supplied by the **arguments** command.
 
 * **log** --  File name indicating where Condor will record
   information about your job's execution.  While it is not required,
@@ -399,6 +417,14 @@ The main options on SMU HPC are as follows:
   .. code-block:: text
 
      log = myjob.log
+
+  * If the file does not begin with a ``/``, the name indicates a
+    relative path; otherwise it is an absolute path.  
+
+  * You must have appropriate permissions to write to the supplied file.
+
+  * The default is ``/dev/null``, corresponding to ignoring all log
+    messages. 
 
 * **notification** {Always, Complete, Error, Never} -- The set of
   job-related events for which the job owner is sent an email.  The
@@ -418,36 +444,38 @@ The main options on SMU HPC are as follows:
      notify_user = username@smu.edu
 
   If left unspecified, condor will send a message to
-  ``job-owner@submit-machine-name`` (which goes nowhere).
+  ``job-owner@submit-machine-name`` (which ends up going nowhere).
 
 * **output** --  File name indicating where Condor should put the
-  standard output (``stdout``) from your job.  For example,
+  standard output (``stdout``) from running your job.  For example,
 
   .. code-block:: text
 
      output = myjob.out
 
-  If the file does not begin with a ``/``, the name indicates a
-  relative path; otherwise it is an absolute path.  You must have
-  appropriate permissions to write to the supplied file.
+  * If the file does not begin with a ``/``, the name indicates a
+    relative path; otherwise it is an absolute path.  
 
-  The default is ``/dev/null``, corresponding to ignoring all output
-  messages. 
+  * You must have appropriate permissions to write to the supplied file.
+
+  * The default is ``/dev/null``, corresponding to ignoring all output
+    messages. 
 
 * **universe** {vanilla, parallel} -- These specify what
-  type of computation you plan to run.  The "vanilla" universes
-  corresponds to single-node batch processing, in which condor will
-  run your job on the first available node to  completion.  The
-  "parallel" universe, however, corresponds to MPI-based parallel
-  jobs.
-
-  For example,
+  type of computation you plan to run.  For example,
 
   .. code-block:: text
 
      universe  = vanilla
 
-* **machine_count** -- Only available with the "parallel" universe,
+  * The "vanilla" universes corresponds to single-node batch
+    processing, in which condor will run your job on the first
+    available node to completion.  
+
+  * The "parallel" universe corresponds to MPI-based parallel jobs
+    that require multiple compute nodes to run.
+
+* **machine_count** -- Only applicable with the "parallel" universe,
   this option tells Condor how many nodes should be allocated to the
   parallel job.  For example,
 
@@ -487,7 +515,7 @@ The main options on SMU HPC are as follows:
 
   One condor job file may contain multiple **queue** commands, each
   with different argument lists, allowing for submission of many
-  condor jobs at once.
+  condor jobs at once using the same submission file.
 
 
 
@@ -527,27 +555,29 @@ Whole node versus shared node jobs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When running batch jobs on the cluster, you may request to use a whole
-node for your job (otherwise you will share the node with other
-users).  Reasons why you may wish to request an entire node for your
-job include:
+node for your job (the default is to share the node with other users).
+Reasons why you may wish to request an entire node for your job
+include: 
 
-* Need for reliable timing information
+* Need for reliable timing information.
 
-* Need for all of the memory on the node
+* Need for all of the memory on the node.
 
 * Use of threads (e.g. OpenMP, Pthreads, Intel Threading Building
   Blocks, MPI, etc.) that will spawn additional processes on top of
   the one that is launched.
 
+* Poor inter-personal skills.
+
 
 If you wish for your job to use an entire node, you only need to add
 two lines to your Condor job submission file.  These lines are
 [inappropriately] named "whole machine", even they only refer to a
-single node on the larger machine: 
+single node of the larger machine: 
 
 .. code-block:: text
 
-   Requirements =  CAN_RUN_WHOLE_MACHINE
+   Requirements = CAN_RUN_WHOLE_MACHINE
    +RequiresWholeMachine = True
 
 
@@ -592,9 +622,6 @@ Condor resources:
 Condor Examples
 -------------------
 
-We will perform this session of the workshop on the ``smuhpc2`` login
-node, so log in there to begin.
-
 In the following, we have a few example Condor usage scenarios to
 familiarize you with how to interact with the high-throughput portion
 of the SMU HPC cluster.
@@ -635,7 +662,7 @@ While you can run this at the command line:
 
 .. code-block:: bash
 
-   $ python ./myjob.py 500
+   $ python ./myjob.py 50
 
 as we increase the number of subintervals to obtain a more accurate
 approximation it can take longer to run, so as "good citizens" we
@@ -686,29 +713,33 @@ Running a set of shared node jobs
 
 Suppose now that we wanted to run this script multiple times with
 different arguments, in order to experimentally measure how rapidly
-the approximation to :math:`pi` converges as we change the number of
+the approximation to :math:`\pi` converges as we change the number of
 subintervals.  
 
 To this end, we have a few options:
 
-1. Write separate job files for each number of subintervals, and
-   submit each to condor.  This has the benefit of creating
-   a reproducible set of tests, where the inputs for each test are
-   quite clear.  
+1. Write separate job files for each command line argument (here, the
+   number of subintervals), and submit each to condor separately.
+   This has the benefit of creating a reproducible set of tests, where
+   the inputs for each test are quite clear, but can take quite some
+   time to set up.  
 
 2. Reuse our existing job file, but when calling ``condor_submit`` we can
    use the ``-append`` option to modify the command line argument and
    output/log/error file names.  
 
-   The challenge with this approach is
-   that we may forget the command-line arguments we had to use for
-   the different calls, making our results more difficult to
-   reproduce.  
+   The problems with this approach are that (a) we may forget the
+   command-line arguments we had to use for the different calls,
+   making our results more difficult to reproduce, and (b) all results
+   would be written to the same output files, obliterating results
+   from all but the last run.  
 
    However, this could be automated by creating a BASH
    script that calls ``condor_submit`` for us multiple times, with the
    customized calls hard-coded into the script.  This would again
-   allow for reproducibility.
+   allow for reproducibility.  Additionally, the **output** condor
+   argument could use the **Process** macro to create separate output
+   files for each run.
 
 3. We could write a single job file that has separate blocks of
    options, each separated by a different **queue** command, allowing
@@ -824,18 +855,12 @@ and launch it as usual,
 
    $ condor_submit test3.job
 
-After the run finishes, find the 4326th prime number (on line 4326 of
-test3.out) with the command
+After the run finishes, find the 4324th prime number (on line 4326 of
+``test3.out`` because of the two extra lines that condor adds to the
+top of the output file) with the command
 
 .. code-block:: bash
 
    $ sed -n 4326p test3.out
 
 
-
-
-
-Exercises
-----------------
-
-**FILL THIS IN**

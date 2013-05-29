@@ -24,7 +24,7 @@ Choose your preferred language of the three and download the files to
 be used in this session by either clicking one of the following three
 links: :download:`C version <code/session5_c.tgz>`, :download:`C++
 version <code/session5_cxx.tgz>`, :download:`F90 version
-<code/session5_f90.tgz>`, or by copying the relevant files on SMUHPC
+<code/session5_f90.tgz>`, or by copying the relevant files on SMU HPC
 with one of the following 3 commands: 
 
 .. code-block:: bash
@@ -45,7 +45,7 @@ Enabling and Generating Profiling Information
 
 In this session, we will be using the GNU compiler suite
 (``gcc``, ``g++``, ``gfortran``).  These compilers are installed on
-SMUHPC and at every supercomputer center I've ever used.  It is a free
+SMU HPC and at every supercomputer center I've ever used.  It is a free
 suite of compilers for C, C++ and Fortran code, and is available for
 Windows, OS X and of course Linux. 
 
@@ -106,10 +106,15 @@ use ``grep`` to find which file contains the routine:
    $ grep -i routine_name *
 
 where ``routine_name`` is the function that you identified from
-the previous step.  Save a copy of this file using the ``cp`` command
-(e.g. ``cp file.cpp file_old.cpp``), where ``file`` is the file that
-you have identified as containing the bottleneck routine. We will use
-this original file again later in the session. 
+the previous step.  Save a copy of this file using the ``cp`` command, e.g.
+
+.. code-block:: bash
+
+   $ cp file.cpp file_old.cpp
+
+where ``file`` is the file that you have identified as containing the
+bottleneck routine (use the appropriate extension for your coding
+language). We will use this original file again later in the session. 
 
 Determine what, if anything, can be optimized in this routine.  Is
 there a simpler way that the arithmetic could be accomplished?  Is it
@@ -117,14 +122,28 @@ accessing memory in an optimal manner?  Is it doing any redundant
 computations? 
 
 Find what you can fix, so long as you do not change the
-mathematical result.  Delete and re-compile the executable (e.g. 
-``rm driver1.exe; make driver1.exe``), re-run the executable
-(``./driver1.exe``), re-examine the results (use ``gprof``,
-etc.).  Continue this process until you have achieved a significant
-performance improvement (at least 30% faster than as before). 
+mathematical result.  Delete and re-compile the executable,
+
+.. code-block:: bash
+
+   $ rm driver1.exe; make driver1.exe
+
+re-run the executable
+
+.. code-block:: bash
+
+   $ ./driver1.exe
+
+Re-examine the results using ``gprof``, and repeat the optimization
+process until you are certain that the code has been sufficiently
+optimized.  You should be able to achieve a significant performance
+improvement (at least 40% faster than the original).
 
 Write down the total runtime required for your hand-optimized program.
-Copy your updated code to the file ``file_new.cpp``.
+Copy your updated code to the file ``file_new.cpp`` (again, use the
+appropriate extension for your coding language).
+
+
 
 
 Automatic Compiler Optimizations
@@ -135,22 +154,40 @@ rebuilding the original (non-optimized) code with the compiler flag
 ``-O2`` (capital 'o' for "Optimize", followed by a '2' to denote the
 optimization level): 
 
-1. Replace the current flag ``-O0`` in your ``Makefile`` with the flag ``-O2``.
+1. Replace the current flag ``-O0`` in your ``Makefile`` with the flag
+   ``-O2``. 
 
-2. Copy the original file back (e.g. ``cp file_old.cpp file.cpp``).
+2. Copy the original file back, e.g. 
+  
+   .. code-block:: bash
 
-3. Delete the old executable.
+      $ cp file_old.cpp file.cpp
 
-4. Re-compile ``driver1.exe``.
+3. Delete the old executable,
 
-5. Re-run ``driver1.exe``.
+   .. code-block:: bash
+
+      $ rm driver1.exe
+
+4. Re-compile ``driver1.exe``,
+
+   .. code-block:: bash
+
+      $ make driver1.exe
+
+5. Re-run ``driver1.exe``,
+
+   .. code-block:: bash
+
+      $ ./driver1.exe
 
 Does this result in faster code than the original?  Is it faster than
 your hand-optimized code?  Write down the total run-time required for
 this test.
 
-Try the same ``-O2`` compiler flag on your hand-optimized code, so
-that you can see how well the code runs when you provide a
+Repeat the above steps, but this time using **both** the ``-O2``
+compiler flag **and** your hand-optimized code in ``file_new.cpp``.
+Determine you can see how well the code runs when you provide a
 hand-optimized code to then allow the compiler to optimize as well.
 How does this perform in comparison to the other three runs? 
 
@@ -166,51 +203,76 @@ Enabling Debugging Information
 In most compilers (including GNU and PGI), you can enable debugging
 information through adding the ``-g`` compiler flag. Add this flag to
 the compilation commands in the ``Makefile`` for the target
-``driver2.exe``, and then compile the executable (``make
-driver2.exe``). 
+``driver2.exe``, and then compile the executable,
+
+.. code-block:: bash
+
+   $ make driver2.exe
 
 Run the new executable.  It should die with an error message about a
 segmentation violation (segmentation fault) or bus error, depending on
-the compiler/OS.  There are many ways to track down this kind of
-error (print statements, staring, randomly changing things to see what
-happens), in this session we will use the most optimal approach, that
-of using a tool to track down the bug for us.
+the compiler/OS, e.g.
 
-This tool is the GNU debugger, which can be used through running the
-faulty executable program from within the debugger itself. Run the
+.. code-block:: bash
+
+   $ ./driver2.exe
+   Segmentation fault
+
+There are many ways to track down this kind of error (e.g. print
+statements, staring, randomly changing things to see what happens).
+In this session we will use the most efficient debugging approach,
+that of using a tool to track down the bug for us.
+
+The tool we will use is the GNU debugger, which can be accessed
+through running the faulty executable program from within the
+debugging program itself.  Load the executable into ``gdb`` with the
 command 
 
 .. code-block:: bash
  
    $ gdb driver2.exe
 
-At the ``gdb`` prompt, type ``run`` to start the executable. It will
+At the ``gdb`` prompt, type ``run`` to start the executable.  It will
 automatically stop at the line where the segmentation fault occurs.
-In another terminal window, you can type ``man gdb`` to learn more
-about how to use the debugger.  Perhaps the most valuable command is
-``print`` that may be used to see the internal value of a specified
-variable (e.g. ``print i`` will print out the current value of the
-iteration variable ``i``). The ``help`` command inside of ``gdb`` may
-be used to find out more information on how to use the program. 
 
-The ``quit`` command inside of ``gdb`` will exit the debugger and
-return you to the command line. 
+In another terminal window, you can type ``man gdb`` to learn more
+about how to use the debugger (or you can `click here to view the gdb
+man page on the web <http://linux.die.net/man/1/gdb>`_.  
+
+* Perhaps the most valuable gdb command is ``print`` that may be used
+  to see the internal value of a specified variable, e.g.
+
+  .. code-block:: bash
+
+     (gdb) print i
+
+  will print out the current value of the iteration variable ``i``). 
+
+* The ``help`` command inside of ``gdb`` may be used to find out more
+  information on how to use the program itself.
+
+* The ``quit`` command inside of ``gdb`` will exit the debugger and
+  return you to the command line.
+
 
 
 Fixing the Bug
 ^^^^^^^^^^^^^^^^
 
-C users: open both the files driver2.c and tridiag_matvec.c, and see
-if you can find/fix the problem by using ``gdb`` and ``print``
-statements as appropriate. 
+C users: 
+  Open both the files ``driver2.c`` and ``tridiag_matvec.c``,
+  and see if you can find/fix the problem by using ``gdb`` and ``print``
+  statements as appropriate. 
 
-C++ users: Open both the files driver2.cpp and tridiag_matvec.cpp, and
-see if you can find/fix the problem by using ``gdb`` and ``print``
-statements as appropriate.  
+C++ users: 
+  Open both the files ``driver2.cpp`` and
+  ``tridiag_matvec.cpp``, and see if you can find/fix the problem by
+  using ``gdb`` and ``print`` statements as appropriate.  
 
-F90 users: Open both the files driver2.f90 and tridiag_matvec.f90, and
-see if you can find/fix the problem by using ``gdb`` and ``print``
-statements as appropriate.
+F90 users: 
+  Open both the files ``driver2.f90`` and
+  ``tridiag_matvec.f90``, and see if you can find/fix the problem by
+  using ``gdb`` and ``print`` statements as appropriate.
 
 A word of warning, the location of the segmentation fault or bus error
 is not always where the problem is located.  Segmentation faults
@@ -247,7 +309,8 @@ hood.  Some of the more popular of these debuggers include:  `ddd
 <http://www.eclipse.org/eclipse/debug/>`_, `zerobugs
 <https://zerobugs.codeplex.com/>`_, `edb
 <http://www.woodmann.com/collaborative/tools/index.php/EDB_Linux_Debugger>`_.
-However, of these the SMUHPC cluster only currently has ``gdb`` installed. 
+However, of this set the SMU HPC cluster currently only has ``gdb``
+installed (ask your system administrators for others you want/need). 
 
 Additionally, there are some highly advanced non-free
 Linux debugging utilities available (all typically graphical),
@@ -257,12 +320,14 @@ including `TotalView
 <http://software.intel.com/en-us/articles/idb-linux>`_ (only works
 with the Intel compilers), and PGI's `pgdebug
 <http://www.pgroup.com/products/pgdbg.htm>`_ (graphical) and `pgdbg`
-(text version).  Of these, the SMUHPC cluster has both ``pgdebug`` and
+(text version).  Of these, the SMU HPC cluster has both ``pgdebug`` and
 ``pgdbg``.  
 
 The usage of most of the above debuggers is similar to ``gdb``, except
-that in graphical debuggers it can be easier to see the
+that in graphical debuggers it can be easier to view the
 data/instruction stack.  The primary benefit of the non-free debuggers
 is their support for debugging parallel jobs that use OpenMP,
-MPI, or hybrid MPI/OpenMP computing approaches (see session 9).
+MPI, or hybrid MPI/OpenMP computing approaches (see session 9).  In
+fact, some of these professional tools can even be used to debug code
+running on GPU accelerators.
 

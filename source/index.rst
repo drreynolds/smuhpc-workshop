@@ -1,4 +1,4 @@
-.. SMUHPC Workshop documentation master file, created by
+.. SMU HPC Workshop documentation master file, created by
    sphinx-quickstart on Fri May 17 10:43:48 2013.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
@@ -34,9 +34,9 @@ by the `SMU Center for Scientific Computation
    Intro. Scripts & Programs (Tue. AM) <session_3>
    More Programming (Tue. PM) <session_4>
    Advanced Programming (Wed. AM) <session_5>
-   Using SMUHPC (Wed. PM) <session_6>
+   Using SMU HPC (Wed. PM) <session_6>
    Postprocessing (Thu. AM) <session_7>
    Intro. Parallel Computing (Thu. PM) <session_8>
-   Parallel Comp. on SMUHPC (Fri. AM) <session_9>
+   Parallel Comp. on SMU HPC (Fri. AM) <session_9>
 
 
