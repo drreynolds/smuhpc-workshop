@@ -17,19 +17,21 @@ each server.
 SMU HPC network
 --------------------------------------------------------
 
-**FILL THIS IN**
+..
+   .. figure:: figs/smuhpc_network.png
+      :scale: 80%
+      :align: center
 
-Outline: 
+      Schematic of the SMU HPC cluster
 
-* gigabit ethernet network connecting disks, login nodes and batch
+
+* Gigabit ethernet network connecting disks, login nodes and batch
   workers.
 
 * Quadrics infiniband network for older parallel nodes.
 
 * QLogic infiniband network for newer parallel nodes.
 
-(Do we have any numbers to mention the performance differences of
-these networks?)
 
 
 
@@ -168,7 +170,7 @@ on SMUHPC at the command line:
 
 .. code-block:: bash
 
-   $ cp ~dreynolds/SMUHPC_workshop/session9_OpenMP.tgz .
+   $ cp ~dreynolds/SMUHPC_tutorial/session9_OpenMP.tgz .
 
 Unpack these files as usual
 
@@ -426,7 +428,9 @@ single dedicated node, and that once the job is launched, we will use
 5 of the hardware threads on that node (recall, parallel1 has 8 cores per
 node, so this would entail 3 cores remaining idle).
 
-Again, this job file should be launched from ``smuhpc4.smu.edu``. 
+Because this job will run within the "parallel" universe on either the
+parallel1 or parallel2 clusters, this job file must be launched from
+``smuhpc4.smu.edu``.
 
 
 
@@ -476,7 +480,9 @@ single dedicated node, and that once the job is launched, we will use
 10 of the hardware threads on that node (recall, parallel2 has 12 cores per
 node, so this would entail 2 cores remaining idle).
 
-Again, this job file should be launched from ``smuhpc4.smu.edu``. 
+Because this job will run within the "parallel" universe on either the
+parallel1 or parallel2 clusters, this job file must be launched from
+``smuhpc4.smu.edu``.
 
 
 OpenMP exercise
@@ -552,7 +558,7 @@ system:
   library) located?  Again, this location is important
   because when linking our own codes, we must typically tell the
   compiler where to look for these library files using the ``-L``
-  argument.
+  and ``-l`` arguments.
 
 For example, the PGI-compiled MPI library, MPICH2 version 1.3.2, is
 installed on SMU HPC in the directory ``/grid/software/mpich2-1.3.2``,
@@ -572,7 +578,7 @@ commands
 
 
 Clearly, specifying the specific instructions for including and
-linking to an MPI library is not always easy: 
+linking to an MPI library can be nontrivial: 
 
 * You must know where all of the relevant libraries are installed on
   each computer. 
@@ -647,7 +653,7 @@ You must launch the job from ``smuhpc.smu.edu`` or
 The key to launching MPI jobs on the batch1 or batch2 portions of the
 SMU HPC system, is that you must supply an "executable"
 to condor that handles the process of launching your program
-appropriately.  This Condor/MPI interaction is handled through
+appropriately.  This Condor/MPI interaction is taken care of by 
 incorporating a few specific items into your condor submission script,
 along with a customized executable script that handles the launching
 of your executable.
@@ -793,7 +799,7 @@ usual (only from the ``smuhpc`` or ``smuhpc2`` login nodes),
    The key to launching MPI jobs on the batch1 or batch2 portions of the
    SMU HPC system, is that you must supply an "executable"
    to condor that handles the process of launching your program
-   appropriately.  This Condor/MPI interaction is handled through
+   appropriately.  This Condor/MPI interaction is taken care of by
    incorporating a few specific items into your condor submission script,
    along with a customized executable script that handles the launching
    of your executable.
@@ -935,7 +941,7 @@ You must launch the job from ``smuhpc4.smu.edu``.
 The key to launching MPI jobs that utilize more than one node using
 either parallel1 or parallel2 is that you must supply an "executable"
 to condor that handles the process of launching your program
-appropriately.  This Condor/MPI interaction is handled through
+appropriately.  This Condor/MPI interaction is taken care of by 
 incorporating a few specific items into your condor submission script,
 along with a customized executable script that handles the launching
 of your executable.
@@ -1085,7 +1091,7 @@ You must launch the job from ``smuhpc4.smu.edu``.
 The key to launching MPI jobs that utilize more than one node using
 either parallel1 or parallel2 is that you must supply an "executable"
 to condor that handles the process of launching your program
-appropriately.  This Condor/MPI interaction is handled through
+appropriately.  This Condor/MPI interaction is taken care of by
 incorporating a few specific items into your condor submission script,
 along with a customized executable script that handles the launching
 of your executable.
@@ -1238,7 +1244,7 @@ could not compile it on that node -- sorry).
 The key to launching MPI jobs that utilize more than one node using
 either parallel1 or parallel2 is that you must supply an "executable"
 to condor that handles the process of launching your program
-appropriately.  This Condor/MPI interaction is handled through
+appropriately.  This Condor/MPI interaction is taken care of by
 incorporating a few specific items into your condor submission script,
 along with a customized executable script that handles the launching
 of your executable.
@@ -1388,7 +1394,7 @@ could not compile it on that node -- sorry).
 The key to launching MPI jobs that utilize more than one node using
 either parallel1 or parallel2 is that you must supply an "executable"
 to condor that handles the process of launching your program
-appropriately.  This Condor/MPI interaction is handled through
+appropriately.  This Condor/MPI interaction is taken care of by
 incorporating a few specific items into your condor submission script,
 along with a customized executable script that handles the launching
 of your executable.
@@ -1510,5 +1516,5 @@ Set up submission scripts to run this executable using
 use one node. Run the 16, 32 and 64 processor jobs using 8 cores per node.
 
 Determine the parallel speedup when running this code using MPI.  Does
-it speed up by a factor of 64?
+it speed up optimally (i.e. by a factor of 64)?
 

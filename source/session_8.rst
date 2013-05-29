@@ -33,8 +33,8 @@ difficult, and will eventually halt this expansion.
    :scale: 90 %
    :align: center
 
-   `Wikipedia -- Moore's Law
-   <http://en.wikipedia.org/wiki/Moore%27s_law>`_ 
+   [from `Wikipedia -- Moore's Law
+   <http://en.wikipedia.org/wiki/Moore%27s_law>`_]
 
 
 Motivation: CPU vs memory/disk speed
@@ -78,7 +78,7 @@ that achieves the highest FLOP rate:
    :scale: 50 %
    :align: center
 
-   David E. Keyes, HiPC 2007
+   [from David E. Keyes, HiPC 2007]
 
 
 Flynn's parallel architecture taxonomy
@@ -224,7 +224,7 @@ Top500 list since 1993.
    :scale: 90 %
    :align: center
 
-   From `http://www.top500.org <http://www.top500.org>`_
+   [from `http://www.top500.org <http://www.top500.org>`_]
 
 
 Note the trend to achieve performance advances through increases in parallelism.
@@ -244,7 +244,7 @@ list since 1993:
    :scale: 90 %
    :align: center
 
-   From `http://www.top500.org <http://www.top500.org>`_
+   [from `http://www.top500.org <http://www.top500.org>`_]
 
 * MPP: Massively Parallel Processors (commercially-designed)
 
@@ -312,7 +312,7 @@ Common switches for commodity clusters include:
    :scale: 100 %
    :align: center
 
-   From `http://www.top500.org <http://www.top500.org>`_
+   [from `http://www.top500.org <http://www.top500.org>`_]
 
 
 Compare these to on-computer speeds of:
@@ -591,7 +591,7 @@ Work pool model
 """""""""""""""""""""""
 
 .. image:: figs/work_pool.png
-   :scale: 80%
+   :scale: 70%
    :align: center
 
 * Tasks are dynamically mapped onto processes, where any task may
@@ -641,7 +641,7 @@ This approach goes by many names: *master-slave*, *professor-student*,
 *Wonka-Loompa*. 
 
 .. image:: figs/manager_worker.png
-   :scale: 80%
+   :scale: 70%
    :align: center
 
 * One or more manager processes generate tasks and assign them to
@@ -769,7 +769,7 @@ on one computer, but slow.
    :scale: 80%
    :align: center
 
-   David E. Keyes, HiPC 2007
+   [from David E. Keyes, HiPC 2007]
 
 
 *Weak scaling*: the goal is to enable problems that cannot fit on one
@@ -784,7 +784,7 @@ computer due to large size (resolution-limited).
    :scale: 80%
    :align: center
 
-   David E. Keyes, HiPC 2007
+   [from David E. Keyes, HiPC 2007]
 
 
 For strong-scaling tests, we also compute the following performance
@@ -842,15 +842,15 @@ computing.  It is implemented as an extension to compilers, and is
 enabled by adding so-called *directives* or *pragmas* to your source
 code, with suggestions on how to launch and share work among threads.
 
-OpenMP resources:
+  OpenMP resources:
 
-* `OpenMP public site <http://openmp.org/wp/>`_
+  * `OpenMP public site <http://openmp.org/wp/>`_
 
-* `OpenMP specifications reference manual
-  <http://www.openmp.org/mp-documents/spec30.pdf>`_ 
+  * `OpenMP specifications reference manual
+    <http://www.openmp.org/mp-documents/spec30.pdf>`_ 
 
-* `In-Depth Interactive OpenMP Tutorial
-  <https://computing.llnl.gov/tutorials/openMP/>`_ 
+  * `In-Depth Interactive OpenMP Tutorial
+    <https://computing.llnl.gov/tutorials/openMP/>`_ 
 
 
 MPI is the primary approach for enabling distributed-memory parallel
@@ -858,15 +858,75 @@ computing.  It is implemented as a library of functions and data
 types, that may be called within your source code to send messages
 among processes for coordination and data transfer.
 
-MPI resources:
+  MPI resources:
 
-* `MPI public site <http://www.mpi-forum.org/>`_
+  * `MPI public site <http://www.mpi-forum.org/>`_
 
-* `MPI specifications reference manual
-  <http://www.mpi-forum.org/docs/mpi-3.0/mpi30-report.pdf>`_ 
+  * `MPI specifications reference manual
+    <http://www.mpi-forum.org/docs/mpi-3.0/mpi30-report.pdf>`_ 
 
-* `In-Depth Interactive MPI Tutorial
-  <https://computing.llnl.gov/tutorials/mpi/>`_ 
+  * `In-Depth Interactive MPI Tutorial
+    <https://computing.llnl.gov/tutorials/mpi/>`_ 
 
-* `Advanced MPI Tutorial
-  <https://computing.llnl.gov/tutorials/mpi_advanced/DavidCronkSlides.pdf>`_
+  * `Advanced MPI Tutorial
+    <https://computing.llnl.gov/tutorials/mpi_advanced/DavidCronkSlides.pdf>`_
+
+
+
+
+Free parallel solver software
+--------------------------------------------------------
+
+
+Since it is a library, MPI has enabled the development of many
+powerful scientific computing solver libraries that build on top of
+MPI to enable efficient, scalable and robust packages for parallel
+scientific computing.
+
+Dense linear solvers and eigenvalue solvers:
+
+* `ScaLAPACK <http://netlib.org/scalapack>`_ -- dense and banded linear
+  solvers and eigenvalue analysis [Fortran77] 
+
+* `PLAPACK <http://www.cs.utexas.edu/~plapack>`_ -- dense matrix
+  operations [C] 
+
+Sparse/iterative linear/nonlinear solvers and eigenvalue solvers:
+
+* `SuperLU <http://crd.lbl.gov/~xiaoye/SuperLU>`_ -- direct solvers for
+  sparse linear systems [C++, C, Fortran]
+
+* `HYPRE <http://www.llnl.gov/CASC/linear_solvers>`_ -- iterative
+  solvers for sparse linear systems [C++, C, Fortran]
+
+* `PARPACK <http://www.caam.rice.edu/software/ARPACK>`_ -- large-scale
+  eigenvalue problems [Fortran77] 
+
+Other:
+
+* `SUNDIALS <http://www.llnl.gov/casc/sundials>`_ -- nonlinear, ODE,
+  DAE solvers w/ sensitivities [C++, C, Fortran, Matlab] 
+
+* `FFTW <http://www.fftw.org>`_ -- multi-dimensional parallel discrete
+  Fourier transform [C++, C, Fortran] 
+
+* `ParMETIS <http://www.cs.umn.edu/~metis>`_ -- graph partitioning
+  meshing, sparse-matrix orderings [C]
+
+* `PHDF5 <http://www.hdfgroup.org>`_ -- parallel data input/output
+  library [C++, C, Fortran] 
+
+* `mpiP <http://mpip.sourceforge.net>`_ -- MPI profiling library [C++,
+  C, Fortran] 
+
+* `LAMMPS <http://lammps.sandia.gov>`_ -- large-scale molecular
+  dynamics simulator [C++, C, Fortran, Python] 
+
+Larger parallel packages (that include or can call many of the above
+software):
+
+* `PETSc <http://www.mcs.anl.gov/petsc>`_ -- data structures &
+  nonlinear/linear PDE solvers [C++, C, Fortran, Python] 
+
+* `Trilinos <http://trilinos.sandia.gov>`_ -- enabling technologies
+  for complex multi-physics problems [C++, Fortran, Python] 
