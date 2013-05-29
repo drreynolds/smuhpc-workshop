@@ -37,9 +37,6 @@ Remaining items to do before workshop:
 
 [X] Mercurial example: clone a repository, add a file, check in, push (session 4)
 
-[ ] Convert existing exercise(s) to example(s), and add a more
-    challenging exercise for the students to work on?  (session 5)
-
 [X] Notes on how condor works (session 6)
 
 [X] Explanation of the "notification" option to condor (session 6)
@@ -55,8 +52,6 @@ Remaining items to do before workshop:
 [X] Condor examples: single shared node job, suite of shared node jobs,
     single whole node job. (session 6)
 
-[ ] Condor exercises of some sort. (session 6)
-
 [X] Introduction on postprocessing (session 7)
 
 [X] Executable to generate a set of files to be postprocessed
@@ -68,7 +63,7 @@ Remaining items to do before workshop:
 [X] Split advection post-processing Python script into two parts, explain each
     in detail. (session 7)
 
-[ ] Add instructions for adding Matlab to the PATH for running
+[X] Add instructions for adding Matlab to the PATH for running
     post-processing examples.  (session 7)
 
 [X] Find out how to open graphics files on SMUHPC (png), and add to
