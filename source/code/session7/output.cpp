@@ -12,7 +12,6 @@
 int output(double *u, double t, int nx, int ny, int noutput) {
 
   // set output file name
-  // Note: we reserve the first set of digits for the MPI process (unused here)
   char outname[100];
   sprintf(outname, "u_sol.%03i.txt", noutput);
 
@@ -33,7 +32,6 @@ int output(double *u, double t, int nx, int ny, int noutput) {
   fclose(FID);
     
   // now output a metadata file, containing general run information
-  // Note: the two 1's will be used for the MPI process dimensions (unused here)
   FID = fopen("u_sol_meta.txt","w");
   fprintf(FID, "%i\n", nx);
   fprintf(FID, "%i\n", ny);
