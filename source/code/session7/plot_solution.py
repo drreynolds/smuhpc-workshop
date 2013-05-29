@@ -40,9 +40,9 @@ for tstep in range(nt):
 
     # plot current solution as a surface, and save to disk
     fig = plt.figure(1)
-    ax = fig.add_subplot(111, projection='3d')
+    ax = Axes3D(fig)
     ax.plot_surface(X, Y, u, rstride=1, cstride=1, cmap=cm.jet,
-                    linewidth=0, antialiased=True, shade=True)
+                    linewidth=0, antialiased=True)
     ax.set_xlabel('y')
     ax.set_ylabel('x')
     title('u(x,y) at t = ' + tstr + ', mesh = ' + nxstr + 'x' + nystr)
