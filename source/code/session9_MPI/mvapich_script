@@ -57,7 +57,9 @@ shift
 # Perform sanity check if the files exists and env's are defined?
 
 #source  /grid/software/Modules/3.2.9/init/sh
+source /grid/software/lmod/lmod/init/sh
 
+module unload mpich2/1.1.1/gcc mpich2/1.3.2/pgi mvapich2/1.6/gcc-QL mvapich2/1.6/gcc mvapich2/1.6/pgi-QL mvapich2/1.6/pgi mvapich2/1.9a2/gcc
 module load $_LOAD_MODULE
 module list
 

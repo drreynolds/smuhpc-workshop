@@ -6,6 +6,8 @@
 EXECUTABLE=$1
 
 # initialize the appropriate mpich module
+source /grid/software/lmod/lmod/init/sh
+module unload mpich2/1.1.1/gcc mpich2/1.3.2/pgi mvapich2/1.6/gcc-QL mvapich2/1.6/gcc mvapich2/1.6/pgi-QL mvapich2/1.6/pgi mvapich2/1.9a2/gcc
 module load $_LOAD_MODULE
 module list
 
