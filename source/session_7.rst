@@ -158,6 +158,9 @@ Hence we only need to read three numbers in a single column and store
 them appropriately.  The relevant Matlab code is in the file
 ``load_info.m``, and relies on the built-in function ``load``: 
 
+.. index:: 
+   pair: load_info(); Matlab
+
 .. code-block:: matlab
 
    function [nx,ny,nt] = load_info()
@@ -181,6 +184,9 @@ them appropriately.  The relevant Matlab code is in the file
 
 and the relevant Python code is in the file ``load_info.py``, and
 relies on the Numpy function ``loadtxt``: 
+
+.. index:: 
+   pair: load_info(); Python
 
 .. code-block:: python
 
@@ -220,6 +226,9 @@ languages) to convert it to the two-dimensional representation.
 
 Here's the Matlab code, ``load_data_2d.m``:
 
+.. index:: 
+   pair: load_data_2d(); Matlab
+
 .. code-block:: matlab
 
    function [t,u] = load_data_2d(tstep)
@@ -254,6 +263,9 @@ Here's the Matlab code, ``load_data_2d.m``:
    return
 
 and here is the corresponding Python code, ``load_data_2d.py``:
+
+.. index:: 
+   pair: load_data_2d(); Python
 
 .. code-block:: python
 
@@ -310,6 +322,8 @@ How these work:
   represents the correct file name (e.g. ``u_sol.006.txt``), and calls
   the relevant ``load`` or ``loadtxt`` routine to input the data.
 
+.. index:: C vs Fortran ordering
+
 * The routine then splits the data into the one-dimensional version of
   ``u`` (called ``u1D``) and ``t``, before reshaping ``u1D`` into a
   two-dimensional version of the solution, before returning the values.
@@ -345,6 +359,7 @@ A few general comments on the above approach:
   this example, the data is stored with the ``x`` index being the
   fastest, hence the "Fortran" ordering of the data file.
 
+.. index:: HDF5, netCDF
 
 High-quality alternatives to such manual I/O approaches abound.  Two
 popular I/O libraries in high-performance computing are `HDF5
@@ -377,6 +392,7 @@ libraries have the following benefits over doing things manually:
   * Matlab/netCDF: although not built into Matlab, there are
     contributed versions of netCDF readers on `Matlab Central
     <http://www.mathworks.com/matlabcentral/fileexchange/15177-netcdf-reader>`_. 
+
   * Python/HDF5: the Python module ``h5py`` contains a full Pythonic
     interface to the HDF5 data format (`click here for more
     information on h5py <https://code.google.com/p/h5py/>`_).
@@ -405,6 +421,9 @@ steps.  You may focus on your preferred computing environment, since
 both scripts are functionally equivalent.
 
 First the Matlab code, ``plot_solution.m``:
+
+.. index:: 
+   pair: plot_solution(); Matlab
 
 .. code-block:: matlab
 
@@ -445,6 +464,9 @@ First the Matlab code, ``plot_solution.m``:
    end
 
 and then the Python code, ``plot_solution.py``:
+
+.. index:: 
+   pair: plot_solution(); Python
 
 .. code-block:: python
 
@@ -606,6 +628,7 @@ though all are freely-available and open-source, so if you need/want
 one you should make a request to the SMUHPC system administrators.
 
 
+.. index:: Mayavi
 
 Mayavi
 """""""""""
@@ -616,6 +639,8 @@ Mayavi is a Python plotting package designed primarily for interactive
 * `Mayavi Documentation <http://code.enthought.com/projects/mayavi/docs/development/html/mayavi/index.html>`_
 * `Mayavi Gallery <http://code.enthought.com/projects/mayavi/docs/development/html/mayavi/auto/examples.html>`_
 
+
+.. index:: VisIt
 
 VisIt
 """""""""""""
@@ -631,6 +656,8 @@ scripting.  See:
 * `VisIt Gallery <https://wci.llnl.gov/codes/visit/gallery.html>`_
 * `VisIt Tutorial <http://www.visitusers.org/index.php?title=Short_Tutorial>`_
 
+
+.. index:: ParaView
 
 ParaView
 """"""""""""""

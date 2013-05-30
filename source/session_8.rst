@@ -18,6 +18,8 @@ laptops and desktops have begun to transition toward chips with
 multiple processors as well. 
 
 
+.. index:: Moore's law
+
 Motivation: Moore's law
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -36,6 +38,8 @@ difficult, and will eventually halt this expansion.
    [from `Wikipedia -- Moore's Law
    <http://en.wikipedia.org/wiki/Moore%27s_law>`_]
 
+
+.. index:: CPU vs memory/disk speed
 
 Motivation: CPU vs memory/disk speed
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -71,6 +75,8 @@ computing:
 
 * Use multiple computers to store data for large problems.
 
+.. index:: Gordon Bell Prize
+
 The Gordon Bell Prize (below) is awarded to each year’s simulation
 that achieves the highest FLOP rate:
 
@@ -80,6 +86,8 @@ that achieves the highest FLOP rate:
 
    [from David E. Keyes, HiPC 2007]
 
+
+.. index:: Flynn's parallel architecture taxonomy, SIMD, MIMD, SISD, MISD
 
 Flynn's parallel architecture taxonomy
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -115,6 +123,8 @@ facilities are in fact comprised of a hybrid between these two
 categories. 
 
 
+.. index:: multiprocessor, SMP
+
 Parallel architectures: multiprocessors
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -149,6 +159,8 @@ memory.
   expensive.
 
 
+.. index:: multi-core
+
 Parallel architectures: multi-core
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -181,6 +193,8 @@ Limitations:
 * Slower effective cache bandwidth than SMPs, since L2 cache is
   shared. 
 
+
+.. index:: multicomputer, DMP
 
 Parallel architectures: multicomputers
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -233,6 +247,7 @@ Such rapid parallelism increases have put limitations on the parallel
 architectures that may be used.
 
 
+.. index:: parallel architecture history, MPP, Cluster, SMP, Constellation
 
 History of parallel architectures
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -264,6 +279,8 @@ distributed-memory MPP and Cluster machines.
 
 
 
+
+.. index:: distributed parallel networks
 
 Distributed parallel networks
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -299,6 +316,8 @@ a parallel computation inherently depends on the speed of the network.
   binary-tree, hypertree, butterfly, hypercube and shuffle-exchange
   networks are all common.
 
+.. index:: fast ethernet, gigabit ethernet, infiniband
+
 Common switches for commodity clusters include:
 
 * *Fast Ethernet*: 100 Mbit/sec bandwidth, 100 μsec latency
@@ -329,6 +348,7 @@ Compare these to on-computer speeds of:
    
 
 
+.. index:: parallel computing paradigms
 
 Overview of parallel computing paradigms: shared memory versus distributed memory
 -------------------------------------------------------------------------------------
@@ -369,6 +389,8 @@ computers.  There are a number of options:
    “I know how to make 4 hourses pull a cart – I don’t know how to make
    1024 chickens do it.” -- Enrico Clementi
 
+
+.. index:: Jiffy Lube example
 
 MIMD example -- the "Jiffy Lube" model
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -426,15 +448,23 @@ Other relevant MIMD definitions [and their Jiffy Lube equivalents]:
 General parallel computing definitions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+.. index:: parallel decomposition
+
 * *Partitioning/Decomposition*: the means by which an overall
   computation is divided into smaller parts, some or all of which may
   be executed in parallel. 
 
+.. index:: parallel tasks
+
 * *Tasks*: programmer-defined computational subunits determined
   through the decomposition.
 
+.. index:: parallel concurrency
+
 * *Concurrency*: the degree to which multiple tasks can be executed in
   parallel at any given time (more is better).
+
+.. index:: parallel granularity
 
 * *Granularity*: the size of tasks into which a problem is decomposed 
 
@@ -444,9 +474,13 @@ General parallel computing definitions
   * A decomposition into a small number of large tasks is called
     *coarse-grained*. 
 
+.. index:: parallel task interaction
+
 * *Task-interaction*: the tasks that a problem is decomposed into
   often share input, output, or intermediate data that must be
   communicated.
+
+.. index:: parallel processes
 
 * *Processes*: individual threads of execution. A single processor may
   execute multiple processes, each of which can operate on multiple
@@ -488,7 +522,9 @@ Overhead and load balancing
 After decomposition, we must map tasks onto processes with the goal
 that all tasks finish in the shortest time.
 
-We strive to minimize overheads for executing the tasks, including:
+.. index:: overhead
+
+We strive to minimize *overheads* for executing the tasks, including:
 
 * The time spent communicating between processors,
 
@@ -504,6 +540,8 @@ Idle processes occur due to:
 
 * A heterogeneous machine, where processors operate at different
   speeds.
+
+.. index:: load balancing
 
 *Load balancing* is the attempt to map processes with the dual
 objectives: 
@@ -521,6 +559,7 @@ conflict with each other.
 Data decompositions
 ^^^^^^^^^^^^^^^^^^^^^^
 
+.. index:: parallel decomposition; domain decomposition
 
 Domain decomposition
 """""""""""""""""""""""
@@ -587,6 +626,8 @@ in an aircraft.
   processes 1 and 2 could take longer than process 3.
 
 
+.. index:: parallel decomposition; work pool
+
 Work pool model
 """""""""""""""""""""""
 
@@ -633,6 +674,7 @@ and where particles with a greater speed require increased processing.
 Functional decompositions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+.. index:: parallel decomposition; manager-worker
 
 Manager-worker
 """""""""""""""""""""""
@@ -688,6 +730,8 @@ A manager process can set up a work queue with many initial iterates.
   iteration limit, or by noticing stagnation of the optimal solution
   set. 
 
+
+.. index:: parallel decomposition; pipeline
 
 Pipeline model
 """""""""""""""""""""""
@@ -750,13 +794,18 @@ vectors :math:`b`.
    :align: center
 
 
+
 .. _parallel_computing_metrics:
 
 Parallel computing metrics
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+.. index:: parallel scalability
+
 *Scalability* is the ability of a parallel algorithm to effectively
 utilize a parallel machine.
+
+.. index:: strong scaling
 
 *Strong scaling*:  the goal is speed up algorithms that are possible
 on one computer, but slow. 
@@ -771,6 +820,8 @@ on one computer, but slow.
 
    [from David E. Keyes, HiPC 2007]
 
+
+.. index:: weak scaling
 
 *Weak scaling*: the goal is to enable problems that cannot fit on one
 computer due to large size (resolution-limited). 
@@ -787,6 +838,8 @@ computer due to large size (resolution-limited).
    [from David E. Keyes, HiPC 2007]
 
 
+.. index:: parallel speedup, parallel efficiency
+
 For strong-scaling tests, we also compute the following performance
 measures: 
 
@@ -799,6 +852,8 @@ measures:
 
    \mbox{Parallel efficiency} = (\mbox{Parallel speedup}) / (\mbox{processors used})
 
+
+.. index:: Amdahl's law
 
 We typically compare these metrics against the theoretically
 "best-case scenario", as determined through *Amdahl's Law* (1967):
@@ -818,12 +873,9 @@ We typically compare these metrics against the theoretically
    :align: center
 
 
-
-
-
-Parallel computing libraries (MPI and OpenMP)
---------------------------------------------------------
-
+.. index:: 
+   single: parallel computing resources
+   single: resources; parallel computing
 
 General parallel computing resources:
 
@@ -836,6 +888,16 @@ General parallel computing resources:
 * Online tutorial: `Introduction to Parallel Computing
   <https://computing.llnl.gov/tutorials/parallel_comp/>`_ 
 
+
+
+
+
+
+Parallel computing libraries (MPI and OpenMP)
+--------------------------------------------------------
+
+.. index:: 
+   pair: OpenMP; resources
 
 OpenMP is the primary approach for enabling shared-memory parallel
 computing.  It is implemented as an extension to compilers, and is
@@ -852,6 +914,9 @@ code, with suggestions on how to launch and share work among threads.
   * `In-Depth Interactive OpenMP Tutorial
     <https://computing.llnl.gov/tutorials/openMP/>`_ 
 
+
+.. index:: 
+   pair: MPI; resources
 
 MPI is the primary approach for enabling distributed-memory parallel
 computing.  It is implemented as a library of functions and data
@@ -885,39 +950,61 @@ scientific computing.
 
 Dense linear solvers and eigenvalue solvers:
 
+.. index:: ScaLAPACK
+
 * `ScaLAPACK <http://netlib.org/scalapack>`_ -- dense and banded linear
   solvers and eigenvalue analysis [Fortran77] 
+
+.. index:: PLAPACK
 
 * `PLAPACK <http://www.cs.utexas.edu/~plapack>`_ -- dense matrix
   operations [C] 
 
 Sparse/iterative linear/nonlinear solvers and eigenvalue solvers:
 
+.. index:: SuperLU
+
 * `SuperLU <http://crd.lbl.gov/~xiaoye/SuperLU>`_ -- direct solvers for
   sparse linear systems [C++, C, Fortran]
 
+.. index:: HYPRE
+
 * `HYPRE <http://www.llnl.gov/CASC/linear_solvers>`_ -- iterative
   solvers for sparse linear systems [C++, C, Fortran]
+
+.. index:: PARPACK
 
 * `PARPACK <http://www.caam.rice.edu/software/ARPACK>`_ -- large-scale
   eigenvalue problems [Fortran77] 
 
 Other:
 
+.. index:: SUNDIALS
+
 * `SUNDIALS <http://www.llnl.gov/casc/sundials>`_ -- nonlinear, ODE,
   DAE solvers w/ sensitivities [C++, C, Fortran, Matlab] 
+
+.. index:: FFTW
 
 * `FFTW <http://www.fftw.org>`_ -- multi-dimensional parallel discrete
   Fourier transform [C++, C, Fortran] 
 
+.. index:: ParMETIS
+
 * `ParMETIS <http://www.cs.umn.edu/~metis>`_ -- graph partitioning
   meshing, sparse-matrix orderings [C]
+
+.. index:: PHDF5
 
 * `PHDF5 <http://www.hdfgroup.org>`_ -- parallel data input/output
   library [C++, C, Fortran] 
 
+.. index:: mpiP
+
 * `mpiP <http://mpip.sourceforge.net>`_ -- MPI profiling library [C++,
   C, Fortran] 
+
+.. index:: LAMMPS
 
 * `LAMMPS <http://lammps.sandia.gov>`_ -- large-scale molecular
   dynamics simulator [C++, C, Fortran, Python] 
@@ -925,8 +1012,12 @@ Other:
 Larger parallel packages (that include or can call many of the above
 software):
 
+.. index:: PETSc
+
 * `PETSc <http://www.mcs.anl.gov/petsc>`_ -- data structures &
   nonlinear/linear PDE solvers [C++, C, Fortran, Python] 
+
+.. index:: Trilinos
 
 * `Trilinos <http://trilinos.sandia.gov>`_ -- enabling technologies
   for complex multi-physics problems [C++, Fortran, Python] 

@@ -38,6 +38,8 @@ SMU HPC network
 Compiling and running parallel programs
 --------------------------------------------------------
 
+.. index:: SMU HPC clusters
+
 As seen in :ref:`session6`, the SMU HPC cluster is actually currently
 comprised of four separate computing clusters: two batch processing
 clusters for high-throughput computing, and two smaller parallel
@@ -141,6 +143,8 @@ detail each compilation/execution approach:
 Notes on maximum/minimum job sizes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+.. index:: running large parallel jobs
+
 **Large jobs**:
 
   Although the condor job scheduler does not enforce maximum wall
@@ -149,6 +153,8 @@ Notes on maximum/minimum job sizes
   excessive amount of time (i.e. over 24 hours).  These are *shared
   resources*, not your own personal cluster.
 
+
+.. index:: running small parallel jobs
 
 **Small jobs**:
 
@@ -182,6 +188,8 @@ In the resulting directory, you will find a number of files, including
 ``Makefile``, ``driver.cpp`` and ``vectors.cpp``.  
 
 
+.. index:: OpenMP; compiler flags
+
 OpenMP is implemented as an extension to existing programming
 languages, and is available for programs written in C, C++, Fortran77
 and Fortran90.  These OpenMP extensions are enabled at the compiler
@@ -210,6 +218,8 @@ flags for well-known compilers include:
 
 
 
+.. index:: OpenMP example; compiling with GNU
+
 .. _session9-compiling_OpenMP_GNU:
 
 Compiling OpenMP code with the GNU compilers
@@ -225,6 +235,8 @@ OpenMP using the command
 The compiler option ``-fopenmp`` is the same, no matter which GNU
 compiler you are using (``gcc``, ``gfortran``, etc.)
 
+
+.. index:: OpenMP example; compiling with PGI
 
 .. _session9-compiling_OpenMP_PGI:
 
@@ -243,6 +255,8 @@ The compiler option ``-mp`` is the same, no matter which PGI
 compiler you are using (``pgcc``, ``pgfortran``, etc.)
 
 
+.. index:: OpenMP; running at the command line
+
 .. _session9-running_OpenMP_commandline:
 
 Running OpenMP programs at the command line
@@ -257,6 +271,8 @@ Run the executable ``driver.exe`` from the command line:
 In fact, this executable did not run using more than one thread, since
 the default behavior of OpenMP programs on SMU HPC is to only use a
 single thread.
+
+.. index:: OpenMP; OMP_NUM_THREADS
 
 To change the number of threads used by our program, we must adjust
 the ``OMP_NUM_THREADS`` environment variable. First, verify that this is
@@ -285,6 +301,8 @@ Re-run ``driver.exe`` first using 1 and then using 2 OpenMP
 threads.  Notice the speedup when running with multiple threads. 
 
 
+
+.. index:: OpenMP example; running on batch1
 
 .. _session9-running_OpenMP_batch1:
 
@@ -342,6 +360,8 @@ This job file should be launched from either ``smuhpc.smu.edu`` or
 
 
 
+.. index:: OpenMP example; running on batch2
+
 .. _session9-running_OpenMP_batch2:
 
 Running OpenMP jobs on batch2
@@ -381,6 +401,8 @@ This job file should be launched from either ``smuhpc.smu.edu`` or
 ``smuhpc2.smu.edu``. 
 
 
+
+.. index:: OpenMP example; running on parallel1
 
 .. _session9-running_OpenMP_parallel1:
 
@@ -433,6 +455,8 @@ parallel1 or parallel2 clusters, this job file must be launched from
 ``smuhpc4.smu.edu``.
 
 
+
+.. index:: OpenMP example; running on parallel2
 
 .. _session9-running_OpenMP_parallel2:
 
@@ -538,6 +562,8 @@ library that you use the same compiler for your program that was used
 to construct the library.
 
 
+.. index:: MPI wrapper scripts
+
 .. _session9-compiling_MPI_programs:
 
 Compiling MPI code (MPI wrapper scripts)
@@ -594,6 +620,18 @@ to do most of this work for you. Such scripts are written to encode
 all of the above information that is required to use MPI with a given
 compiler on a specific system. 
 
+.. index:: 
+   single: MPI wrapper scripts; mpicxx
+   single: MPI wrapper scripts; mpiCC
+   single: MPI wrapper scripts; mpic++
+   single: MPI wrapper scripts; openmpicxx
+   single: MPI wrapper scripts; mpicc
+   single: MPI wrapper scripts; openmpicc
+   single: MPI wrapper scripts; mpif90
+   single: MPI wrapper scripts; openmpif90
+   single: MPI wrapper scripts; mpif77
+   single: MPI wrapper scripts; openmpif77
+
 Depending on your programming language and the specific MPI
 implementation, these wrapper scripts can have different names. The
 typical names for these MPI wrapper scripts are below: 
@@ -613,6 +651,8 @@ appropriate context within the following subsections, that focus on
 the myriad compilers and clusters we wish to use.
 
 
+
+.. index:: MPI example; compiling with GNU for batch1 and batch2
 
 .. _session9-compiling_MPI_GNU_batch:
 
@@ -642,6 +682,8 @@ course, this is not required.
 
 
 
+.. index:: MPI example; running with GNU on batch1 and batch2
+
 .. _session9-running_MPI_GNU_batch:
 
 Running MPI code with the GNU compilers on batch1 and batch2
@@ -658,6 +700,8 @@ incorporating a few specific items into your condor submission script,
 along with a customized executable script that handles the launching
 of your executable.
 
+.. index:: mpich_script
+
 This executable script is named ``mpich_script``, and is included
 in the ``session9_MPI`` directory that you downloaded above.  You
 should not need to edit this script file except for more advanced
@@ -666,6 +710,8 @@ usage scenarios, which we will not cover during this tutorial.
 However, the example condor submission file, ``mpich_condor.sub`` does
 contain specific items that you will need to modify for your usage
 scenario.  This file is reproduced here:
+
+.. index:: mpich_condor.sub
 
 .. code-block:: bash
 
@@ -760,6 +806,8 @@ usual (only from the ``smuhpc`` or ``smuhpc2`` login nodes),
 
 
 ..
+   .. index:: MPI example; compiling with PGI for batch1 and batch2
+
    .. _session9-compiling_MPI_PGI_batch:
 
    Compiling MPI code with the PGI compilers for batch1 and batch2
@@ -788,6 +836,8 @@ usual (only from the ``smuhpc`` or ``smuhpc2`` login nodes),
 
 
 
+   .. index:: MPI example; running with GNU on batch1 and batch2
+
    .. _session9-running_MPI_PGI_batch:
 
    Running MPI code with the PGI compilers on batch1 and batch2
@@ -804,6 +854,8 @@ usual (only from the ``smuhpc`` or ``smuhpc2`` login nodes),
    along with a customized executable script that handles the launching
    of your executable.
 
+   .. index:: mpich_script
+
    This executable script is named ``mpich_script``, and is included
    in the ``session9_MPI`` directory that you downloaded above.  You
    should not need to edit this script file except for more advanced
@@ -812,6 +864,8 @@ usual (only from the ``smuhpc`` or ``smuhpc2`` login nodes),
    However, the example condor submission file, ``mpich_condor.sub`` does
    contain specific items that you will need to modify for your usage
    scenario.  This file is reproduced here:
+
+   .. index:: mpich_condor.sub
 
    .. code-block:: bash
 
@@ -903,6 +957,8 @@ usual (only from the ``smuhpc`` or ``smuhpc2`` login nodes),
 
 
 
+.. index:: MPI example; compiling with GNU for parallel1
+
 .. _session9-compiling_MPI_GNU_parallel1:
 
 Compiling MPI code with the GNU compilers for parallel1
@@ -931,6 +987,8 @@ course, this is not required.
 
 
 
+.. index:: MPI example; running with GNU on parallel1
+
 .. _session9-running_MPI_GNU_parallel1:
 
 Running MPI code with the GNU compilers on parallel1
@@ -946,10 +1004,14 @@ incorporating a few specific items into your condor submission script,
 along with a customized executable script that handles the launching
 of your executable.
 
+.. index:: mvapich_script
+
 This executable script is named ``mvapich_script``, and is included
 in the ``session9_MPI`` directory that you downloaded above.  You
 should not need to edit this script file except for more advanced
 usage scenarios, which we will not cover during this tutorial.
+
+.. index:: mvapich_condor.sub
 
 However, the example condor submission file, ``mvapich_condor.sub`` does
 contain specific items that you will need to modify for your usage
@@ -1053,6 +1115,7 @@ usual (only from the  ``smuhpc4`` login node),
 
 
 
+.. index:: MPI example; compiling with PGI for parallel1
 
 .. _session9-compiling_MPI_PGI_parallel1:
 
@@ -1081,6 +1144,8 @@ appropriately to distinguish it from other compilation approaches.  Of
 course, this is not required.
 
 
+.. index:: MPI example; running with PGI on parallel1
+
 .. _session9-running_MPI_PGI_parallel1:
 
 Running MPI code with the PGI compilers on parallel1
@@ -1096,10 +1161,14 @@ incorporating a few specific items into your condor submission script,
 along with a customized executable script that handles the launching
 of your executable.
 
+.. index:: mvapich_script
+
 This executable script is named ``mvapich_script``, and is included
 in the ``session9_MPI`` directory that you downloaded above.  You
 should not need to edit this script file except for more advanced
 usage scenarios, which we will not cover during this tutorial.
+
+.. index:: mvapich_condor.sub
 
 However, the example condor submission file, ``mvapich_condor.sub`` does
 contain specific items that you will need to modify for your usage
@@ -1205,6 +1274,8 @@ usual (only from the  ``smuhpc4`` login node),
 
 
 
+.. index:: MPI example; compiling with GNU for parallel2
+
 .. _session9-compiling_MPI_GNU_parallel2:
 
 Compiling MPI code with the GNU compilers for parallel2
@@ -1233,6 +1304,8 @@ appropriately to distinguish it from other compilation approaches.  Of
 course, this is not required.
 
 
+.. index:: MPI example; running with GNU on parallel2
+
 .. _session9-running_MPI_GNU_parallel2:
 
 Running MPI code with the GNU compilers on parallel2
@@ -1249,12 +1322,16 @@ incorporating a few specific items into your condor submission script,
 along with a customized executable script that handles the launching
 of your executable.
 
+.. index:: mvapich_script
+
 This executable script is named ``mvapich_script``, and is included
 in the ``session9_MPI`` directory that you downloaded above.  You
 should not need to edit this script file except for more advanced
 usage scenarios, which we will not cover during this tutorial.
 
-However, the example condor submission file, ``mpi_condor.sub`` does
+.. index:: mvapich_condor.sub
+
+However, the example condor submission file, ``mvapich_condor.sub`` does
 contain specific items that you will need to modify for your usage
 scenario.  This file, modified for the GNU/parallel2 usage scenario,
 is reproduced here: 
@@ -1354,6 +1431,8 @@ usual (only from the  ``smuhpc4`` login node),
 
 
 
+.. index:: MPI example; compiling with PGI for parallel2
+
 .. _session9-compiling_MPI_PGI_parallel2:
 
 Compiling MPI code with the PGI compilers for parallel2
@@ -1382,6 +1461,8 @@ appropriately to distinguish it from other compilation approaches.  Of
 course, this is not required.
 
 
+.. index:: MPI example; running with PGI on parallel2
+
 .. _session9-running_MPI_PGI_parallel2:
 
 Running MPI code with the PGI compilers on parallel2
@@ -1399,12 +1480,16 @@ incorporating a few specific items into your condor submission script,
 along with a customized executable script that handles the launching
 of your executable.
 
+.. index:: mvapich_script
+
 This executable script is named ``mvapich_script``, and is included
 in the ``session9_MPI`` directory that you downloaded above.  You
 should not need to edit this script file except for more advanced
 usage scenarios, which we will not cover during this tutorial.
 
-However, the example condor submission file, ``mpi_condor.sub`` does
+.. index:: mvapich_condor.sub
+
+However, the example condor submission file, ``mvapich_condor.sub`` does
 contain specific items that you will need to modify for your usage
 scenario.  This file, modified for the PGI/parallel2 usage scenario,
 is reproduced here: 

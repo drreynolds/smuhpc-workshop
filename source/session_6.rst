@@ -32,6 +32,7 @@ is administered by the `SMU Office of Information Technology
 
 
 
+.. index:: SMU HPC; hardware
 
 Basic hardware components
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -106,8 +107,11 @@ Disk nodes
   diskarray2b-6b. 
 
 
+
+.. index:: SMU HPC; general information
+
 General SMU HPC information
-"""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * OS: Scientific Linux 5.5 (64 bit).
 
@@ -143,6 +147,8 @@ We will perform this session of the workshop on the ``smuhpc2`` login
 node, so log in there to begin.
 
 
+
+.. index:: condor, job scheduler
 
 Condor and job submission scripts
 ------------------------------------------------------
@@ -180,19 +186,43 @@ acquisition of the system.
 
 Some widely used cluster batch systems are:
 
+.. index:: 
+   seealso: SLURM; job scheduler
+
 * `Simple Linux Utility for Resource Management (SLURM) <http://slurm.schedmd.com/>`_
+
+.. index:: 
+   seealso: Moab; job scheduler
 
 * `Moab <http://docs.adaptivecomputing.com/mwm/help.htm#topics/0-intro/productOverview.htm>`_
 
+.. index:: 
+   seealso: Torque; job scheduler
+
 * `Torque <http://www.adaptivecomputing.com/products/open-source/torque/>`_
+
+.. index:: 
+   seealso: LoadLeveler; job scheduler
 
 * `LoadLeveler <http://www-03.ibm.com/systems/software/loadleveler/index.html>`_
 
+.. index:: 
+   seealso: condor; job scheduler
+
 * `Condor <http://research.cs.wisc.edu/htcondor/>`_
+
+.. index:: 
+   seealso: Oracle grid engine; job scheduler
 
 * `Oracle Grid Engine <http://www.oracle.com/us/products/tools/oracle-grid-engine-075549.html>`_
 
+.. index:: 
+   seealso: Argent job scheduler; job scheduler
+
 * `Argent Job Scheduler <http://help.argent.com/#product_downloads_job_scheduler>`_
+
+.. index:: 
+   seealso: Platform LSF; job scheduler
 
 * `Platform LSF <http://www-03.ibm.com/systems/technicalcomputing/platformcomputing/products/lsf/>`_
 
@@ -205,6 +235,8 @@ The Condor queue commands
 While there are a `multitude of condor commands
 <http://research.cs.wisc.edu/htcondor/manual/v7.6/9_Command_Reference.html>`_,
 only some are of value to a new user:
+
+.. index:: condor; condor_submit
 
 * ``condor_submit`` -- this is the main interface between a user and
   the condor scheduler, that queues jobs for execution.  The usage
@@ -238,6 +270,8 @@ only some are of value to a new user:
     missing or equal to ``-``, then the commands are taken from
     standard input.
 
+.. index:: condor; condor_q
+
 * ``condor_q`` -- displays information about jobs in the condor
   queue.  The usage command with the most helpful arguments is
 
@@ -262,6 +296,8 @@ only some are of value to a new user:
   * ``username`` -- limits output to only jobs submitted by a specific
     user
 
+.. index:: condor; condor_rm
+
 * ``condor_rm`` -- removes jobs from the condor queue.  The usage
   command with the most typical arguments is
 
@@ -281,6 +317,7 @@ only some are of value to a new user:
 
 
 
+.. index:: condor job submission file
 
 The condor job submission file
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -288,19 +325,28 @@ The condor job submission file
 The way that a user interacts with Condor is through creating a *job
 submission file* that describes the job you want to run:
 
+.. index:: condor job submission file; line continuation
+
 * For lengthy lines within the submit description file, ``\`` may be
   used as a line continuation character.  Placing the backslash at
   the end of a line causes the current line's command to be continued
   with the next line of the file. 
 
+.. index:: 
+   pair: condor job submission file; comment
+
 * Submit file description files may contain comments, characterized as any
   line beginning with a ``#`` character. 
+
+.. index:: condor job submission file; case-independence
 
 * These submission file options are case-independent (i.e. "Universe" ==
   "uNivErSE"), although any file or path names are not.  
 
 
 The main condor job submission file options on SMU HPC are as follows: 
+
+.. index:: condor job submission file; arguments 
 
 * **arguments** --  List of arguments to be supplied to the executable
   as part of the command line.  For example, 
@@ -326,6 +372,8 @@ The main condor job submission file options on SMU HPC are as follows:
   4. To insert a literal single quote mark, escape it within an
      argument already delimited by single quote marks by adding
      another single quote mark. 
+
+.. index:: condor job submission file; environment 
 
 * **environment** -- List of additional environment variables to
   supply to the executable.  For example,
@@ -355,6 +403,8 @@ The main condor job submission file options on SMU HPC are as follows:
      mark anywhere inside of a section surrounded by single quote
      marks. 
 
+.. index:: condor job submission file; error file
+
 * **error** --  Path and file name indicating where Condor should put
   the standard error (``stderr``) from running your job.  For example, 
 
@@ -370,6 +420,8 @@ The main condor job submission file options on SMU HPC are as follows:
   * The default is ``/dev/null``, corresponding to ignoring all error
     messages. 
 
+.. index:: condor job submission file; executable
+
 * **executable** -- The path and file name of your executable
   program. For example,
 
@@ -382,6 +434,8 @@ The main condor job submission file options on SMU HPC are as follows:
 
   * You must have appropriate permissions to read/execute the supplied file.
 
+.. index:: condor job submission file; getenv
+
 * **getenv** {True, False} -- Propagates the environment variables
   present in your shell upon submitting the job to the job when it
   runs. For example, 
@@ -392,6 +446,8 @@ The main condor job submission file options on SMU HPC are as follows:
 
   If both **getenv** and **environment** are used, the values supplied
   by **environment** take precedence.
+
+.. index:: condor job submission file; input
 
 * **input** -- File containing any keyboard input values
   (i.e. standard input, ``stdin``) that your program requires.  For
@@ -408,6 +464,8 @@ The main condor job submission file options on SMU HPC are as follows:
 
   * Note that this command does not refer to the command-line arguments
     of the program, which are supplied by the **arguments** command.
+
+.. index:: condor job submission file; log
 
 * **log** --  File name indicating where Condor will record
   information about your job's execution.  While it is not required,
@@ -426,6 +484,8 @@ The main condor job submission file options on SMU HPC are as follows:
   * The default is ``/dev/null``, corresponding to ignoring all log
     messages. 
 
+.. index:: condor job submission file; notification
+
 * **notification** {Always, Complete, Error, Never} -- The set of
   job-related events for which the job owner is sent an email.  The
   default is "Complete", indicating notification when the job
@@ -436,6 +496,8 @@ The main condor job submission file options on SMU HPC are as follows:
 
      notification = Always
 
+.. index:: condor job submission file; notify_user
+
 * **notify_user** -- The email address to which condor will send
   **notification** messages.  For example,
 
@@ -445,6 +507,8 @@ The main condor job submission file options on SMU HPC are as follows:
 
   If left unspecified, condor will send a message to
   ``job-owner@submit-machine-name`` (which ends up going nowhere).
+
+.. index:: condor job submission file; output
 
 * **output** --  File name indicating where Condor should put the
   standard output (``stdout``) from running your job.  For example,
@@ -461,6 +525,8 @@ The main condor job submission file options on SMU HPC are as follows:
   * The default is ``/dev/null``, corresponding to ignoring all output
     messages. 
 
+.. index:: condor job submission file; universe
+
 * **universe** {vanilla, parallel} -- These specify what
   type of computation you plan to run.  For example,
 
@@ -475,6 +541,8 @@ The main condor job submission file options on SMU HPC are as follows:
   * The "parallel" universe corresponds to MPI-based parallel jobs
     that require multiple compute nodes to run.
 
+.. index:: condor job submission file; machine_count
+
 * **machine_count** -- Only applicable with the "parallel" universe,
   this option tells Condor how many nodes should be allocated to the
   parallel job.  For example,
@@ -482,6 +550,8 @@ The main condor job submission file options on SMU HPC are as follows:
   .. code-block:: text
 
      machine_count = 2
+
+.. index:: condor job submission file; requirements
 
 * **requirements** -- Option allowing you to provide additional
   requirements that must be satisfied before launching your job.  This
@@ -506,6 +576,8 @@ The main condor job submission file options on SMU HPC are as follows:
 
      requirements = regexp("iwnode", Machine)
 
+.. index:: condor job submission file; queue
+
 * **queue** -- This places your job into the queue, and should follow
   all arguments that specify how to run the job.  For example,
 
@@ -519,6 +591,8 @@ The main condor job submission file options on SMU HPC are as follows:
 
 
 
+.. index:: condor job submission file; macros
+
 In setting up this file, you have may insert parameterless macros, of
 the form ``$(macro_name)``, anywhere in your job submission file.
 Custom macros may be defined via the syntax
@@ -529,8 +603,12 @@ Custom macros may be defined via the syntax
 
 There are three default macros:
 
+.. index:: condor job submission file; Cluster
+
 * **Cluster** -- the value of the ``ClusterID`` on which the job has
   is queued.
+
+.. index:: condor job submission file; Process
 
 * **Process** -- the Condor process ID number for this job.  For
   example,
@@ -538,6 +616,8 @@ There are three default macros:
   .. code-block:: text
 
      output = myjob.$(Process).out
+
+.. index:: condor job submission file; Node
 
 * **Node** -- only defined for jobs in the "Parallel" universe, this
   holds the name of the node on which the process is running (useful
@@ -550,6 +630,7 @@ There are three default macros:
 
 
 
+.. index:: condor; whole node vs shared node
 
 Whole node versus shared node jobs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -582,6 +663,8 @@ single node of the larger machine:
 
 
 
+.. index:: condor; ssh to job
+
 Condor SSH to job
 ^^^^^^^^^^^^^^^^^^^^
 
@@ -604,6 +687,9 @@ where here ``<processID>`` is the integer ID number for your running job.
 
 
 
+
+.. index:: 
+   pair: condor; resources
 
 Condor resources:
 ^^^^^^^^^^^^^^^^^^^^^
@@ -641,6 +727,8 @@ Unzip this file, and enter the resulting subdirectory
    $ tar -zxf session6.tgz
    $ cd session6
 
+
+.. index:: condor examples; single shared node job
 
 Running a single shared node job
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -705,6 +793,8 @@ should be empty, the log file should have some general condor-related
 information, and the output file should have our desired results.
 
 
+
+.. index:: condor examples; multiple shared node jobs
 
 .. _running_multiple_condor_jobs:
 
@@ -816,6 +906,8 @@ To view our results in a single command, use
 
 
 
+.. index:: condor examples; single whole node job
+
 Running a single whole node job
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -854,6 +946,9 @@ and launch it as usual,
 .. code-block:: bash
 
    $ condor_submit test3.job
+
+
+.. index:: sed
 
 After the run finishes, find the 4324th prime number (on line 4326 of
 ``test3.out`` because of the two extra lines that condor adds to the

@@ -12,6 +12,7 @@ We will perform this session of the workshop on the ``smuhpc3`` login
 node, so log in there to begin.
 
 
+.. index:: ! Makefile
 
 Makefiles
 --------------
@@ -72,9 +73,9 @@ Let's first compile and assemble the auxiliary subroutine
 
    $ g++ -c one_norm.cpp
 
-This calls the GNU C++ compiler, ``g++``, to create an object file, named
-``one_norm.o``, that contains compiler-generated CPU instructions on how
-to execute the function in the file ``one_norm.cpp``. 
+This calls the GNU C++ compiler, ``g++``, to create an :index:`object
+file`, named ``one_norm.o``, that contains compiler-generated CPU
+instructions on how to execute the function in the file ``one_norm.cpp``. 
 
 Use similar instructions to create the object files ``driver.o``,
 ``vector_difference.o``, ``vector_product.o`` and ``vector_sum.o`` in
@@ -82,23 +83,23 @@ a similar fashion.
 
 You should now have the files ``driver.o``, ``one_norm.o``,
 ``vector_difference.o``, ``vector_product.o`` and ``vector_sum.o`` in
-your directory. The final stage in creating the executable is to link
-these files together. We may call ``g++`` one more time to do this
-(which itself calls the system-dependent linker), supplying all of the
-object files as arguments so that ``g++`` knows which files to link
-together: 
+your directory. The final stage in creating the executable is to
+:index:`link <linking>` these files together. We may call ``g++`` one
+more time to do this (which itself calls the system-dependent linker),
+supplying all of the object files as arguments so that ``g++`` knows
+which files to link together: 
 
 .. code-block:: bash
 
    $ g++ driver.o one_norm.o vector_difference.o vector_product.o \
      vector_sum.o -lm
 
-This creates an executable file named ``a.out``, which is the default
-(entirely non-descriptive) name given by most compilers to the
-resulting executable.  The additional argument ``-lm`` is used to tell
-``g++`` to link these functions against the built-in math library (so
-that we can use the absolute value function, ``fabs()``, that is
-called inside the ``one_norm.cpp`` file. 
+This creates an executable file named ``a.out``, which is the
+:index:`default <a.out>` (entirely non-descriptive) name given by most
+compilers to the resulting executable.  The additional argument
+``-lm`` is used to tell ``g++`` to link these functions against the
+built-in math library (so that we can use the absolute value function,
+``fabs()``, that is called inside the ``one_norm.cpp`` file. 
 
 You can instead give your executable a more descriptive name with the
 ``-o`` option:
@@ -108,7 +109,8 @@ You can instead give your executable a more descriptive name with the
    $ g++ driver.o one_norm.o vector_difference.o vector_product.o \
      vector_sum.o -lm -o driver.exe 
 
-This will create the same executable, but with the more descriptive name ``driver.exe``. 
+This will create the same executable, but with the more descriptive
+name ``driver.exe``.  
 
 While you may find it to be quite enjoyable to compile every source
 file by hand, and then manually link them together into an executable,
@@ -116,17 +118,23 @@ the process can be completely automated by using a ``Makefile``.
 
 A few rules about ``Makefiles``:
 
+.. index:: Makefile
+   seealso: GNUmakefile; Makefile
+   seealso: makefile; Makefile
+
 * The ``make`` program will look for any of the files:
   ``GNUmakefile``, ``makefile``, and ``Makefile`` (in that order) for
   build instructions.  Most people consider the name ``Makefile`` as
   best practice, though any are acceptable.  
 
 * Inside the ``Makefile``, lines beginning with the ``#`` character
-  are treated as comments, and are ignored. 
+  are treated as :index:`comments <pair: Makefile; comment>`, and are
+  ignored.
 
 * Blank lines are ignored.
 
-* You specify a *target* for ``make`` to build using the syntax,
+* You :index:`specify <pair: Makefile; target>` a *target* for
+  ``make`` to build using the syntax, 
 
   .. code-block:: makefile
 
@@ -162,22 +170,21 @@ lines are either blank or are comment lines except for the four sets:
    hello_f77.exe : hello.f
            gfortran hello.f -o hello_f.exe
 
-Here, each of the items to the left of the colons are called *build
-targets*; here we have four targets, ``hello_cpp.exe``,
+Here, we have four build targets, ``hello_cpp.exe``,
 ``hello_c.exe``, ``hello_f90.exe`` and ``hello_f77.exe`` (it is
 traditional to give the target the same name as the output of the
 build commands).  
 
-Each of these targets depend a source code file
-listed to the right of the colon; here these are ``hello.cpp``,
-``hello.c``, ``hello.f90`` and ``hello.f``, respectively.  
+Each of these targets :index:`depend <pair: Makefile; dependencies>` a
+source code file listed to the right of the colon; here these are
+``hello.cpp``, ``hello.c``, ``hello.f90`` and ``hello.f``, respectively.  
 
-The indented lines (each require a single [tab] character) under each
-target contain the instructions on how to build that executable.  For
-example, ``make`` will build ``hello_cpp.exe`` by issuing the command
-``g++ hello.cpp -o hello_cpp.exe``, which does the compilation,
-assembly and linking all in one step (since there is only one source
-code file). 
+The :index:`indented <pair: Makefile; build commands>` lines (each
+require a single [tab] character) under each target contain the
+instructions on how to build that executable.  For example, ``make``
+will build ``hello_cpp.exe`` by issuing the command ``g++ hello.cpp -o
+hello_cpp.exe``, which does the compilation, assembly and linking all
+in one step (since there is only one source code file). 
 
 Alternatively, this Makefile could have been written:
 
@@ -238,6 +245,8 @@ targets may be executed through the command ``make target``, where
 ``target`` is the name you have specified for a target in the
 ``Makefile``.  
 
+.. index:: make clean
+
 For example, a standard ``Makefile`` target is to clean up the
 temporary files created during compilation of the executable,
 typically entitled ``clean``.  In our compilation process, we created
@@ -260,6 +269,9 @@ but for our needs in this tutorial these commands should suffice. For
 additional information on the ``make`` system, see the PDF manual
 listed below.
 
+.. index::
+   pair: Makefile; resources
+
 Make resources:
 
 * `GNU Make manual
@@ -267,6 +279,8 @@ Make resources:
 
 
 
+
+.. index:: ! module
 
 Modules
 -----------
@@ -298,8 +312,10 @@ The module system operates through the Linux executable, ``module``,
 followed by the desired command.  The primary module commands are as
 follows: 
 
+.. index:: module; avail
+
 * ``module avail`` -- displays a list of all available modules on the
-  system, e.g.
+  system, e.g. 
 
   .. code-block:: bash
 
@@ -339,8 +355,10 @@ follows:
      matching any of the "keys". 
 
 
-* ``module list`` -- lists all currently loaded modules in your
-  working environment.  At first, we have none:
+.. index:: module; list
+
+* ``module list`` -- lists all currently loaded
+  modules in your working environment.  At first, we have none:
 
   .. code-block:: bash
 
@@ -350,9 +368,13 @@ follows:
      
      Lmod Warning: No modules installed
 
-* ``module add`` and ``module load`` -- loads a module into your
-  working environment.  For example, at the moment the PGI C compiler
-  is not in our PATH:
+.. index:: 
+   single: module; add
+   single: module; load
+
+* ``module add`` and ``module load`` -- loads
+  a module into your working environment.  For example, at the moment
+  the PGI C compiler is not in our PATH:
 
   .. code-block:: bash
 
@@ -376,9 +398,13 @@ follows:
      Currently Loaded Modules:
        1) pgi/13.2-64bit
 
-* ``module rm`` and ``module unload`` -- undoes a previous "add" or
-  "load" command, removing the module from your working environment,
-  e.g.
+.. index:: 
+   single: module; rm
+   single: module; unload
+
+* ``module rm`` and ``module unload`` -- undoes
+  a previous "add" or "load" command, removing the module from your
+  working environment, e.g.
 
   .. code-block:: bash
 
@@ -393,8 +419,13 @@ follows:
      Currently Loaded Modules:
        1) pgi/13.2-64bit
 
-* ``module switch`` and ``module swap`` -- this does a combination
-  unload/load, swapping out one module for another, e.g.
+.. index:: 
+   single: module; switch
+   single: module; swap
+
+* ``module switch`` and ``module swap`` -- this
+  does a combination unload/load, swapping out one module for another,
+  e.g. 
 
   .. code-block:: bash
 
@@ -407,9 +438,13 @@ follows:
      Currently Loaded Modules:
        1) pgi/13.2/64bit        2) mvapich2/1.6/gcc-QL
 
-* ``module display`` and ``module show`` -- this shows detaled
-  information about how a specific module affects your environment,
-  e.g.
+.. index:: 
+   single: module; display
+   single: module; show
+
+* ``module display`` and ``module show`` -- this
+  shows detaled information about how a specific module affects your
+  environment, e.g.
  
   .. code-block:: bash
 
@@ -429,10 +464,12 @@ follows:
      .8.0/lib:/grid/software/gmp-5.1.1/lib:/grid/software/mpfr-3.1.2/lib:/gr
      id/software/mpc-1.0.1/lib")
 
-* ``module help`` -- This displays a set of descriptive information
-  about the module (what it does, the version number of the
-  software, etc.).  This only applies to packages where their "help"
-  pages have been installed (none yet on SMU HPC).
+.. index:: module; help
+
+* ``module help`` -- This displays a set of
+  descriptive information about the module (what it does, the version
+  number of the software, etc.).  This only applies to packages where
+  their "help" pages have been installed (none yet on SMU HPC).
 
 
 
@@ -459,10 +496,9 @@ the ``pgc++`` compiler.  Using the module system, this simplifies to
    $ pgc++  driver.cpp one_norm.cpp vector_difference.cpp \
      vector_product.cpp vector_sum.cpp -lm -o driver.exe
 
-Even for this simple example where we only
-need to add something to our PATH, the module system can be invaluable
-since it is rare that you know the global location of a file *a
-priori*.  
+Even for this simple example where we only need to add something to
+our PATH, the module system can be invaluable since it is rare that
+you know the global location of a file *a priori*.  
 
 
 
@@ -488,6 +524,9 @@ Hints:
 
 
 
+.. index:: 
+   pair: module; resources
+
 Module resources:
 ^^^^^^^^^^^^^^^^^^
 
@@ -496,6 +535,9 @@ Module resources:
 * `Module FAQ <http://sourceforge.net/p/modules/wiki/FAQ/>`_
 
 
+
+.. index:: version control systems
+   seealso: VCS; version control systems
 
 Version control systems
 ---------------------------
@@ -695,6 +737,7 @@ A typical scenario goes like this:
 
 
 
+.. index:: cvs
 
 CVS
 ^^^^^
@@ -708,26 +751,48 @@ files.
 
 The primary CVS commands are:
 
+.. index:: cvs; add
+
 * ``cvs add`` --  adds a new file/directory to the repository
+
+.. index:: cvs; admin
 
 * ``cvs admin`` -- administration front end for the underlying
   revision control system
 
+.. index:: cvs; checkout
+
 * ``cvs checkout`` -- checkout sources for editing
+
+.. index:: cvs; commit
 
 * ``cvs commit`` -- checks files into the repository
 
+.. index:: cvs; diff
+
 * ``cvs diff`` -- checks for differences between revisions
+
+.. index:: cvs; history
 
 * ``cvs history`` -- shows status of files and users
 
+.. index:: cvs; import
+
 * ``cvs import`` -- import sources into CVS
+
+.. index:: cvs; remove
 
 * ``cvs remove`` -- removes an entry from the repository
 
+.. index:: cvs; status
+
 * ``cvs status`` -- status info on the revisions
 
+.. index:: cvs; tag
+
 * ``cvs tag`` -- add a tag to checked out version
+
+.. index:: cvs; update
 
 * ``cvs update`` -- brings work tree in sync with repository
 
@@ -739,6 +804,9 @@ of *Integrated Desktop Environments* (IDEs)
 on all major operating systems with native support for CVS-hosted projects.
 
 
+.. index:: 
+   pair: cvs; resources
+
 CVS resources:
 
 * `Main CVS site <http://cvs.nongnu.org/>`_
@@ -747,6 +815,8 @@ CVS resources:
 
 
 
+
+.. index:: svn
 
 SVN
 ^^^^^
@@ -760,23 +830,49 @@ are quite similar to those for CVS.
 
 The primary SVN commands include:
 
+.. index:: svn; help
+
 * ``svn help`` -- provides a summary of the available commands.
+
+.. index:: 
+   single: svn; checkout
+   single: svn; co
 
 * ``svn checkout`` or ``svn co`` -- pulls an SVN tree from the server
   (you should only need to do this once).
 
+.. index:: svn; add
+
 * ``svn add`` -- adds a newly-created file or directory to the repository.
+
+.. index:: 
+   single: svn; delete
+   single: svn; del
+   single: svn; remove
+   single: svn; rm
 
 * ``svn delete`` or ``svn del`` or ``svn remove`` or ``svn rm`` --
   deletes the local file immediately, and notifies the repository that
   on the next commit, the file should be deleted from there as well.
 
+.. index:: 
+   single: svn; status
+   single: svn; stat
+
 * ``svn status`` or ``svn stat`` --  displays the status of working directories and files.
+
+.. index:: 
+   single: svn; update
+   single: svn; up
 
 * ``svn update`` or ``svn up`` -- synchronizes your local version of
   the code with the server. If you have made local changes, it will
   try and merge any changes on the server with your changes on your
   machine. 
+
+.. index:: 
+   single: svn; commit
+   single: svn; ci
 
 * ``svn commit`` or ``svn ci`` -- recursively sends your changes to
   the SVN server.
@@ -788,19 +884,33 @@ The primary SVN commands include:
 
   * The ``-m`` option should always be used to pass a log message to the command.
 
+.. index:: svn; diff
+
 * ``svn diff`` -- shows all changes between the local version of a
   file and the version in the repository.  May also be used to see
   changes between specific versions of the file with the syntax ``svn diff -r
   revision1:revision2 FILENAME``
+
+.. index:: 
+   single: svn; move
+   single: svn; mv
+   single: svn; rename
+   single: svn; ren
 
 * ``svn move SRC DEST`` or ``svn mv SRC DEST`` or ``svn rename SRC
   DEST`` or ``svn ren SRC DEST`` --  moves a file from one directory
   to another or renames a file in your local directory immediately,
   and performs the same changes on the server upon committing.
 
+.. index:: svn; revert
+
 * ``svn revert`` -- replaces a local file(s) with the one in the repository.
 
+.. index:: svn; log
+
 * ``svn log`` –- displays the log messages from checkins to to the repository.
+
+.. index:: svn; resolve
 
 * ``svn resolve`` -- if an update showed a conflict (a file marked
   with a "C"), then once you have manually merged the two versions of
@@ -813,6 +923,9 @@ but again since it has been widely used for over a decade, subversion
 support has been integrated into a variety of `GUI front-ends and IDEs
 <https://en.wikipedia.org/wiki/List_of_software_that_uses_Subversion>`_.
 
+
+.. index:: 
+   pair: svn; web hosting
 
 In addition, there are a number of web sites that will host
 open-source SVN-based software projects free of charge, including:
@@ -832,6 +945,9 @@ open-source SVN-based software projects free of charge, including:
 
 
 
+.. index:: 
+   pair: svn; web resources
+
 SVN resources:
 
 * `Main SVN site <https://subversion.apache.org/>`_
@@ -840,6 +956,8 @@ SVN resources:
 
 
 
+
+.. index:: git
 
 Git
 ^^^^^
@@ -856,22 +974,33 @@ patches (sets of changes) between peers, resulting in some `key
 benefits over previous centralized systems 
 <https://en.wikipedia.org/wiki/Distributed_revision_control#Distributed_vs._centralized>`_ 
 
+.. index:: git; commands
+
 The `commands
 <https://confluence.atlassian.com/display/STASH/Basic+Git+commands>`_
 used for interacting with Git are nearly identical to those for SVN,
 with a few additions/exceptions: 
+
+.. index:: git; clone
 
 * ``git clone`` -- this is the primary mechanism for retrieving a
   local copy of a Git repository.  Unlike the CVS and SVN ``checkout``
   commands, the result is a full repository that may act as a server
   for other client repositories.
 
+.. index:: git; pull
+
 * ``git pull`` -- this fetches and merges changes on the remote server
   to your working repository.
+
+.. index:: git; push
 
 * ``git push`` -- the opposite of ``pull``, this sends all changes in
   your local repository to a remote repository.
 
+
+.. index:: 
+   pair: git; web hosting
 
 While distributed version control systems no longer require a main
 server, it is often useful to have a centralized, "agreed-upon" main
@@ -892,6 +1021,9 @@ projects free of charge, including:
 * `Assembla <http://offers.assembla.com/free-git-hosting/>`_
 
 
+.. index:: 
+   pair: git; resources
+
 Git resources:
 
 * `Main Git site <http://git-scm.com/>`_
@@ -901,6 +1033,9 @@ Git resources:
 * `Git book chapters <http://git-scm.com/book>`_
 
 
+
+.. index:: hg
+   seealso: mercurial; hg
 
 Mercurial
 ^^^^^^^^^^^^
@@ -913,25 +1048,38 @@ released in 2005, and is a widely-used distributed revision control
 system.  It is primarily implemented using Python, and is available on
 all major operating systems.  
 
+.. index:: hg; commands
+
 Again, like Git, Mercurial commands are similar to CVS and SVN, with a
 few notable exceptions (note that ``hg`` is the chemical symbol for
 mercury): 
 
+.. index:: hg; clone
+
 * ``hg clone`` -- the primary mechanism for retrieving a local copy of
   a mercurial repository; the result of which is a full repository
   that may act as a server for other client repositories.
+
+.. index:: hg; pull
 
 * ``hg pull`` -- this fetches all changes on the remote server and
   adds them to your working repository, but *unlike Git it does not
   merge them in*, allowing you control over which remote changesets
   are incorporated into your local sandbox, and which are not.
 
+.. index:: hg; up
+
 * ``hg up`` -- this is the command that updates your local sandbox
   with changes that have been pulled into your working repository.
+
+.. index:: hg; push
 
 * ``hg push`` -- like Git, this command sends all changes in
   your local repository to a remote repository.
 
+
+.. index:: 
+   pair: hg; web hosting
 
 As with Git and Subversion, there are a variety of web sites that will
 host open-source Mercurial repositories free of charge, including: 
@@ -952,6 +1100,9 @@ host open-source Mercurial repositories free of charge, including:
 
 * `Kiln <http://www.fogcreek.com/kiln/>`_
 
+
+.. index:: 
+   pair: hg; resources
 
 Mercurial resources:
 
@@ -1009,6 +1160,8 @@ containing your first name, e.g.
 
    $ echo "Daniel" > Reynolds.txt
 
+.. index:: hg; status
+
 To see what has changed in comparison with the last saved state of the
 repository, you can use the ``status`` command:
 
@@ -1016,6 +1169,8 @@ repository, you can use the ``status`` command:
 
    $ hg status
    ? Reynolds.txt
+
+.. index:: hg; add
 
 The "?" indicates that there is a new file in the directory that the
 repository does not yet know about.  We can add these files to the 
@@ -1041,6 +1196,8 @@ repository.  Other keys include:
 * "!" -- the file has been deleted
 
 * "R" -- the file has been removed from the repository
+
+.. index:: hg; commit
 
 To save this change into the repository, we must ``commit`` the
 changes:
@@ -1075,6 +1232,8 @@ changes back to my example repository with the command
 
    $ hg push
 
+.. index:: hg; merge
+
 However, if the ``update`` command complained about changes needing to
 be merged (meaning that someone else checked things in, so your
 changes need to be merged with his/hers), then you can ``merge`` via
@@ -1106,6 +1265,5 @@ changes from the shared repository, you ``push`` via
    checking in and pushing things at the same moment as you are.  If
    you choose to skip the ``push`` portion of the above steps today,
    that's fine. 
-
 
 

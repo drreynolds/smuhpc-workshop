@@ -43,9 +43,9 @@ session, so go ahead and enter that subdirectory:
 Linux Processes
 --------------------
 
-A process is an executing program identified by a unique PID (process
-identifier). To see information about your processes, with their
-associated PID and status, type 
+A :index:`process` is an executing program identified by a unique
+PID (process identifier). To see information about your
+processes, with their associated PID and status, type 
 
 .. code-block:: bash
 
@@ -54,7 +54,7 @@ associated PID and status, type
 A process may be run in the foreground, in the background, or be
 suspended. Most Linux jobs are run in the foreground; for those jobs
 the shell does not return the command prompt until the process has
-finished executing.  
+finished executing.   
 
 Some processes take a long time to run and hold up the
 terminal. Backgrounding a long process has the effect that the UNIX
@@ -65,9 +65,9 @@ while the original process continues executing.
 Running background processes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To background a process, type an ``&`` at the end of the command line
-when the program is executed. For example, the command ``sleep`` waits
-a given number of seconds before continuing. Type 
+To background a new process, type an ``&`` at the end of the command
+line when the program is executed. For example, the command ``sleep``
+waits a given number of seconds before continuing. Type  
 
 .. code-block:: bash
 
@@ -77,7 +77,7 @@ This will wait 10 seconds before returning the command prompt
 ``$``. Until the command prompt is returned, you can do nothing except
 wait. 
 
-To run ``sleep`` in the background, type
+To run ``sleep`` in the :index:`background <& (run in background)>`, type
 
 .. code-block:: bash
 
@@ -107,16 +107,15 @@ At the prompt, type
 
    $ sleep 600
 
-This will not return to the prompt for 10 minutes.  You can suspend
+This will not return to the prompt for 10 minutes.  You can
+:index:`suspend <pair: suspend; process>` 
 the process running in the foreground by typing ``^z``, i.e. hold down
 the "control" key and type "z".  This has suspended the job.  To put it
-in the background, type  
+in the :index:`background  <pair: background; process>`, type  
 
 .. code-block:: bash
 
    $ bg
-
-and hit "return".
 
 Note: do not background terminal-based programs that require user
 interaction e.g. ``vi`` or ``nano`` 
@@ -133,7 +132,7 @@ type
 
    $ jobs
 
-An example of a job list could be
+An example of a :index:`job list <jobs>` could be
 
 .. code-block:: bash
 
@@ -141,7 +140,8 @@ An example of a job list could be
    [2] Running firefox
    [3] Running matlab
 
-To restart (foreground) a suspended or backgrounded processes, type
+To restart (:index:`foreground <pair: foreground; process>`) a
+suspended or backgrounded processes, type 
 
 .. code-block:: bash
 
@@ -157,12 +157,17 @@ Typing ``fg`` with no job number foregrounds the most-recently
 suspended or backgrounded process. 
 
 
+.. index::
+   single: kill
+   pair: kill; process
+
 Killing a process
 ^^^^^^^^^^^^^^^^^^^
 
 It is sometimes necessary to kill a process (for example, when an
 executing program is in an infinite loop).  To kill a job running in
-the foreground, type ``^c`` (control c). For example, run 
+the foreground, type ``^c`` (:index:`[control]-[c] <^c (kill a
+process)>`). For example, run  
 
 .. code-block:: bash
 
@@ -193,8 +198,8 @@ the process has been removed.
 
 
 Alternatively, any process owned by a user (not just one launched from
-that terminal) can be killed by finding the process' corresponding ID
-numbers (PID) and using ``kill``
+that terminal) can be killed by :index:`finding the process'
+corresponding ID number <ps>` (:index:`PID`) and using ``kill``
 
 .. code-block:: bash
 
@@ -245,6 +250,7 @@ kill 26152              kill process number 26152
 
 
 
+.. index:: shell script
 
 Writing shell scripts
 ------------------------------------------------------
@@ -271,11 +277,13 @@ There are a variety of Linux shells, but the two most popular shells
 are currently BASH and TCSH.  As most new accounts on SMUHPC are set
 up to use BASH, we'll provide examples for that type of shell here.
 Alternately, there are also a variety of specially-designed scripting
-languages used throughout scientific computing, such as Python and
-Perl.  As we'll be using Python in session 7, we'll provide some
-examples of Python scripts here as well.
+languages used throughout scientific computing, such as Python,
+Perl and Ruby.  As we'll be using Python in session 7, we'll provide
+some examples of Python scripts here as well.
 
 
+
+.. index:: reproducibility
 
 Scripting vs. using a shell or GUI
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -317,6 +325,9 @@ dividends if you must do the task repeatedly.
    xkcd comic 1205, `Is It Worth the Time? <http://xkcd.com/1205/>`_
 
 
+.. index::
+   single: BASH
+   pair: BASH; shell script
 
 BASH scripts
 ^^^^^^^^^^^^^^^
@@ -332,11 +343,11 @@ Basics of BASH shell scripting:
   to indicate that the script contents should be executed by the BASH
   shell.
 
-* Lines beginning with a ``#`` character are interpreted as comments
-  (except for the first line).
+* Lines beginning with a ``#`` character are interpreted as
+  :index:`comments <pair: BASH; comment>` (except for the first line).
 
-* Variables may be defined in-line via setting *variable*=*value*,
-  e.g.
+* :index:`Variables <BASH; variable>` may be defined in-line via
+  setting *variable*=*value*, e.g.
  
   .. code-block:: bash
 
@@ -344,14 +355,15 @@ Basics of BASH shell scripting:
      STUDENTS=(Sally Frankie Wally Jenny Ahmad)
 
   Here, ``CXX`` is a scalar variable, while ``STUDENTS`` is an array.
-  Variables may be referenced subsequently in the script via placing a
-  dollar-sign in front, e.g.
+  Variables may be :index:`referenced <BASH; variable reference>`
+  subsequently in the script via placing a dollar-sign in front, e.g. 
 
   .. code-block:: bash
 
      $CXX driver.cpp -o driver.exe
 
-* Arrays may also be created by merely using the syntax
+* :index:`Arrays <pair: BASH; array>` may also be created by merely
+  using the syntax 
 
   .. code-block:: bash
 
@@ -365,7 +377,8 @@ Basics of BASH shell scripting:
 
      ${a[1]}
 
-* Loops may be performed via iteration over a range (version 3.0+):
+* :index:`Loops <pair: BASH; loop>` may be performed via iteration
+  over a range (version 3.0+): 
 
   .. code-block:: bash
 
@@ -420,7 +433,7 @@ Basics of BASH shell scripting:
      The number is 3
      The number is 5
 
-  Loops may also iterate over a list, e.g.
+  Loops may also iterate over a :index:`list <pair: BASH; list>`, e.g.
 
   .. code-block:: bash
 
@@ -457,7 +470,7 @@ Basics of BASH shell scripting:
      The student is Jenny
      The student is Ahmad
   
-* Loop control statements: 
+* :index:`Loop control statements <pair: BASH; loop control statements>`: 
 
   * ``break`` may be used in a loop just as in C and C++, in that it
     will break out of the smallest enclosing loop surrounding the
@@ -467,7 +480,8 @@ Basics of BASH shell scripting:
     statements within that iteration of the smallest enclosing loop
     and jumps to the next loop iteration.
 
-* If-elif-else statements may be performed via the syntax
+* :index:`If-elif-else <pair: BASH; if-elif-else>` statements may be
+  performed via the syntax 
 
   .. code-block:: bash
      
@@ -481,7 +495,7 @@ Basics of BASH shell scripting:
         statements3
      fi
 
-* Functions may defined via the syntax
+* :index:`Functions <pair: BASH; function>` may defined via the syntax
 
   .. code-block:: bash
      
@@ -540,25 +554,30 @@ As an example, consider the following script (in ``bash_example.sh``):
 The structure of this example should be obvious from the preceding
 short examples, except that there are a few notable exceptions:
 
-* We perform arithmetic: these operations must be of the form
-  ``$(( expression ))``.  
+* We perform :index:`arithmetic <pair: BASH; arithmetic>`: these
+  operations must be of the form  ``$(( expression ))``.  
 
-* We use the "modulus" operator, ``%``.  Other allowable arithmetic
-  operators include ``+``, ``-``, ``*`` and ``/``.
+* We use the "modulus" :index:`operator <pair: BASH; arithmetic
+  operators>`, ``%``.  Other allowable arithmetic operators include
+  ``+``, ``-``, ``*`` and ``/``. 
 
-* We perform the logical "equality" operation via ``-eq``.  The
-  inequality logical operation is ``-ne``.  The mathematical :math:`<`,
-  :math:`\le`, :math:`>` and :math:`\ge` operators are given by
-  ``-lt``, ``-le``, ``-gt`` and ``-ge``.
+* We perform the :index:`logical <pair: BASH; logic operators>`
+  "equality" operation via ``-eq``.  The inequality logical operation
+  is ``-ne``.  The mathematical :math:`<`, :math:`\le`, :math:`>` and
+  :math:`\ge` operators are given by ``-lt``, ``-le``, ``-gt`` and ``-ge``.
 
 * BASH logic operations may be combined using the standard ``&&``
   (and), ``||`` (or) and ``!`` (not). 
 
-* Function arguments are passed in following the function name; more
-  than one function argument may be supplied (though not shown here).
+* Function :index:`arguments <pair: BASH; function arguments>` are
+  passed in following the function name; more than one function
+  argument may be supplied (though not shown here). 
 
 
 
+.. index::
+   single: Python
+   pair: Python; shell script
 
 Python scripts
 ^^^^^^^^^^^^^^^
@@ -576,11 +595,11 @@ Basics of Python shell scripting:
   many systems, this may be inadvisable, since Python scripts are
   typically run from within a Python environment.
 
-* Lines beginning with a ``#`` character are interpreted as comments
-  (except for the first line).
+* Lines beginning with a ``#`` character are interpreted as
+  :index:`comments <pair: Python; comment>` (except for the first line).
 
-* Variables may be defined in-line via setting *variable*=*value*,
-  e.g.
+* :index:`Variables <pair: Python, variable>` may be defined in-line
+  via setting *variable*=*value*, e.g.
  
   .. code-block:: python
 
@@ -589,8 +608,9 @@ Basics of Python shell scripting:
      pi = 3.1415926535897932
 
   Here, ``N`` is a scalar integer variable and ``pi`` is a scalar
-  double-precision variable.  Variables may be referenced subsequently 
-  in the script by just writing the variable name, e.g.
+  double-precision variable.  Variables may be 
+  :index:`referenced <Python; variable reference>` subsequently in the
+  script by just writing the variable name, e.g. 
 
   .. code-block:: python
 
@@ -599,28 +619,31 @@ Basics of Python shell scripting:
      pi = 3.1415926535897932
      Vol = pi * h * r**2
 
-  Note, Python allows the standard arithmetic operations ``+``, ``-``,
+  Note, Python allows the standard :index:`arithmetic <pair: Python;
+  arithmetic operators>` operations ``+``, ``-``,
   ``*`` and ``/``, as well as exponentiation via the ``**`` operator.
   Additionally, the ``//`` operator performs division and rounds the
   result down to the nearest integer, while the ``%`` operator
   performs the modulus.
 
-* Python allows a multitude of "array" types, the two most common
-  being lists and Numpy's numerical arrays.  A Python *list* is very
-  flexible (entries can be anything), but can be very inefficient.
-  Lists are declared as a comma-separated list of items enclosed by
-  parentheses, e.g.
+* :index:`Python <pair: Python; array>` allows a multitude of "array"
+  types, the two most common being lists and Numpy's numerical arrays.
+  A Python *list* is very flexible (entries can be anything), but can
+  be very inefficient.  :index:`Lists <pair: Python; list>` are
+  declared as a comma-separated list of items enclosed by parentheses,
+  e.g. 
  
   .. code-block:: python
 
      mylist = (7, 1.e-4, 'fred')
 
   Due to this inefficiency, the Numpy extension module to Python was
-  created with numerical array types.  Officially called ``ndarray``,
-  these are more commonly referred to by the alias ``array`` (these
-  differ from the standard Python library ``array`` class).  These may
-  be created using a combination of Numpy's ``array`` function and
-  square brackets to hold the array values, e.g.
+  created with :index:`numerical array types <pair: Python; numerical
+  array>`.  Officially called ``ndarray``, these are more commonly
+  referred to by the alias ``array`` (these differ from the standard
+  Python library ``array`` class).  These may be created using a
+  combination of Numpy's ``array`` function and square brackets to
+  hold the array values, e.g. 
 
   .. code-block:: python
 
@@ -662,7 +685,8 @@ Basics of Python shell scripting:
   assumed. When given one argument, a starting value of 0 and an
   increment of 1 are assumed. 
 
-* Loops may be performed via iteration over a list or an array:
+* :index:`Loops <pair: Python; loop>` may be performed via iteration
+  over a list or an array: 
 
   .. code-block:: python
 
@@ -706,7 +730,7 @@ Basics of Python shell scripting:
      3
      4
 
-* Loop control statements: 
+* :index:`Loop control statements <pair: Python; loop control statements>`: 
   
   * ``break`` may be used in a loop just as in C and C++, in that it
     will break out of the smallest enclosing ``for`` or ``while`` loop
@@ -716,7 +740,8 @@ Basics of Python shell scripting:
     statements within that iteration of the smallest enclosing loop
     and jumps to the next loop iteration.
 
-* If-elif-else statements may be performed via the syntax
+* :index:`If-elif-else <pair: Python; if-elif-else>` statements may be
+  performed via the syntax 
 
   .. code-block:: python
      
@@ -727,7 +752,7 @@ Basics of Python shell scripting:
      else:
         statements3
 
-* Functions may defined via the syntax
+* :index:`Functions <pair: Python; function>` may defined via the syntax
 
   .. code-block:: python
      
@@ -740,7 +765,8 @@ Basics of Python shell scripting:
   ``:``, that are indented from the ``def``, and that precede a break
   in that indentation.
 
-  Functions may also allow input and return arguments, e.g.
+  Functions may also allow :index:`input and return arguments <pair:
+  Python; function arguments>`, e.g.
 
   .. code-block:: python
      
@@ -798,15 +824,17 @@ should be obvious from the preceding explanations, except that there
 are a few notable exceptions: 
 
 * We perform the logical "equality" operation via ``==``.  The
-  inequality logical operation is ``!=``.  Similarly, ``<``, ``<=``,
-  ``>`` and ``>=`` correspond to the the mathematical :math:`<`,
-  :math:`\le`, :math:`>` and :math:`\ge` operators.   
+  inequality :index:`logical operation <pair: Python; logic operators>` 
+  is ``!=``.  Similarly, ``<``, ``<=``, ``>`` and ``>=`` correspond to
+  the the mathematical :math:`<`, :math:`\le`, :math:`>` and
+  :math:`\ge` operators.
 
 * Python logic operations may be combined using ``and``, ``or`` and
   ``not`` (self-explanatory).
 
 
-
+.. index::
+   single: shell script; running
 
 Executing shell scripts
 ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -830,8 +858,8 @@ Alternately, since the first line of the script was set to
 
    #!/bin/bash
 
-then it may be executed by first changing the file permissions to
-"executable" 
+then it may be executed by first :index:`changing <chmod>` the file
+:index:`permissions to "executable" <execute permissions>`
 
 .. code-block:: bash
 
@@ -850,7 +878,8 @@ Similarly, you may execute the example Python script from above via
    $ python python_example.py
 
 It can also be called from an interactive Python session; first enter
-an interactive Python session via the shell command
+an :index:`interactive Python session <pair: Python; interactive
+session>` via the shell command 
 
 .. code-block:: bash
 
@@ -884,6 +913,9 @@ then it may be given execute permissions and run directly via
 Additional resources on both BASH and Python scripting are provided
 below. 
 
+.. index::
+   pair: BASH; resources
+
 BASH resources:
 
 * A Quick Introduction to BASH Programming: `Part 1
@@ -896,6 +928,8 @@ BASH resources:
 * `Advanced BASH-Scripting Guide <http://tldp.org/LDP/abs/html/>`_
 
 
+.. index::
+   pair: Python; resources
 
 Python resources:
 
@@ -910,6 +944,8 @@ Python resources:
 
 
 
+
+.. index:: Sieve of Eratosthenes
 
 
 Scripting exercise
@@ -942,6 +978,7 @@ to find all of the prime numbers between 2 and 1000:
 
 
 
+.. index:: compiled programs
 
 Compiled programs
 ------------------------------------------------------
@@ -955,18 +992,20 @@ much slower than a computer processor is able.
 Alternately, a *compiled program* is one in which a separate program
 is used to translate the full set of human-readable commands into an
 executable, and in so doing is able to optimize how these commands are
-performed.  This translation process is handled by a *compiler*, which
-will typically perform a suite of optimizations including grouping
-repeated calculations together into *vector operations*, pre-fetching
-data from main memory before it is required by the program, or even
-re-ordering commands to maximize data reuse within fast cache memory.
+performed.  This :index:`translation <compiler>` process is handled by
+a *compiler*, which will typically perform a suite of optimizations
+including grouping repeated calculations together into vector
+operations, pre-fetching data from main memory before it is required
+by the program, or even re-ordering commands to maximize data reuse
+within fast cache memory. 
 
 For example, C++ language source code is converted into an executable
 through the following process.  The human-readable source code is
-translated into a lower-level *assembly language*. This assembly
-language code is then converted into object code which are fragments
-of code which the computer processor understands directly. The final
-stage the compiler performs involves linking the object code to code
+translated into a lower-level *assembly language*. This
+:index:`assembly language` code is then converted into 
+:index:`object files` which are fragments of code which the computer
+processor understands directly. The final stage the compiler performs
+involves :index:`linking` the object code to code 
 libraries which contain built-in system functions.  After this linking
 stage, the compiler outputs an executable program.  
 
@@ -994,6 +1033,8 @@ In the ``session3`` directory, you will notice a number of files:
    $ ls
    Makefile         hello.c    hello.f    python_example.py
    bash_example.sh  hello.cpp  hello.f90
+
+.. index:: Hello world
 
 We've already seen some of these (``bash_example.sh`` and
 ``python_example.py``); we'll now investigate the ``hello`` files.
@@ -1038,49 +1079,53 @@ to the following
 
 For those of you familar to the "Windows" (and even OS X's "Xcode")
 approach for programming, you're used to seeing this within an
-*Integrated Desktop Environment* (IDE), where you enter your code and
-click icons that will handle compilation and execution of your program
-for you.  While IDEs exist in the Linux world, they are rarely used in
-high-performance computing since the compilation approach on your
-laptop typically cannot create code that will execute on the
-worker nodes of a cluster.
+*Integrated Desktop Environment* 
+(:index:`IDE <integrated desktop environment>`), where you enter your
+code and click icons that will handle compilation and execution of
+your program for you.  While IDEs exist in the Linux world, they are
+rarely used in high-performance computing since the compilation
+approach on your laptop typically cannot create code that will execute
+on the worker nodes of a cluster. 
 
 Hence, we'll now learn the (rather simple) approach for compiling
 codes at the command-line in Linux.  
 
 The first step in compilation is knowing which compiler to use.
-Nearly every Linux system is installed with the GNU compiler
-collection, `GCC <http://gcc.gnu.org/>`_:
+Nearly every Linux system is installed with the 
+:index:`GNU compiler collection`, `GCC <http://gcc.gnu.org/>`_: 
 
-* ``gcc`` -- the GNU C compiler
+* ``gcc`` -- the :index:`GNU C compiler <GNU compiler collection; gcc>`
 
-* ``g++`` -- the GNU C++ compiler
+* ``g++`` -- the :index:`GNU C++ compiler <GNU compiler collection; g++>`
 
-* ``gfortran`` -- the GNU Fortran compiler (handles both F77 and F90)
+* ``gfortran`` -- the :index:`GNU Fortran compiler <GNU compiler collection; gfortran>`
+  (handles both F77 and F90) 
 
-* ``gcj`` -- the GNU Java compiler
-
-However, if you have a very old version of the GNU compiler suite,
-instead of ``gfortran`` you may have ``g77``, that only works with F77
-code (no F90).
+However, if you have a very 
+:index:`old version of the GNU compiler <GNU compiler collection; g77>` 
+suite, instead of ``gfortran`` you may have ``g77``, that only works
+with F77 code (no F90).
 
 The GNU compiler suite is open-source (i.e. you can modify it if you
 want), free, and is available for all major computer architectures
 (even Windows); however, it does not always produce the most efficient
 code.  As a result, the `SMU Center for Scientific Computation
 <http://www.smu.edu/Academics/CSC>`_ has purchased the `PGI
-<http://www.pgroup.com/>`_ compiler suite:
+<http://www.pgroup.com/>`_ :index:`compiler suite <PGI compiler suite>`:
 
-* ``pgcc`` - the PGI C compiler
+* ``pgcc`` - the :index:`PGI C compiler <PGI compiler suite; pgcc>`
 
-* ``pgc++`` - the PGI C++ compiler
+* ``pgc++`` - the :index:`PGI C++ compiler <PGI compiler suite; pgc++>`
 
-* ``pgfortran`` - the PGI Fortran compiler (both F77 and F90)
+* ``pgfortran`` - the :index:`PGI Fortran compiler <PGI compiler suite; pgfortran>` 
+  (both F77 and F90) 
 
 In my experience, with some applications a program compiled with the
 PGI compilers can run 50% faster than the same code compiled with the
 GNU compilers.  We'll discuss how to use the PGI compiler on SMUHPC in
 session 4 later today.
+
+.. index:: command-line compilation
 
 To compile an executable, we merely call the relevant compiler,
 followed by the files we wish to compile, e.g. for the C code we'd use
@@ -1096,11 +1141,11 @@ or for the F77 code we'd use
    $ gfortran hello.f
    
 Both of these commands produce the same output, a new file named
-``a.out``.  This is the [entirely nondescriptive] standard output name
-for executables produced by compilers.  However, since a computer on
-which every program was named "a.out" would be entirely unusable, it
-is typical to name your program something more useful.  This is
-handled with the command line option ``-o``, e.g. 
+``a.out``.  This is the :index:`standard output name <a.out>` for
+executables produced by compilers.  However, since a computer on which
+every program was named "a.out" would be entirely unusable, it is
+typical to name your program something more useful.  This is handled
+with the command line option ``-o``, e.g.  
 
 .. code-block:: bash
 
@@ -1113,7 +1158,6 @@ just like any other Linux program, via
 .. code-block:: bash
 
    $ ./hello.exe
-
 
 .. note::
 
@@ -1147,6 +1191,9 @@ have been answered on public forums.  Just describe your question and
 do a web search.
 
 
+.. index::
+   pair: Fortran; resources
+
 Fortran resources:
 
 * `Fortran short-course
@@ -1160,6 +1207,9 @@ Fortran resources:
 
 
 
+.. index::
+   pair: C++; resources
+
 C++ resources:
 
 * `C++ Language Tutorial <http://www.cplusplus.com/doc/tutorial/>`_ 
@@ -1171,6 +1221,7 @@ C++ resources:
 
 
 
+.. index:: configure, make, make check, make install, make clean
 
 Compiling "typical" Linux packages
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1231,6 +1282,8 @@ First create a download directory
 
    $ mkdir download
 
+.. index:: wget
+
 Download the software using ``wget`` into your new download directory
 
 .. code-block:: bash
@@ -1245,7 +1298,9 @@ List the contents of your download directory
 
 .. code-block:: bash
 
-   $ ls -l
+   $ ls
+
+.. index:: tar, gzip, gunzip, .tar.gz extension, .tgz extension
 
 As you can see, the filename ends in tar.gz. The ``tar`` command turns
 several files and directories into one single ".tar" file. This is
@@ -1420,6 +1475,8 @@ If you get the answer 1.8288, congratulations, it worked. Type
 
 To view what units the program can convert between, view the data file
 in the ``share`` directory (the list is quite comprehensive). 
+
+.. index:: info
 
 To read the full documentation, change into the ``info`` directory and type 
 
