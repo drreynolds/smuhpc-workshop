@@ -497,7 +497,7 @@ and then the Python code, ``plot_solution.py``:
    nx,ny,nt = load_info()
    
    # iterate over time steps
-   for tstep in range(nt):
+   for tstep in range(nt+1):
    
        # input solution at this time
        t,u = load_data_2d(tstep)
