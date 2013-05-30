@@ -17,23 +17,23 @@ by the `SMU Center for Scientific Computation
 
 **Times**: 
 
-  Morning sessions: 8-11
+* Morning sessions: 8-11
 
-  Afternoon sessions: 12-3
+* Afternoon sessions: 12-3
 
 **Instructors**: 
 
-  Tom Coan (Mon)
+* Tom Coan (Mon)
 
-  Dan Reynolds (Tue-Fri)
+* Dan Reynolds (Tue-Fri)
 
 **Assistants**: 
 
-  Amit Kumar
+* Amit Kumar
 
-  Merlin Wilkerson
+* Merlin Wilkerson
 
-  Doug Tucker
+* Doug Tucker
 
 
 `Additional Information and Registration <http://www.smu.edu/BusinessFinance/OIT/StayInformed/SMUHPC>`_
@@ -53,5 +53,3 @@ by the `SMU Center for Scientific Computation
    Postprocessing (Thu. AM) <session_7>
    Intro. Parallel Computing (Thu. PM) <session_8>
    Parallel Comp. on SMU HPC (Fri. AM) <session_9>
-
-

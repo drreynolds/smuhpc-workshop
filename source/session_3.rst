@@ -601,7 +601,7 @@ Basics of Python shell scripting:
 * Lines beginning with a ``#`` character are interpreted as
   :index:`comments <pair: Python; comment>` (except for the first line).
 
-* :index:`Variables <pair: Python, variable>` may be defined in-line
+* :index:`Variables <pair: Python; variable>` may be defined in-line
   via setting *variable*=*value*, e.g.
  
   .. code-block:: python
