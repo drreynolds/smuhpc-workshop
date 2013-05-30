@@ -1,3 +1,6 @@
+:tocdepth: 2
+
+
 .. _session8:
 
 Session 8: Introduction to Parallel Computing

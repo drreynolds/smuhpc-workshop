@@ -1,3 +1,6 @@
+:tocdepth: 1
+
+
 .. _session2:
 
 Session 2: Linux II

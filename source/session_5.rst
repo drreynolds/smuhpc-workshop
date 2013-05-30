@@ -1,3 +1,6 @@
+:tocdepth: 2
+
+
 .. _session5:
 
 Session 5: Advanced Programming

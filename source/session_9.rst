@@ -1,3 +1,6 @@
+:tocdepth: 2
+
+
 .. _session9:
 
 Session 9: Parallel Computing on SMUHPC
@@ -35,7 +38,7 @@ SMU HPC network
 
 
 
-Parallel programs on SMU HPC
+Parallel computing on SMU HPC
 --------------------------------------------------------
 
 .. index:: SMU HPC clusters

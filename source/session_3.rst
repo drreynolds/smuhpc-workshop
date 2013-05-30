@@ -1,3 +1,6 @@
+:tocdepth: 2
+
+
 .. _session3:
 
 Session 3: Introduction to Scripts and Programs

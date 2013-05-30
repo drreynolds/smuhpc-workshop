@@ -1,3 +1,6 @@
+:tocdepth: 1
+
+
 .. _session1:
 
 Session 1: Introduction to Linux

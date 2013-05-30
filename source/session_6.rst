@@ -1,3 +1,6 @@
+:tocdepth: 2
+
+
 .. _session6:
 
 Session 6: Using SMU HPC

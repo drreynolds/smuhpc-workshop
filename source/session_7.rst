@@ -1,3 +1,6 @@
+:tocdepth: 2
+
+
 .. _session7:
 
 Session 7: Postprocessing

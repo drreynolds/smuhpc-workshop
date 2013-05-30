@@ -11,17 +11,32 @@ exercises associated with the 2013 SMU HPC Summer workshop, sponsored
 by the `SMU Center for Scientific Computation
 <http://www.smu.edu/academics/csc>`_. 
 
-* **Location**: Fondren Library, room 103c
+**Location**:  Fondren Library, room 103c
 
-* **Dates**: June 3-7, 2013
+**Dates**:   June 3-7, 2013
 
-* **Times**: Morning sessions 8-11, afternoon sessions 12-3
+**Times**: 
 
-* **Instructors**: Tom Coan (Mon); Dan Reynolds (Tue-Fri)
+  Morning sessions: 8-11
 
-* **Assistants**: Amit Kumar, Merlin Wilkerson, Doug Tucker
+  Afternoon sessions: 12-3
 
-* `Additional Information and Registration <http://www.smu.edu/BusinessFinance/OIT/StayInformed/SMUHPC>`_
+**Instructors**: 
+
+  Tom Coan (Mon)
+
+  Dan Reynolds (Tue-Fri)
+
+**Assistants**: 
+
+  Amit Kumar
+
+  Merlin Wilkerson
+
+  Doug Tucker
+
+
+`Additional Information and Registration <http://www.smu.edu/BusinessFinance/OIT/StayInformed/SMUHPC>`_
 
 
 **Schedule**:

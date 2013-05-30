@@ -1,3 +1,6 @@
+:tocdepth: 2
+
+
 .. _session4:
 
 Session 4: More Programming
