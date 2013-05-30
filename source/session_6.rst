@@ -139,12 +139,56 @@ General SMU HPC information
   configuration of the cluster.
 
 
+.. _session6_condor:
 
 Getting started
 ---------------------
 
 We will perform this session of the workshop on the ``smuhpc2`` login
 node, so log in there to begin.
+
+In order to use any of the commands for this session, we must first
+set up our account to use the condor job scheduler.  This is
+accomplished by "sourcing" the appropriate initialization script.
+Determine which shell you are using with the command
+
+.. code-block:: bash
+
+   $ echo $SHELL
+
+* BASH users: add the following line to your ``~/.bashrc`` file:
+
+  .. code-block:: bash
+
+     source /grid/condor/condor.sh
+
+  and reload your BASH initialization script with the command
+
+  .. code-block:: bash
+
+     $ source ~/.bashrc
+
+* TCSH users: add the following line to your ``~/.tcshrc`` file:
+
+  .. code-block:: tcsh
+
+     source /grid/condor/condor.csh
+
+  and reload your TCSH initialization script with the command
+
+  .. code-block:: tcsh
+
+     $ source ~/.tcshrc
+
+* It is unlikely that you are using a shell other than BASH or TCSH,
+  but if so:
+ 
+  * SH or KSH users: emulate the BASH instructions for your login script.
+
+  * CSH users: emulate the TCSH instructions for your login script.
+
+Note: now that this has been added to your initialization script, you
+should never need to do this step again.
 
 
 
@@ -229,7 +273,7 @@ Some widely used cluster batch systems are:
 
 
 
-The Condor queue commands
+The condor queue commands
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 While there are a `multitude of condor commands

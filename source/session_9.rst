@@ -166,26 +166,37 @@ Notes on maximum/minimum job sizes
 
 
 
+Getting started
+^^^^^^^^^^^^^^^^^^^^^
 
-OpenMP
-^^^^^^^^^^
+If you have not already set up your login script to initialize condor,
+follow the instructions :ref:`from tutorial session 6
+<session6_condor>` to do so.
 
-First, retrieve the files for this portion of the session by clicking
-:download:`this link <code/session9_OpenMP.tgz>` or by copying them
-on SMUHPC at the command line:
+
+Second, you will need to retrieve sets of files for both the OpenMP
+and MPI portions of this session.  Retrieve the files for the OpenMP
+portion by clicking :download:`this link <code/session9_OpenMP.tgz>`
+or by copying them on SMUHPC at the command line:
 
 .. code-block:: bash
 
    $ cp ~dreynolds/SMUHPC_tutorial/session9_OpenMP.tgz .
 
-Unpack these files as usual
+Similarly, retrieve the files for the MPI portion by clicking
+:download:`this link <code/session9_MPI.tgz>` or by copying them
+on SMUHPC at the command line:
 
 .. code-block:: bash
 
-   $ tar -zxf session9_OpenMP.tgz
+   $ cp ~dreynolds/SMUHPC_workshop/session9_MPI.tgz .
 
-In the resulting directory, you will find a number of files, including
-``Makefile``, ``driver.cpp`` and ``vectors.cpp``.  
+
+
+
+
+OpenMP
+^^^^^^^^^^
 
 
 .. index:: OpenMP; compiler flags
@@ -215,6 +226,16 @@ flags for well-known compilers include:
 
 * NAG: ``-openmp``
 
+
+Before proceeding to the following sections, unpack the OpenMP portion
+of this tutorial using the usual commands:
+
+.. code-block:: bash
+
+   $ tar -zxf session9_OpenMP.tgz
+
+In the resulting directory, you will find a number of files, including
+``Makefile``, ``driver.cpp`` and ``vectors.cpp``.  
 
 
 
@@ -534,15 +555,7 @@ additional resources no longer improve the speed?
 MPI
 ^^^^^^^^^^
 
-Retrieve the files for this portion of the session by clicking
-:download:`this link <code/session9_MPI.tgz>` or by copying them
-on SMUHPC at the command line:
-
-.. code-block:: bash
-
-   $ cp ~dreynolds/SMUHPC_workshop/session9_MPI.tgz .
-
-Unpack these files as usual,
+Unpack the source files for the MPI portion of this tutorial as usual,
 
 .. code-block:: bash
 
