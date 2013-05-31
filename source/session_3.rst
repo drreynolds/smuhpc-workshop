@@ -1,10 +1,12 @@
-:tocdepth: 2
+:tocdepth: 3
 
 
 .. _session3:
 
+*****************************************************
 Session 3: Introduction to Scripts and Programs
-========================================================
+*****************************************************
+
 
 *Instructor: Dan Reynolds*
 
@@ -12,7 +14,7 @@ Session 3: Introduction to Scripts and Programs
 
 
 Getting started
-------------------
+=================================
 
 We will perform this session of the workshop on the ``smuhpc3`` login
 node, so log in there to begin.
@@ -44,7 +46,7 @@ session, so go ahead and enter that subdirectory:
 
 
 Linux Processes
---------------------
+=================================
 
 A :index:`process` is an executing program identified by a unique
 PID (process identifier). To see information about your
@@ -65,8 +67,8 @@ prompt is returned immediately, and other tasks can be carried out
 while the original process continues executing. 
 
 
-Running background processes
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Running in the background 
+--------------------------------------------------
 
 To background a new process, type an ``&`` at the end of the command
 line when the program is executed. For example, the command ``sleep``
@@ -101,8 +103,8 @@ process is finished. Backgrounding is useful for jobs which will take
 a long time to complete. 
 
 
-Backgrounding a current foreground process
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Backgrounding a foreground process
+--------------------------------------------------
 
 At the prompt, type
 
@@ -124,8 +126,8 @@ Note: do not background terminal-based programs that require user
 interaction e.g. ``vi`` or ``nano`` 
 
 
-Listing suspended and background processes
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Listing processes
+--------------------------------------------------
 
 When a process is running, backgrounded or suspended, it will be
 entered onto a list along with a job number. To examine this list,
@@ -165,7 +167,7 @@ suspended or backgrounded process.
    pair: kill; process
 
 Killing a process
-^^^^^^^^^^^^^^^^^^^
+--------------------------------------------------
 
 It is sometimes necessary to kill a process (for example, when an
 executing program is in an infinite loop).  To kill a job running in
@@ -256,7 +258,7 @@ kill 26152              kill process number 26152
 .. index:: shell script
 
 Writing shell scripts
-------------------------------------------------------
+=================================
 
 A *shell script* is merely a file that contains a set of commands that
 you would type at the prompt, but that are grouped together for
@@ -288,8 +290,8 @@ some examples of Python scripts here as well.
 
 .. index:: reproducibility
 
-Scripting vs. using a shell or GUI
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Scripting vs. shell/GUI
+--------------------------------------------------
 
 While it is certainly possible to manually type all commands required
 to compile a code, run it in a variety of ways, and even post-process
@@ -333,7 +335,7 @@ dividends if you must do the task repeatedly.
    pair: BASH; shell script
 
 BASH scripts
-^^^^^^^^^^^^^^^
+--------------------------------------------------
 
 Basics of BASH shell scripting:
 
@@ -583,7 +585,7 @@ short examples, except that there are a few notable exceptions:
    pair: Python; shell script
 
 Python scripts
-^^^^^^^^^^^^^^^
+--------------------------------------------------
 
 Basics of Python shell scripting:
 
@@ -840,7 +842,7 @@ are a few notable exceptions:
    single: shell script; running
 
 Executing shell scripts
-^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------------------------
 
 Shell scripts may be executed in one of two ways.  If the script
 already has *execute* permissions (`ls -l` will show an "x" in the
@@ -952,7 +954,7 @@ Python resources:
 
 
 Scripting exercise
-^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------------------------
 
 Construct your own BASH or Python script that uses the 
 `Sieve of Eratosthenes
@@ -984,7 +986,7 @@ to find all of the prime numbers between 2 and 1000:
 .. index:: compiled programs
 
 Compiled programs
-------------------------------------------------------
+=================================
 
 All high-level language code must be converted into a form the
 computer understands.  In the above shell scripts, this translation is
@@ -1025,8 +1027,8 @@ and Fortran90).
 
 
 
-Compiling your own codes
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Compiling programs
+--------------------------------------------------
 
 In the ``session3`` directory, you will notice a number of files:
 
@@ -1227,7 +1229,7 @@ C++ resources:
 .. index:: configure, make, make check, make install, make clean
 
 Compiling "typical" Linux packages
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------------------------
 
 As the number of UNIX variants increased, it became harder to write
 programs which would be portable to all variants. Developers
@@ -1271,13 +1273,14 @@ configuration files.
 
 
 Example: compiling the program "units"
-""""""""""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 For this example, we will download and compile a piece of free
 software that converts between different units of measurements. 
 
 
-**Downloading source code**
+Downloading source code
+""""""""""""""""""""""""
 
 First create a download directory 
 
@@ -1295,7 +1298,8 @@ Download the software using ``wget`` into your new download directory
    $ wget http://faculty.smu.edu/reynolds/unixtut/units-1.74.tar.gz
 
 
-**Extracting the source code**
+Extracting the source code
+"""""""""""""""""""""""""""""""
 
 List the contents of your download directory 
 
@@ -1337,7 +1341,9 @@ Again, list the contents of the directory, then go to the ``units-1.74`` sub-dir
    $ cd units-1.74
 
 
-**Configuring and creating the Makefile**
+Configuring and creating the Makefile
+"""""""""""""""""""""""""""""""""""""""""""""""""
+
 
 The first thing to do is carefully read the ``README`` and ``INSTALL``
 text files (use the ``less`` command). These contain important
@@ -1352,14 +1358,9 @@ information on how to compile and run the software
 The ``units`` package uses the GNU configure system to compile the
 source code. We will need to specify the installation directory, since
 the default will be the main system area which you do not have write
-permissions for. We need to create an install directory in your home
-directory
-
-.. code-block:: bash
-
-   $ mkdir ~/units-1.7.4
-
-Then run the ``configure`` utility setting the installation path to this
+permissions for. We'll plan on installing this into a new subdirectory
+in your home directory, ``$HOME/units-1.7.4``.  This is typically
+handled by passing the ``--prefix`` option to ``configure``:
 
 .. code-block:: bash
 
@@ -1381,7 +1382,8 @@ can view the ``Makefile`` if you wish (use the ``less`` command), but do
 not edit the contents of this file unless you know what you are doing.
 
 
-**Building the package**
+Building the package
+"""""""""""""""""""""""""""""""""""""""""""""""""
 
 Now you can go ahead and build the package by running the ``make`` command
 
@@ -1406,7 +1408,8 @@ If everything is okay, you can now install the package.
 This will install the files into the ``~/units-1.7.4`` directory you created earlier.
 
 
-**Running the software**
+Running the software
+"""""""""""""""""""""""""""""""""""""""""""""""""
 
 Go back to the top of your home directory:
 

@@ -1,10 +1,11 @@
-:tocdepth: 2
+:tocdepth: 3
 
 
 .. _session9:
 
-Session 9: Parallel Computing on SMUHPC
-========================================================
+*****************************************************
+Session 9: Parallel Computing on SMU HPC
+*****************************************************
 
 *Instructor: Dan Reynolds*
 
@@ -18,14 +19,14 @@ each server.
 
 
 SMU HPC network
---------------------------------------------------------
+=================================================================
 
-..
-   .. figure:: figs/smuhpc_network.png
-      :scale: 80%
-      :align: center
 
-      Schematic of the SMU HPC cluster
+.. figure:: figs/AllofHPC_Simplified.jpg
+   :scale: 65%
+   :align: center
+
+   Schematic of the SMU HPC cluster
 
 
 * Gigabit ethernet network connecting disks, login nodes and batch
@@ -38,8 +39,8 @@ SMU HPC network
 
 
 
-Parallel computing on SMU HPC
---------------------------------------------------------
+General information
+=================================================================
 
 .. index:: SMU HPC clusters
 
@@ -72,12 +73,13 @@ approaches, but they are provided for future reference.
 
 
 
-Notes on maximum/minimum job sizes
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Notes on job sizes
+------------------------------------
 
 .. index:: running large jobs
 
-**Large jobs**:
+Large jobs
+^^^^^^^^^^^^^^
 
   Although the condor job scheduler does not enforce maximum wall
   clock limits on user jobs, we *strongly* request that no single
@@ -88,7 +90,8 @@ Notes on maximum/minimum job sizes
 
 .. index:: running small jobs
 
-**Small jobs**:
+Small jobs
+^^^^^^^^^^^^^^
 
   We *strongly* request that all jobs not using MPI and running on
   only one node (or less) of the cluster be run on the *batch1* or
@@ -101,7 +104,7 @@ Notes on maximum/minimum job sizes
 
 
 Getting started
-^^^^^^^^^^^^^^^^^^^^^
+------------------------------------
 
 If you have not already set up your login script to initialize condor,
 follow the instructions from tutorial :ref:`session 6
@@ -129,8 +132,8 @@ on SMUHPC at the command line:
 
 
 
-Shared-memory parallel programs
-------------------------------------
+Shared-memory programs
+=================================================================
 
 Since SMP programs do not communicate between nodes via the network,
 and hence cannot make use of the high-speed (and high-cost) infiniband
@@ -164,7 +167,7 @@ detail each compilation/execution approach for SMP computing:
 
 
 Enabling OpenMP
-^^^^^^^^^^^^^^^^^
+------------------------------------
 
 
 .. index:: OpenMP; compiler flags
@@ -197,8 +200,8 @@ flags for well-known compilers include:
 
 
 
-Compiling OpenMP programs
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Compiling with OpenMP
+------------------------------------
 
 Before proceeding to the following subsections, unpack the OpenMP
 portion of this tutorial using the usual commands:
@@ -217,7 +220,7 @@ In the resulting directory, you will find a number of files, including
 .. _session9-compiling_OpenMP_GNU:
 
 Compiling OpenMP code with the GNU compilers
-""""""""""""""""""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You can compile the executable ``driver.exe`` with the GNU compiler and
 OpenMP using the command 
@@ -235,7 +238,7 @@ compiler you are using (``gcc``, ``gfortran``, etc.)
 .. _session9-compiling_OpenMP_PGI:
 
 Compiling OpenMP code with the PGI compilers
-"""""""""""""""""""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Assuming that you have already loaded the PGI module, you can compile
 the executable ``driver.exe`` with the PGI compiler and OpenMP using
@@ -252,15 +255,15 @@ compiler you are using (``pgcc``, ``pgfortran``, etc.)
 
 
 
-Running OpenMP programs
-^^^^^^^^^^^^^^^^^^^^^^^^
+Running with OpenMP 
+------------------------------------
 
 .. index:: OpenMP; running at the command line
 
 .. _session9-running_OpenMP_commandline:
 
 Running OpenMP programs at the command line
-""""""""""""""""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Run the executable ``driver.exe`` from the command line:
 
@@ -307,7 +310,7 @@ threads.  Notice the speedup when running with multiple threads.
 .. _session9-running_OpenMP_batch1:
 
 Running OpenMP jobs on *batch1*
-""""""""""""""""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To run OpenMP-enabled code on the *batch1* cluster, the steps are identical
 to those required for requesting an entire compute node, except that
@@ -365,7 +368,7 @@ This job file should be launched from either ``smuhpc.smu.edu`` or
 .. _session9-running_OpenMP_batch2:
 
 Running OpenMP jobs on *batch2*
-""""""""""""""""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To run OpenMP-enabled code on the *batch2* cluster, the steps are identical
 to those required for requesting an entire compute node, except that
@@ -408,7 +411,7 @@ This job file should be launched from either ``smuhpc.smu.edu`` or
    .. _session9-running_OpenMP_parallel1:
 
    Running OpenMP jobs on *parallel1*
-   """"""""""""""""""""""""""""""""""""""""""""""
+   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
    To run OpenMP-enabled code on the *parallel1* cluster, the steps are
    identical to those required for requesting an entire compute node,
@@ -462,7 +465,7 @@ This job file should be launched from either ``smuhpc.smu.edu`` or
    .. _session9-running_OpenMP_parallel2:
 
    Running OpenMP jobs on *parallel2*
-   """"""""""""""""""""""""""""""""""""""""""""""
+   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
    To run OpenMP-enabled code on the *parallel2* cluster, the steps are
    identical to those required for requesting an entire compute node,
@@ -513,7 +516,7 @@ This job file should be launched from either ``smuhpc.smu.edu`` or
 
 
 OpenMP exercise
-^^^^^^^^^^^^^^^^^
+------------------------------------
 
 Compile the program ``driver.exe`` using the PGI compiler with OpenMP
 enabled.
@@ -537,8 +540,8 @@ additional resources no longer improve the speed?
 
 
 
-Distributed-memory parallel programs
-----------------------------------------
+Distributed-memory programs
+=================================================================
 
 Since DMP programs require communication between nodes via the
 network, and it is unlikely that users will wish to run such programs
@@ -596,7 +599,7 @@ detail each compilation/execution approach for DMP computing:
 
 
 MPI overview
-^^^^^^^^^^^^^
+------------------------------------
 
 Unpack the source files for the MPI portion of this tutorial as usual,
 
@@ -621,7 +624,7 @@ to construct the library.
 
 
 Compiling MPI code
-^^^^^^^^^^^^^^^^^^^^
+------------------------------------
 
 
 
@@ -630,7 +633,7 @@ Compiling MPI code
 .. _session9-compiling_MPI_programs:
 
 MPI wrapper scripts
-""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Typically, in order to compile a program to use a library, a few key
 items must be known about how the library was installed on the
@@ -721,7 +724,7 @@ the myriad compilers and clusters we wish to use.
 .. _session9-compiling_MPI_GNU_parallel1:
 
 Compiling MPI code with the GNU compilers for *parallel1*
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Compilation must occur on ``smuhpc4.smu.edu``.
 
@@ -751,7 +754,7 @@ course, this is not required.
 .. _session9-compiling_MPI_PGI_parallel1:
 
 Compiling MPI code with the PGI compilers for *parallel1*
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Compilation must occur on ``smuhpc4.smu.edu``.
 
@@ -782,7 +785,7 @@ course, this is not required.
 .. _session9-compiling_MPI_GNU_parallel2:
 
 Compiling MPI code with the GNU compilers for *parallel2*
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Compilation must occur on ``smuhpc.smu.edu``, ``smuhpc2.smu.edu`` or
 ``smuhpc3.smu.edu``, but **not** on ``smuhpc4``.
@@ -814,7 +817,7 @@ course, this is not required.
 .. _session9-compiling_MPI_PGI_parallel2:
 
 Compiling MPI code with the PGI compilers for *parallel2*
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Compilation must occur on ``smuhpc.smu.edu``, ``smuhpc2.smu.edu`` or
 ``smuhpc3.smu.edu``, but **not** on ``smuhpc4``.
@@ -848,7 +851,7 @@ course, this is not required.
    .. _session9-compiling_MPI_GNU_batch:
 
    Compiling MPI code with the GNU compilers for *batch1* and *batch2*
-   """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
    Compilation can occur on any SMU HPC login node.
 
@@ -878,7 +881,7 @@ course, this is not required.
    .. _session9-compiling_MPI_PGI_batch:
 
    Compiling MPI code with the PGI compilers for *batch1* and *batch2*
-   """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
    Compilation can occur on any SMU HPC login node.
 
@@ -906,7 +909,7 @@ course, this is not required.
 
 
 Running MPI code
-^^^^^^^^^^^^^^^^^^^^
+------------------------------------
 
 
 .. index:: MPI example; running interactively
@@ -914,7 +917,7 @@ Running MPI code
 .. _session9-running_MPI_command_line:
 
 Running MPI code interactively
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When running jobs on a dedicated parallel cluster (or a single workstation),
 parallel jobs and processes are not regulated through a queueing
@@ -1025,7 +1028,7 @@ most 4 processes.
 .. _session9-running_MPI_GNU_parallel1:
 
 Running MPI code with the GNU compilers on *parallel1*
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You must launch the job from ``smuhpc4.smu.edu``.
 
@@ -1155,7 +1158,7 @@ usual (only from the  ``smuhpc4`` login node),
 .. _session9-running_MPI_PGI_parallel1:
 
 Running MPI code with the PGI compilers on *parallel1*
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You must launch the job from ``smuhpc4.smu.edu``.
 
@@ -1286,7 +1289,7 @@ usual (only from the  ``smuhpc4`` login node),
 .. _session9-running_MPI_GNU_parallel2:
 
 Running MPI code with the GNU compilers on *parallel2*
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You must launch the job from ``smuhpc4.smu.edu`` (even though you
 could not compile it on that node -- sorry).
@@ -1413,7 +1416,7 @@ usual (only from the  ``smuhpc4`` login node),
 .. _session9-running_MPI_PGI_parallel2:
 
 Running MPI code with the PGI compilers on *parallel2*
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 You must launch the job from ``smuhpc4.smu.edu`` (even though you
@@ -1542,7 +1545,7 @@ usual (only from the  ``smuhpc4`` login node),
    .. _session9-running_MPI_GNU_batch:
 
    Running MPI code with the GNU compilers on *batch1* and *batch2*
-   """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
    You must launch the job from ``smuhpc.smu.edu`` or
    ``smuhpc2.smu.edu``.
@@ -1665,7 +1668,7 @@ usual (only from the  ``smuhpc4`` login node),
    .. _session9-running_MPI_PGI_batch:
 
    Running MPI code with the PGI compilers on *batch1* and *batch2*
-   """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
    You must launch the job from ``smuhpc.smu.edu`` or
    ``smuhpc2.smu.edu``.
@@ -1786,7 +1789,7 @@ usual (only from the  ``smuhpc4`` login node),
 
 
 MPI exercise
-^^^^^^^^^^^^^^^
+------------------------------------
 
 Compile the executable ``driver.exe`` to be run on *parallel1* using the
 GNU compilers.  

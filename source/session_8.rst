@@ -3,8 +3,9 @@
 
 .. _session8:
 
+*****************************************************
 Session 8: Introduction to Parallel Computing
-========================================================
+*****************************************************
 
 *Instructor: Dan Reynolds*
 
@@ -13,7 +14,7 @@ Session 8: Introduction to Parallel Computing
 
 
 What is parallel computing?
---------------------------------------------------------
+================================================
 
 Parallel computing has historically focused on state-of-the-art
 engineering and scientific applications. Now video game consoles,
@@ -24,7 +25,7 @@ multiple processors as well.
 .. index:: Moore's law
 
 Motivation: Moore's law
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------------------------
 
 Historically, we have depended on hardware advances to enable faster
 and larger simulations.  In 1965, Gordon Moore observed that the CPU
@@ -45,7 +46,7 @@ difficult, and will eventually halt this expansion.
 .. index:: CPU vs memory/disk speed
 
 Motivation: CPU vs memory/disk speed
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------------------------
 
 * The overall rate of computation is determined not just by the
   processor speed, but also by the ability of the memory system to
@@ -64,7 +65,7 @@ Motivation: CPU vs memory/disk speed
 
 
 Motivation: the parallel solution
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------------------------
 
 In addition, many simulations require incredible amounts of memory to
 achieve high-accuracy solutions (PDE & Monte-Carlo solvers, etc.),
@@ -93,7 +94,7 @@ that achieves the highest FLOP rate:
 .. index:: Flynn's parallel architecture taxonomy, SIMD, MIMD, SISD, MISD
 
 Flynn's parallel architecture taxonomy
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------------------------
 
 We classify parallel computers according to their control structure along the
 metrics:
@@ -116,8 +117,8 @@ metrics:
 
 
 
-Overview of parallel computing hardware
------------------------------------------
+Parallel computing hardware
+================================================
 
 We typically group parallel computing architectures into two primary
 categories according to the memory layout on these machines: *shared
@@ -129,7 +130,7 @@ categories.
 .. index:: multiprocessor, SMP
 
 Parallel architectures: multiprocessors
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------------------------
 
 In the 80’s, vendors began to attach multiple processors to the same
 memory. 
@@ -165,7 +166,7 @@ memory.
 .. index:: multi-core
 
 Parallel architectures: multi-core
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------------------------
 
 Most modern computer processors employ multiple computational cores: 
 
@@ -200,7 +201,7 @@ Limitations:
 .. index:: multicomputer, DMP
 
 Parallel architectures: multicomputers
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------------------------
 
 A more cost-effective approach to construction of larger parallel
 computers relies on a network to connect disjoint computers together:
@@ -232,7 +233,7 @@ computers relies on a network to connect disjoint computers together:
 
 
 Machine size history
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------------------------
 
 Historical plot of the processor count in computers comprising the
 Top500 list since 1993. 
@@ -253,7 +254,7 @@ architectures that may be used.
 .. index:: parallel architecture history, MPP, Cluster, SMP, Constellation
 
 History of parallel architectures
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------------------------
 
 Historical plot of the computer architectures comprising the Top500
 list since 1993: 
@@ -286,7 +287,7 @@ distributed-memory MPP and Cluster machines.
 .. index:: distributed parallel networks
 
 Distributed parallel networks
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------------------------
 
 Since clusters pass messages to communicate between CPUs, the speed of
 a parallel computation inherently depends on the speed of the network.
@@ -353,8 +354,8 @@ Compare these to on-computer speeds of:
 
 .. index:: parallel computing paradigms
 
-Overview of parallel computing paradigms: shared memory versus distributed memory
--------------------------------------------------------------------------------------
+Parallel computing paradigms: shared vs distributed memory
+=================================================================
 
 
 The question then arises as to how we may use these parallel
@@ -396,7 +397,7 @@ computers.  There are a number of options:
 .. index:: Jiffy Lube example
 
 MIMD example -- the "Jiffy Lube" model
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------------------------
 
 Jiffy Lube advertises a “12-point check”, consisting of changing the
 oil and filter, interior vacuum, battery check, windshield wiper
@@ -449,7 +450,7 @@ Other relevant MIMD definitions [and their Jiffy Lube equivalents]:
 
 
 General parallel computing definitions
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------------------------
 
 .. index:: parallel decomposition
 
@@ -491,7 +492,7 @@ General parallel computing definitions
 
 
 The primary question in parallel algorithms -- decomposition
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+----------------------------------------------------------------
 
 Any decomposition strategy must determine a set of primitive tasks.
 
@@ -520,7 +521,7 @@ data items with the individual computations.
 
 
 Overhead and load balancing
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------------------------
 
 After decomposition, we must map tasks onto processes with the goal
 that all tasks finish in the shortest time.
@@ -560,12 +561,12 @@ conflict with each other.
 
 
 Data decompositions
-^^^^^^^^^^^^^^^^^^^^^^
+------------------------------------
 
 .. index:: parallel decomposition; domain decomposition
 
 Domain decomposition
-"""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * Tasks are statically or semi-statically mapped onto processes based on
   spatial location; each task performs similar operations on different
@@ -604,7 +605,9 @@ Typical domain decomposition approaches:
 
 
 
-**Domain decomposition example: PDE approximation of an aircraft**
+Domain decomposition example: PDE approximation of an aircraft
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 
 Suppose we want to simulate 3D elasticity for vibrations/deformations
 in an aircraft.
@@ -632,7 +635,7 @@ in an aircraft.
 .. index:: parallel decomposition; work pool
 
 Work pool model
-"""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. image:: figs/work_pool.png
    :scale: 70%
@@ -649,7 +652,8 @@ Work pool model
   processes. 
 
 
-**Work pool example: particle dynamics**
+Work pool example: particle dynamics
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 Suppose we wish to simulate the dynamics (position and velocity) of a
 large number of collisionless particles in an external force field,
@@ -675,12 +679,12 @@ and where particles with a greater speed require increased processing.
 
 
 Functional decompositions
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+------------------------------------
 
 .. index:: parallel decomposition; manager-worker
 
 Manager-worker
-"""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This approach goes by many names: *master-slave*, *professor-student*,
 *Wonka-Loompa*. 
@@ -705,7 +709,8 @@ This approach goes by many names: *master-slave*, *professor-student*,
   dominates the cost of assigning/transferring work.
 
 
-**Manager-worker example: simulated annealing**
+Manager-worker example: simulated annealing
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 *Simulated annealing* is a stochastic optimization algorithm for
 functions with multiple local minima.
@@ -737,7 +742,7 @@ A manager process can set up a work queue with many initial iterates.
 .. index:: parallel decomposition; pipeline
 
 Pipeline model
-"""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. image:: figs/pipeline.png
    :scale: 70%
@@ -762,7 +767,8 @@ Pipeline model
     of data. 
 
 
-**Pipeline example: repeated LU solves**
+Pipeline example: repeated LU solves
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 Suppose we have the matrix decomposition :math:`A=LU`, where :math:`L`
 and :math:`U` are lower and upper triangular matrices, respectively,
@@ -801,7 +807,7 @@ vectors :math:`b`.
 .. _parallel_computing_metrics:
 
 Parallel computing metrics
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+------------------------------------
 
 .. index:: parallel scalability
 
@@ -896,8 +902,8 @@ General parallel computing resources:
 
 
 
-Parallel computing libraries (MPI and OpenMP)
---------------------------------------------------------
+Parallel computing libraries: MPI and OpenMP
+=================================================================
 
 .. index:: 
    pair: OpenMP; resources
@@ -943,7 +949,7 @@ among processes for coordination and data transfer.
 
 
 Free parallel solver software
---------------------------------------------------------
+=================================================================
 
 
 Since it is a library, MPI has enabled the development of many

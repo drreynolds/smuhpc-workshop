@@ -1,10 +1,11 @@
-:tocdepth: 2
+:tocdepth: 3
 
 
 .. _session6:
 
+*****************************************************
 Session 6: Using SMU HPC
-========================================================
+*****************************************************
 
 *Instructor: Dan Reynolds*
 
@@ -12,7 +13,7 @@ Session 6: Using SMU HPC
 
 
 What is SMU HPC?
-------------------
+================================================
 
 While we've technically been using the SMU HPC cluster throughout this
 workshop, in reality we've only been using standard Linux tools as if
@@ -37,8 +38,8 @@ is administered by the `SMU Office of Information Technology
 
 .. index:: SMU HPC; hardware
 
-Basic hardware components
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+SMU HPC hardware
+--------------------------------------------------
 
 First, let's familiarize ourselves with the hardware that comprises
 the SMU HPC cluster.  We can group the portions of SMU HPC into a few
@@ -47,7 +48,7 @@ nodes*, *interactive nodes* and *disk nodes*.
 
 
 Login nodes
-""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * ``smuhpc.smu.edu`` -- main login node, used for compiling source code,
   setting up job submission files, input files, transferring data
@@ -61,7 +62,7 @@ Login nodes
 
 
 Batch worker nodes
-""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * 107 nodes have 8 cores each (for 856 in total).  Each node has 48 GB
   of RAM and and 250 GB of local disk space.  [``wnode1-27``, ``cnode1-80``]
@@ -73,7 +74,7 @@ Batch worker nodes
 
 
 Parallel nodes
-""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * 16 nodes have 8 cores each (for 128 in total).  Each node has 48 GB
   of RAM and 500 GB of local disk space.  These are connected via a
@@ -87,7 +88,7 @@ Parallel nodes
 
 
 Interactive nodes
-"""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * 2 high-memory data analysis and shared-memory parallel nodes.  Both
   have 8 cores each, 144 GB of RAM and 3 TB of local disk space.
@@ -103,18 +104,22 @@ Interactive nodes
 
 
 Disk nodes
-"""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* One 320 TB parallel Lustre file system is attached to all nodes, and
-  is managed by the nodes diskarraynfs, diskarray, diskarray2-6,
-  diskarray2b-6b. 
+* One 437 TB parallel Lustre file system is attached to all nodes, and
+  is managed by 12 Object Storage Servers and a metadata server.  In
+  the next few weeks an additional 96 TB will be added to the existing
+  Lustre file system.
+
+* An additional 14 TB usable NFS file system is attached to all nodes
+  for non-parallel use.
 
 
 
 .. index:: SMU HPC; general information
 
-General SMU HPC information
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+General information
+--------------------------------------------------
 
 * OS: Scientific Linux 5.5 (64 bit).
 
@@ -145,7 +150,7 @@ General SMU HPC information
 .. _session6_condor:
 
 Getting started
----------------------
+================================================
 
 We will perform this session of the workshop on the ``smuhpc2`` login
 node, so log in there to begin.
@@ -197,8 +202,8 @@ should never need to do this step again.
 
 .. index:: condor, job scheduler
 
-Condor and job submission scripts
-------------------------------------------------------
+The condor job scheduler
+================================================
 
 In this session we'll focus on the *high throughput* portion of the
 SMU HPC cluster, i.e. the portion of the cluster that should be used
@@ -276,8 +281,8 @@ Some widely used cluster batch systems are:
 
 
 
-The condor queue commands
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Condor commands
+--------------------------------------------------
 
 While there are a `multitude of condor commands
 <http://research.cs.wisc.edu/htcondor/manual/v7.6/9_Command_Reference.html>`_,
@@ -366,8 +371,8 @@ only some are of value to a new user:
 
 .. index:: condor job submission file
 
-The condor job submission file
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Job submission file
+--------------------------------------------------
 
 The way that a user interacts with Condor is through creating a *job
 submission file* that describes the job you want to run:
@@ -679,8 +684,8 @@ There are three default macros:
 
 .. index:: condor; whole node vs shared node
 
-Whole node versus shared node jobs
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Whole vs shared node 
+--------------------------------------------------
 
 When running batch jobs on the cluster, you may request to use a whole
 node for your job (the default is to share the node with other users).
@@ -713,15 +718,15 @@ single node of the larger machine:
 .. index:: condor; ssh to job
 
 Condor SSH to job
-^^^^^^^^^^^^^^^^^^^^
+--------------------------------------------------
 
 In some instances, you may wish to request a worker node from the
-Condor pool for dedicated use.  Since a typical user is not allowed to
-SSH directly to a worker node, Condor supplies a modified SSH
-executable that will allow users to log into a worker node that has
-been dedicated to that user.  This behavior is called *SSH to job*,
-and is only allowed when a job has been submitted in "whole machine"
-mode as described above.
+Condor pool for dedicated **interactive** use only.  Since a typical
+user is not allowed to SSH directly to a worker node, Condor supplies
+a modified SSH executable that will allow users to log into a worker
+node that has been dedicated to that user.  This behavior is called
+*SSH to job*, and is only allowed when a job has been submitted in
+"whole machine" mode as described above.
 
 Once your job is running, you can log into it via the commands
 
@@ -739,7 +744,7 @@ where here ``<processID>`` is the integer ID number for your running job.
    pair: condor; resources
 
 Condor resources:
-^^^^^^^^^^^^^^^^^^^^^
+--------------------------------------------------
 
 * :download:`SMU HPC Condor tutorial <files/condor.pdf>`
 
@@ -753,7 +758,7 @@ Condor resources:
 
 
 Condor Examples
--------------------
+================================================
 
 In the following, we have a few example Condor usage scenarios to
 familiarize you with how to interact with the high-throughput portion
@@ -777,8 +782,8 @@ Unzip this file, and enter the resulting subdirectory
 
 .. index:: condor examples; single shared node job
 
-Running a single shared node job
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Running a job
+--------------------------------------------------
 
 In this example, we'll run the Python scrpit ``myjob.py``, that
 performs a simple algorithm for approximating :math:`\pi` using a
@@ -845,8 +850,8 @@ information, and the output file should have our desired results.
 
 .. _running_multiple_condor_jobs:
 
-Running a set of shared node jobs
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Running many jobs
+--------------------------------------------------
 
 Suppose now that we wanted to run this script multiple times with
 different arguments, in order to experimentally measure how rapidly
@@ -955,8 +960,8 @@ To view our results in a single command, use
 
 .. index:: condor examples; single whole node job
 
-Running a single whole node job
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Running on a whole node 
+--------------------------------------------------
 
 All of our above tests were performed on nodes where other users' jobs
 could also be running.  As previously discussed, sometimes our

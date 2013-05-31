@@ -1,10 +1,11 @@
-:tocdepth: 2
+:tocdepth: 3
 
 
 .. _session5:
 
+*****************************************************
 Session 5: Advanced Programming
-========================================================
+*****************************************************
 
 *Instructor: Dan Reynolds*
 
@@ -14,7 +15,7 @@ Session 5: Advanced Programming
 
 
 Getting started
-------------------
+======================================================
 
 We will perform this session of the workshop on the ``smuhpc3`` login
 node, so log in there to begin.
@@ -39,11 +40,11 @@ Unpack your tarball and enter the resulting directory.
 .. index:: profiling
 
 Profiling and performance analysis
-------------------------------------------------------
+================================================
 
 
-Enabling and Generating Profiling Information
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Generating a profile
+--------------------------------------------------
 
 In this session, we will be using the GNU compiler suite
 (``gcc``, ``g++``, ``gfortran``).  These compilers are installed on
@@ -95,8 +96,8 @@ relevant profiling information.
 
 
 
-Identifying Bottleneck Routines
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Identifying bottlenecks
+--------------------------------------------------
 
 Read through the first table of profiling information in this file.
 The first column of this table shows the percentage of time spent in
@@ -105,8 +106,8 @@ majority of the time.  This bottleneck should be the first routine that
 you investigate for optimization. 
 
 
-Optimizing Your Code
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Optimizing code
+--------------------------------------------------
 
 .. index:: grep
 
@@ -161,8 +162,8 @@ appropriate extension for your coding language).
 
 .. index:: compiler optimizations
 
-Automatic Compiler Optimizations
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Compiler optimizations
+--------------------------------------------------
 
 The compiler may also attempt to optimize the code itself. Try
 rebuilding the original (non-optimized) code with the compiler flag
@@ -212,10 +213,10 @@ How does this perform in comparison to the other three runs?
 .. index:: debugging
 
 Debugging and debuggers
-------------------------------------------------------
+================================================
 
 Enabling Debugging Information
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------------------------
 
 .. index:: 
    pair: debugging; -g
@@ -291,7 +292,7 @@ man page on the web <http://linux.die.net/man/1/gdb>`_.
 
 
 Fixing the Bug
-^^^^^^^^^^^^^^^^
+--------------------------------------------------
 
 C users: 
   Open both the files ``driver2.c`` and ``tridiag_matvec.c``,
@@ -337,8 +338,8 @@ first and last entries, which should be 1.
 
 .. index:: debugging; advanced debuggers
 
-More advanced debuggers
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Advanced debuggers
+--------------------------------------------------
 
 There are many freely-available Linux debugging utilites in addition
 to `gdb <https://www.gnu.org/software/gdb/>`_.  Most of these are

@@ -41,7 +41,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'SMU HPC Summer Workshop'
-copyright = u'2013, Daniel R. Reynolds'
+copyright = u'2013, SMU Center for Scientific Computation (Daniel R. Reynolds)'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -110,6 +110,7 @@ html_theme = 'default'
 
 # default options
 html_theme_options = {
+    "sidebarwidth": "275",
     "rightsidebar": "true",
     "stickysidebar": "true",
     "bodyfont": "Arial",
@@ -212,7 +213,7 @@ latex_elements = {
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
   ('index', 'SMUHPCWorkshop.tex', u'SMU HPC Summer Workshop',
-   u'Daniel R. Reynolds', 'manual'),
+   u'Daniel R. Reynolds, SMU Center for Scientific Computation', 'howto'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of

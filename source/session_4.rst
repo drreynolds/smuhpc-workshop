@@ -1,10 +1,11 @@
-:tocdepth: 2
+:tocdepth: 3
 
 
 .. _session4:
 
+*****************************************************
 Session 4: More Programming
-============================
+*****************************************************
 
 *Instructor: Dan Reynolds*
 
@@ -18,7 +19,7 @@ node, so log in there to begin.
 .. index:: ! Makefile
 
 Makefiles
---------------
+================================================
 
 The ``make`` command allows programmers to easily manage programs with
 large numbers of files.  It aids in developing large programs by
@@ -286,7 +287,7 @@ Make resources:
 .. index:: ! module
 
 Modules
------------
+================================================
 
 The *module* system is a command-line tool to help users manage their
 Linux environment variables (e.g. PATH, LD_LIBRARY_PATH).  It works by
@@ -477,7 +478,7 @@ follows:
 
 
 Module example
-^^^^^^^^^^^^^^^^^^^
+--------------------------------------------------
 
 As a simple example, let's compare how to do the same task first
 without, and then with, the module system.  Returning to our previous
@@ -506,7 +507,7 @@ you know the global location of a file *a priori*.
 
 
 Module exercise
-^^^^^^^^^^^^^^^^^^
+--------------------------------------------------
 
 Run Mathematica on SMUHPC, using it to integrate the function
 :math:`f(x) = \log(x^3-2)`.  
@@ -531,7 +532,7 @@ Hints:
    pair: module; resources
 
 Module resources:
-^^^^^^^^^^^^^^^^^^
+--------------------------------------------------
 
 * `Main Module page <http://modules.sourceforge.net/>`_
 
@@ -543,7 +544,7 @@ Module resources:
    seealso: VCS; version control systems
 
 Version control systems
----------------------------
+================================================
 
 (adapted from `A visual guide to version control
 <http://betterexplained.com/articles/a-visual-guide-to-version-control/>`_) 
@@ -584,8 +585,8 @@ usually like this:
   file after they save it. 
 
 
-So Why Do We Need A Version Control System (VCS)?
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Why use a VCS?
+--------------------------------------------------
 
 Our shared folder/naming system is fine for class projects or one-time
 papers, but is exceptionally bad for software projects.  Do you
@@ -593,8 +594,9 @@ imagine that the Windows source code sits in a shared folder named
 something like "Windows7-Latest-New", for anyone to edit?  Or that
 every programmer just works on different files in the same folder?
 
-Large, fast-changing projects with multiple authors need a Version Control
-System (think: "file database") to track changes and avoid
+For projects that are large, fast-changing, or have multiple authors,
+a Version Control System (VCS) is critical.  Think of a VCS as a "file
+database", that helps to track changes and avoid
 general chaos. A good VCS does the following: 
 
 * *Backup and Restore* -- files are saved as they are edited, and you
@@ -637,8 +639,8 @@ features.
 
 
 
-General VCS definitions
-^^^^^^^^^^^^^^^^^^^^^^^^
+General definitions
+--------------------------------------------------
 
 Most version control systems involve the following concepts, though
 the labels may be different. 
@@ -740,10 +742,13 @@ A typical scenario goes like this:
 
 
 
+Standard VCS programs
+--------------------------------------------------
+
 .. index:: cvs
 
 CVS
-^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Originally developed in 1990, `CVS
 <https://en.wikipedia.org/wiki/Concurrent_Versions_System>`_ is one of
@@ -822,7 +827,7 @@ CVS resources:
 .. index:: svn
 
 SVN
-^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 `Apache Subversion <https://en.wikipedia.org/wiki/Apache_Subversion>`_
 (SVN) was initially released in 2000, as an effort to write an
@@ -963,7 +968,7 @@ SVN resources:
 .. index:: git
 
 Git
-^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Originally released in 2005 (by `Linus Torvalds
 <https://en.wikipedia.org/wiki/Linus_Torvalds>`_ himself!), `Git
@@ -1041,7 +1046,7 @@ Git resources:
    seealso: mercurial; hg
 
 Mercurial
-^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 (my favorite)
 
@@ -1120,27 +1125,27 @@ Mercurial resources:
 
 
 Mercurial example
-""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 We'll get a little experience with using Mercurial to "collaborate" on
-a shared project.  The first step in using a version control system
-on an existing repository it to do the initial download of the code
-from the main repository.  This repository can often be on a
-standalone server, on the web, or it can even reside in someone else's
-home directory.  Here, we'll use one that I've set up for this class.
-
-We'll first need to load the Mercurial module:
+a shared project.  We'll first need to load the Mercurial module:
 
 .. code-block:: bash
 
    $ module load mercurial-2.6.1
 
-In Mercurial, the initial download of the code uses the ``clone``
-command:
+The first step in using a version control system
+on an existing repository is to do the initial download of the code
+from the main repository.  This repository can often be on a
+standalone server, on a public a web site, or it can even reside in
+someone else's home directory.  Here, we'll use one that I've set up
+for this class on the public web server `bitbucket.org
+<http://bitbucket.org>`_.   In Mercurial, the initial download of the
+code uses the ``clone`` command:
 
 .. code-block:: bash
 
-   $ hg clone ~dreynolds/smuhpc-workshop-example
+   $ hg clone ssh://hg@bitbucket.org/drreynolds/smuhpc-workshop-example
 
 When the command completes, you should have a new directory named
 ``smuhpc-workshop-example``.  Enter that directory,
@@ -1165,13 +1170,14 @@ containing your first name, e.g.
 
 .. index:: hg; status
 
-To see what has changed in comparison with the last saved state of the
-repository, you can use the ``status`` command:
+To see which files have changed in comparison with the last saved
+state of the repository, you can use the ``status`` command:
 
 .. code-block:: bash
 
    $ hg status
    ? Reynolds.txt
+
 
 .. index:: hg; add
 
@@ -1200,28 +1206,60 @@ repository.  Other keys include:
 
 * "R" -- the file has been removed from the repository
 
-.. index:: hg; commit
 
-To save this change into the repository, we must ``commit`` the
-changes:
+.. index:: hg; diff
+
+If you want to see the specific changes that have been made to all of
+the Mercurial-tracked files, you can use the ``diff`` command:
 
 .. code-block:: bash
 
-   $ hg commit -m "added a file with my name" Reynolds.txt
+   $ hg diff
+   diff -r ad44a3024020 Reynolds.txt
+   --- /dev/null	Thu Jan 01 00:00:00 1970 +0000
+   +++ b/Reynolds.txt	Fri May 31 13:46:17 2013 -0500
+   @@ -0,0 +1,1 @@
+   +Daniel
 
-The string following the ``-m`` indicates a log message describing the
-changes that were made.  Once this command has completed, we see that
-the local directory is current with our local repository:
+where we see that there is a new line "Daniel" (denoted by the ``+``)
+that has been added.
+
+.. index:: hg; commit
+
+To save this change into the repository, we must ``commit`` the
+changes.  To do so, we must supply both a log message using the ``-m``
+flag, and our name (in order to give credit and/or lay blame) with the
+``-u`` flag.  For example, my commit message could be something like
+this: 
+
+.. code-block:: bash
+
+   $ hg commit -u dreynolds -m "added a file with my name" Reynolds.txt
+
+Once this command has completed, we see that the local directory is
+current with our local repository: 
 
 .. code-block:: bash
 
    $ hg status
 
-(note that nothing is listed).  To share these changes with everyone
-else, you can ``push`` your modifications back to the original
-repository that you'd initially cloned.  In order to be a good
-citizen, before you push your changes up to the shared location, you
-should first retrieve all changes that have been pushed by others:
+(note that nothing is listed).  
+
+When working on a project with others, you will eventually wish to
+share your code by "pushing" it back up to a shared repository.  This
+can also be quite helpful if you develop your project on different
+computers, so that instead of copying the files manually by email,
+``rsync`` or ``scp``, you can just push your changes up to the
+repository from one computer, and clone/pull them down to another.
+
+The command to push files back to the main repository is ``push``.  We
+will not do so here, since in order to push to `bitbucket.org
+<http://bitbucket.org>`_ you must first set up a Bitbucket account.
+
+However, if you did have a Bitbucket account, prior to pushing your
+code, you should always retrieve any changes that your collaborators
+have made to the repository by using a "pull" and an "update" (and
+possibly a "merge" if necessary).  To retrieve these changes:
 
 .. code-block:: bash
 
@@ -1251,7 +1289,7 @@ merge
 
 .. code-block:: bash
 
-   $ hg commit -m "merged to tip"
+   $ hg commit -u dreynolds -m "merged to tip"
 
 Once you're certain that you have finished retrieving and merging all
 changes from the shared repository, you ``push`` via
@@ -1263,10 +1301,7 @@ changes from the shared repository, you ``push`` via
 
 .. note::
 
-   Typically this process is not so challenging as it is today in
-   class, because in reality most of your collaborators will not be
-   checking in and pushing things at the same moment as you are.  If
-   you choose to skip the ``push`` portion of the above steps today,
-   that's fine. 
+   Typically this process is not difficult, since typically you will
+   be editing different files than your collaborators.
 
 

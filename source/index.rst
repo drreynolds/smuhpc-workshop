@@ -3,15 +3,16 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+######################################
 2013 SMU HPC Summer Workshop
-=============================================
+######################################
 
 Welcome to the main site for the tutorials and hands-on
 exercises associated with the 2013 SMU HPC Summer workshop, sponsored
 by the `SMU Center for Scientific Computation
 <http://www.smu.edu/academics/csc>`_. 
 
-**Location**:  Fondren Library, room 103c
+**Location**:  Fondren Library, room 103b
 
 **Dates**:   June 3-7, 2013
 

@@ -1,10 +1,11 @@
-:tocdepth: 2
+:tocdepth: 3
 
 
 .. _session7:
 
+*****************************************************
 Session 7: Postprocessing
-========================================================
+*****************************************************
 
 *Instructor: Dan Reynolds*
 
@@ -12,7 +13,7 @@ Session 7: Postprocessing
 
 
 Getting started
-----------------
+================================================
 
 We will perform this session of the workshop on the ``smuhpc3`` login
 node, so log in there to begin.
@@ -71,8 +72,8 @@ preferred scripting environment.
 
 
 
-Importing data into standard software (Matlab, Python)
---------------------------------------------------------
+Importing/exporting data
+================================================
 
 Before we can understand how to load data into Matlab or Python, we
 must understand how it was written from the program.  Here is the C++
@@ -408,8 +409,8 @@ libraries have the following benefits over doing things manually:
 
 
 
-Visualization and other processing tasks
---------------------------------------------------------
+Post-processing 
+================================================
 
 We will now use the above data input routines to do some
 post-processing of these simulated results.  For this example, we'll
@@ -608,7 +609,7 @@ right-clicking and selecting "Next":
 
 
 Advanced visualization
-^^^^^^^^^^^^^^^^^^^^^^^^
+================================================
 
 
 A few difficulties with using either Matlab or Python for data
@@ -634,7 +635,7 @@ one you should make a request to the SMUHPC system administrators.
 .. index:: Mayavi
 
 Mayavi
-"""""""""""
+--------------------------------------------------
 
 Mayavi is a Python plotting package designed primarily for interactive
 3D visualization. See:
@@ -646,7 +647,7 @@ Mayavi is a Python plotting package designed primarily for interactive
 .. index:: VisIt
 
 VisIt
-"""""""""""""
+--------------------------------------------------
 
 `VisIt <https://wci.llnl.gov/codes/visit>`_ is an open source
 visualization package being developed at `Lawrence Livermore National
@@ -663,7 +664,7 @@ scripting.  See:
 .. index:: ParaView
 
 ParaView
-""""""""""""""
+--------------------------------------------------
 
 Like VisIt, `ParaView <http://www.paraview.org>`_ is another open
 source package for large-scale visualization developed at the
@@ -679,7 +680,7 @@ interface and a Python interface for scripting.  See:
 
 
 Exercise
-----------------------
+================================================
 
 In the set of files for this session, you will find one additional
 file that you have not yet used, ``density.txt``.  This is a
