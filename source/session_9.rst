@@ -126,7 +126,7 @@ on SMUHPC at the command line:
 
 .. code-block:: bash
 
-   $ cp ~dreynolds/SMUHPC_workshop/session9_MPI.tgz .
+   $ cp ~dreynolds/SMUHPC_tutorial/session9_MPI.tgz .
 
 
 
