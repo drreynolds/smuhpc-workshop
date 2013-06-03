@@ -12,23 +12,24 @@ Session 1: Introduction to Linux
 *Assistants: Amit Kumar, Merlin Wilkerson, Doug Tucker*
 
 
-What are operating systems?  Why use Linux?
-=================================================================
+`Session 1 & 2 lecture slides (PDF)
+<http://www.physics.smu.edu/coan/linux/intro_slides.pdf>`_ 
+
+`Session 1 & 2 tutorial slides, "Linux Driver's Ed" (HTML)
+<http://www.physics.smu.edu/coan/linux/index.html>`_
 
 
-Connecting remotely to a Linux system using ssh
-=================================================================
+Topics:
 
+  What are operating systems?  Why use Linux?
 
-The file system
-=================================================================
+  Connecting remotely to a Linux system using ssh
 
+  The file system
 
-The command prompt and basic commands
-=================================================================
+  The command prompt and basic commands
 
+  Editing text files
 
-Editing text files
-=================================================================
 
 

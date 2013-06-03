@@ -12,25 +12,26 @@ Session 2: Linux II
 *Assistants: Amit Kumar, Merlin Wilkerson, Doug Tucker*
 
 
-Permissions and environment variables
-======================================================
+`Session 1 & 2 lecture slides (PDF)
+<http://www.physics.smu.edu/coan/linux/intro_slides.pdf>`_ 
+
+`Session 1 & 2 tutorial slides, "Linux Driver's Ed" (HTML)
+<http://www.physics.smu.edu/coan/linux/index.html>`_
 
 
-Pipes
-======================================================
+Topics:
 
-shells
-======================================================
+  Permissions and environment variables
 
-shell utilities
-======================================================
+  Pipes
 
-zip
-======================================================
+  shells
 
-tar
-======================================================
+  shell utilities
 
-scp
-======================================================
+  zip
+
+  tar
+
+  scp
 
