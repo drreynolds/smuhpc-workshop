@@ -73,7 +73,7 @@ Remaining items to do before workshop:
 
 [X] Postprocessing exercise instructions (session 7) 
 
-[ ] Notes on the SMUHPC networks (session 9)
+[X] Notes on the SMUHPC networks (session 9)
 
 [X] Notes on which parts of SMUHPC can run what (batch, OpenMP, MPI) (session 9)
 
