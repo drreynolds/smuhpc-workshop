@@ -233,7 +233,9 @@ routine.
       3 25
 
    However, since I do not know how to use R, all of the following
-   examples will only be in Matlab or Python.
+   examples will only be in Matlab or Python.  Of course, if you are
+   more familiar with R, you are welcome to attempt the remainder of
+   this session with that instead of Matlab or Python.
 
 Now that we've seen a simple approach for loading an array into Matlab
 and Python, we can move on to functions for reading the larger
