@@ -1317,7 +1317,7 @@ code uses the ``clone`` command:
 
 .. code-block:: bash
 
-   $ hg clone ssh://hg@bitbucket.org/drreynolds/smuhpc-workshop-example
+   $ hg clone https://drreynolds@bitbucket.org/drreynolds/smuhpc-workshop-example
 
 When the command completes, you should have a new directory named
 ``smuhpc-workshop-example``.  Enter that directory,
