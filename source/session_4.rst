@@ -116,6 +116,10 @@ You can instead give your executable a more descriptive name with the
 This will create the same executable, but with the more descriptive
 name ``driver.exe``.  
 
+
+How can a Makefile help?
+---------------------------
+
 While you may find it to be quite enjoyable to compile every source
 file by hand, and then manually link them together into an executable,
 the process can be completely automated by using a ``Makefile``.  
@@ -172,7 +176,7 @@ lines are either blank or are comment lines except for the four sets:
            gfortran hello.f90 -o hello_f90.exe
 
    hello_f77.exe : hello.f
-           gfortran hello.f -o hello_f.exe
+           gfortran hello.f -o hello_f77.exe
 
 Here, we have four build targets, ``hello_cpp.exe``,
 ``hello_c.exe``, ``hello_f90.exe`` and ``hello_f77.exe`` (it is
@@ -208,7 +212,7 @@ Alternatively, this Makefile could have been written:
 
    hello_f77.exe : hello.f
            gfortran -c hello.f
-           gfortran hello.o -o hello_f.exe
+           gfortran hello.o -o hello_f77.exe
 
 or even as
 
@@ -224,9 +228,177 @@ or even as
            gfortran hello.f90 -o hello_f90.exe
 
    hello_f77.exe : 
-           gfortran hello.f -o hello_f.exe
+           gfortran hello.f -o hello_f77.exe
 
 (which ignores the dependency on the source code files ``main.cpp``).
+
+
+Makefile variables
+---------------------------
+
+As you likely noticed, many of the above commands seemed very
+repetitive (e.g. continually calling ``gfortran``, or repeating the
+dependencies and target name in the compile line).  
+
+As with anything in Linux, we'd prefer to do things as easily as
+possible, which is where Makefile variables come into the picture.  We
+can define our own variable in a ``Makefile`` by placing the variable
+to the left of an equal sign, with the value to the right (as with BASH):
+
+.. code-block:: makefile
+
+   VAR = value
+
+The main difference with BASH comes in how we use these variables.
+Again, it requires a ``$``, but we also need to use parentheses or
+braces, ``$(VAR)`` or ``${VAR}``.  In addition, there are a few
+built-in variables within ``Makefile`` commands that can be quite
+handy:
+
+* ``$^`` -- in a compilation recipe, this references all of the
+  *dependencies* for the target
+
+* ``$<`` -- in a compilation recipe, this references the *first
+  dependency* for the target
+
+* ``$@`` -- in a compilation recipe, this references the *target name*
+
+With these, we can streamline our previous ``Makefile`` example
+considerably:
+
+.. code-block:: makefile
+
+   CC=gcc
+   CXX=g++
+   FC=gfortran 
+
+   hello_cpp.exe : hello.cpp
+           $(CXX) $^ -o $@
+
+   hello_c.exe : hello.c
+           $(CC) $^ -o $@
+
+   hello_f90.exe : hello.f90
+           $(FC) $^ -o $@
+
+   hello_f77.exe : hello.f
+           $(FC) $^ -o $@
+
+
+Advanced usage
+---------------------------
+
+If we have one main routine in the file ``driver.c`` that uses
+functions residing in multiple input files, e.g. ``func1.c``, 
+``func2.c``, ``func3.c`` and ``func4.c``, it is standard to compile
+each of the input functions into ``.o`` files separately, and then to
+link them together with the driver at the last stage.  This can be
+very helpful when developing/debugging code, since if you only change
+one line in ``file2.c``, you do not need to re-compile *all* of your
+input functions, just the one that you changed.  By setting up your
+``Makefile`` so that the targets are the ``.o`` files, and if the 
+Makefile knows how to build each ``.o`` file so that it depends on the
+respective ``.c`` file, recompilation of your project can be very
+efficient.  For example,
+
+.. code-block:: makefile
+
+   CC=gcc
+
+   driver.exe : driver.o func1.o func2.o func3.o func4.o 
+           $(CC) $^ -o $@
+
+   driver.o : driver.c
+           $(CC) -c $^ -o $@
+
+   func1.o : func1.c
+           $(CC) -c $^ -o $@
+
+   func2.o : func2.c
+           $(CC) -c $^ -o $@
+
+   func3.o : func3.c
+           $(CC) -c $^ -o $@
+
+   func4.o : func4.c
+           $(CC) -c $^ -o $@
+
+.. index:: Makefile; explicit rule
+
+However, if this actually depends on a *large number* of input
+functions, the Makefile can become very long if you have to specify
+the recipe for compiling each ``.c`` file into a ``.o`` file.  To this
+end, we can supply an *explicit rule* for how to perform this
+conversion, e.g.
+
+.. code-block:: makefile
+
+   CC=gcc
+   OBJS=driver.o func1.o func2.o func3.o func4.o func5.o \
+        func6.o func7.o func8.o func9.o func10.o func11.o \
+        func12.o func13.o func14.o func15.o
+
+   driver.exe : $(OBJS)
+           $(CC) $^ -o $@
+
+   %.o : %.c 
+           $(CC) -c $^ -o $@
+
+Here, the last block specifies the rule for how to convert *any*
+``.c`` file into a ``.o`` file.  Similarly, we have defined the
+``OBJS`` variable to list out all of the ``.o`` files that we need to
+generate our executable.  Notice that the line continuation character
+is ``\``:
+
+* The ``\`` must be the *last character* on the line (no trailing
+  spaces)
+
+* Continued lines must use *spaces* to start the line (no "Tab"),
+  though they aren't required to line up as pretty as in this example.
+
+
+As a final example, let's now suppose that all of the files in our
+project ``#include`` the same header file, ``head.h``.  Of course, if
+we change even a single line in this header file, we'll need to
+recompile all of our ``.c`` files, so we need to add ``head.h`` as a
+dependency for processing our ``.c`` files into ``.o`` files:
+
+.. code-block:: makefile
+
+   CC=gcc
+   OBJS=driver.o func1.o func2.o func3.o func4.o func5.o \
+        func6.o func7.o func8.o func9.o func10.o func11.o \
+        func12.o func13.o func14.o func15.o
+
+   driver.exe : $(OBJS)
+           $(CC) $^ -o $@
+
+   %.o : %.c head.h
+           $(CC) -c $< -o $@
+
+Note that to the right of the colon in our explicit rule we have now
+listed the header file, ``head.h``.  Also notice that within the
+explicit rule, we now use the ``$<`` instead of the ``$^``, this is
+because we want the compilation line to be, e.g.
+
+.. code-block:: bash
+
+   gcc -c func3.c -o func3.o
+
+and **not**
+
+.. code-block:: bash
+
+   gcc -c func3.c head.h -o func3.o
+
+so we only wanted to automatically list the *first* dependency from
+the list, and not *all* dependencies.
+
+
+
+
+Makefile exercise
+------------------------
 
 Create a ``Makefile`` to compile the executable ``driver.exe`` for
 session 4, out of the files ``driver.cpp``, ``one_norm.cpp``,
