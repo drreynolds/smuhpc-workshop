@@ -762,7 +762,7 @@ Basics of Python shell scripting:
   .. code-block:: python
      
      def hello():
-        echo "Hello world!"
+        print "Hello world!"
 
   In Python, there are no braces surrounding a function contents; just
   as with ``if`` statents and ``for`` loops, the contents of a
@@ -842,7 +842,7 @@ are a few notable exceptions:
    single: shell script; running
 
 Executing shell scripts
---------------------------------------------------
+=============================
 
 Shell scripts may be executed in one of two ways.  If the script
 already has *execute* permissions (`ls -l` will show an "x" in the
@@ -954,7 +954,7 @@ Python resources:
 
 
 Scripting exercise
---------------------------------------------------
+=============================
 
 Construct your own BASH or Python script that uses the 
 `Sieve of Eratosthenes
