@@ -372,9 +372,9 @@ Basics of BASH shell scripting:
 
   .. code-block:: bash
 
-     a[0] = 1
-     a[1] = 0
-     a[2] = 0
+     a[0]=1
+     a[1]=0
+     a[2]=0
 
   Entries of an array may be accessed using ``$`` and braces ``{}``, e.g.
 
