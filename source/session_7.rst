@@ -218,6 +218,22 @@ Matlab code we name these and return each separately.  In the Python
 code we merely return the array and leave naming to the calling
 routine. 
 
+.. note::
+
+   In the R package for interactive statistical data analysis, the
+   corresponding command to Matlab's ``load`` and Python/Numpy's
+   ``loadtxt`` is the R function ``read.table``, e.g. 
+
+   .. code-block:: text
+
+      > read.table("u_sol_meta.txt")
+        V1
+      1 50
+      2 50
+      3 25
+
+   However, since I do not know how to use R, all of the following
+   examples will only be in Matlab or Python.
 
 Now that we've seen a simple approach for loading an array into Matlab
 and Python, we can move on to functions for reading the larger
