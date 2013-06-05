@@ -9,7 +9,7 @@ Session 6: Using SMU HPC
 
 *Instructor: Dan Reynolds*
 
-*Assistants: Amit Kumar, Merlin Wilkerson, Doug Tucker*
+*Assistant: Amit Kumar*
 
 
 What is SMU HPC?

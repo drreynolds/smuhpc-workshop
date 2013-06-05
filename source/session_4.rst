@@ -9,7 +9,7 @@ Session 4: More Programming
 
 *Instructor: Dan Reynolds*
 
-*Assistants: Amit Kumar, Merlin Wilkerson, Doug Tucker*
+*Assistant: Amit Kumar*
 
 
 We will perform this session of the workshop on the ``smuhpc3`` login

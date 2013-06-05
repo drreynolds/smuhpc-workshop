@@ -10,7 +10,7 @@ Session 3: Introduction to Scripts and Programs
 
 *Instructor: Dan Reynolds*
 
-*Assistants: Amit Kumar, Merlin Wilkerson, Doug Tucker*
+*Assistant: Amit Kumar*
 
 
 Getting started

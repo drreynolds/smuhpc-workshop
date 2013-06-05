@@ -9,7 +9,7 @@ Session 8: Introduction to Parallel Computing
 
 *Instructor: Dan Reynolds*
 
-*Assistants: Amit Kumar, Merlin Wilkerson, Doug Tucker*
+*Assistant: Amit Kumar*
 
 
 

@@ -9,7 +9,7 @@ Session 5: Advanced Programming
 
 *Instructor: Dan Reynolds*
 
-*Assistants: Amit Kumar, Merlin Wilkerson, Doug Tucker*
+*Assistant: Amit Kumar*
 
 
 
@@ -449,8 +449,8 @@ including `TotalView
 <http://www.roguewave.com/products/totalview.aspx>`_, `DDT
 <http://www.allinea.com/products/ddt/>`_, `idb
 <http://software.intel.com/en-us/articles/idb-linux>`_ (only works
-with the Intel compilers), and PGI's `pgdebug
-<http://www.pgroup.com/products/pgdbg.htm>`_ (graphical) and `pgdbg`
+with the Intel compilers), and PGI's `pgdbg
+<http://www.pgroup.com/products/pgdbg.htm>`_ (graphical) and `pgdebug`
 (text version).  Of these, the SMU HPC cluster has both ``pgdebug`` and
 ``pgdbg``.  
 

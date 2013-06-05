@@ -28,13 +28,9 @@ by the `SMU Center for Scientific Computation
 
 * Dan Reynolds (Tue-Fri)
 
-**Assistants**: 
+**Assistant**: 
 
 * Amit Kumar
-
-* Merlin Wilkerson
-
-* Doug Tucker
 
 
 `Additional Information and Registration <http://www.smu.edu/BusinessFinance/OIT/StayInformed/SMUHPC>`_

@@ -9,7 +9,7 @@ Session 1: Introduction to Linux
 
 *Instructor: Tom Coan*
 
-*Assistants: Amit Kumar, Merlin Wilkerson, Doug Tucker*
+*Assistant: Amit Kumar*
 
 
 `Session 1 & 2 lecture slides (PDF)
