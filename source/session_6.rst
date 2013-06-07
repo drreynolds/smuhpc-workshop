@@ -541,7 +541,7 @@ The main condor job submission file options on SMU HPC are as follows:
 * **notification** {Always, Complete, Error, Never} -- The set of
   job-related events for which the job owner is sent an email.  The
   default is "Complete", indicating notification when the job
-  finishes.  "Error" indicates to notify if hte job terminated
+  finishes.  "Error" indicates to notify if the job terminated
   abnormally. For example,
 
   .. code-block:: text
@@ -558,7 +558,8 @@ The main condor job submission file options on SMU HPC are as follows:
      notify_user = username@smu.edu
 
   If left unspecified, condor will send a message to
-  ``job-owner@submit-machine-name`` (which ends up going nowhere).
+  ``job-owner@submit-machine-name`` (which ends up going to the system
+  administrators, who probably don't really appreciate it).
 
 .. index:: condor job submission file; output
 
@@ -779,6 +780,14 @@ Unzip this file, and enter the resulting subdirectory
    $ tar -zxf session6.tgz
    $ cd session6
 
+Before we can use this example, we need to set up our environment
+correctly:
+
+.. code-block:: bash
+
+   $ module load gcc
+   $ module load python
+
 
 .. index:: condor examples; single shared node job
 
@@ -809,18 +818,28 @@ approximation it can take longer to run, so as "good citizens" we
 should instead run it on dedicated compute nodes instead of the shared
 login nodes.  
 
+Before submitting this script to condor, we need to ensure that
+``myjob.py`` has "executable" permissions:
+
+.. code-block:: bash
+
+   $ chmod +x ./myjob.py 
+
+
 Create a new job submission file, ``test1.job`` using the editor of
 your choice (e.g. ``gedit`` or ``emacs``), and fill in the arguments
 
 .. code-block:: text
 
-   universe   = vanilla
-   getenv     = true
-   log        = test1.log
-   error      = test1.err
-   output     = test1.out
-   executable = myjob.py
-   arguments  = 5000000
+   universe     = vanilla
+   getenv       = true
+   log          = test1.log
+   error        = test1.err
+   output       = test1.out
+   notification = always
+   notify_user  = username@smu.edu
+   executable   = myjob.py
+   arguments    = 5000000
    queue
 
 Submit this to the condor scheduler with the command
@@ -894,55 +913,45 @@ Create a new condor job submission file, ``test2.job`` with the contents
 
 .. code-block:: text
 
-   universe   = vanilla
-   getenv     = true
-   log        = test2a.log
-   error      = test2a.err
-   output     = test2a.out
-   executable = myjob.py
-   arguments  = 500
+   universe     = vanilla
+   getenv       = true
+   log          = test2a.log
+   error        = test2a.err
+   output       = test2a.out
+   notification = always
+   notify_user  = username@smu.edu
+   executable   = myjob.py
+   arguments    = 500
    queue
 
-   universe   = vanilla
-   getenv     = true
    log        = test2b.log
    error      = test2b.err
    output     = test2b.out
-   executable = myjob.py
    arguments  = 5000
    queue
 
-   universe   = vanilla
-   getenv     = true
    log        = test2c.log
    error      = test2c.err
    output     = test2c.out
-   executable = myjob.py
    arguments  = 50000
    queue
 
-   universe   = vanilla
-   getenv     = true
    log        = test2d.log
    error      = test2d.err
    output     = test2d.out
-   executable = myjob.py
    arguments  = 500000
    queue
 
-   universe   = vanilla
-   getenv     = true
    log        = test2e.log
    error      = test2e.err
    output     = test2e.out
-   executable = myjob.py
    arguments  = 5000000
    queue
 
-Note that all of the blocks use many of the same options, but that we
-have set up unique log, error and output file names for each, and have
-varied the value of **arguments** to specify different numbers of
-subintervals. 
+Note that only the first block specifies the **universe**, **getenv**
+**executable**, **notification** and **notify_user**; since these will
+be reused for all of our runs we do not need to change them for each
+subsequent job.
 
 Launch these jobs as before, with the command
 
@@ -977,6 +986,13 @@ we will now run the executable ``myjob.sh`` on a dedicated node.  This
 script also requires a command-line argument, e.g. ``n``, and it then
 computes the first ``n`` prime numbers using a simplistic version of
 the *trial division* algorithm.
+
+Before submitting this script to condor, we need to ensure that
+``myjob.sh`` has "executable" permissions:
+
+.. code-block:: bash
+
+   $ chmod +x ./myjob.sh
 
 Create a new condor job submission file, ``test3.job`` with the contents
 

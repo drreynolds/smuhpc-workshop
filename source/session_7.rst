@@ -66,8 +66,8 @@ acoustic wave over a periodic, two-dimensional surface, using a coarse
 In the following sections, we will work on importing these data files
 into either a Matlab or Python environment, and then some simple data
 analysis.  For the remainder of this session, both Matlab and Python
-will be presented, though you may choose to specialize on only your
-preferred scripting environment.
+will be presented, though you may choose to specialize in only your
+preferred interactive environment.
 
 
 
@@ -178,8 +178,8 @@ them appropriately.  The relevant Matlab code is in the file
    % 20 May 2013
 
    % input general problem information
-   load u_sol_meta.txt;
-   nx = u_sol_meta(1);
+   load u_sol_meta.txt;   % reads values from disk, storing in a vector
+   nx = u_sol_meta(1);    % unpack vector to name each output
    ny = u_sol_meta(2);
    nt = u_sol_meta(3);
    
@@ -206,9 +206,11 @@ relies on the Numpy function ``loadtxt``:
    def load_info():
        """Returns the mesh size and total number of output times 
           from the input file 'u_sol_meta.txt'.  Has calling syntax:
-             nx,ny,nt = load_info() """
+             nx,ny,nt = load_info(). """
+       
+       # reads integer values from disk, storing in a vector
        data = np.loadtxt("u_sol_meta.txt", dtype=int)
-       return data
+       return data     # return entire vector
 
    # end of file
 
@@ -584,7 +586,8 @@ or Python,
 
 .. code-block:: bash
 
-   $ module load python-2.7.5
+   $ module load gcc
+   $ module load python
    $ python ./plot_solution.py
 
 You should then see a set of ``.png`` images in the directory:
@@ -739,4 +742,25 @@ tasks:
 
    * Plot a projection of the density onto the :math:`yz` plane.
 
+
+*Hints*: 
+
+* If you plot the :math:`log` of the density, you will get more
+  interesting pictures.  In both Matlab and Python/Numpy, this is
+  easily computed using whole-array operations, e.g. ``logd = log(d)``.
+
+* Both Matlab and Python allow array slicing to extract a plane from
+  a 3D data set, e.g. 
+   
+  * Matlab: ``dslice = squeeze(d(:,:,2))`` -- here, the ``squeeze``
+    command may be used to eliminate now-trivial 3rd dimension that
+    has length 1.
+
+  * Python/Numpy: ``dslice = d[:][:][2]``  or even ``dslice = d[:,:,2]``
+    (since Numpy arrays allow both forms of syntax).
+
+* Both Matlab and Python/Numpy have a ``sum`` command that will add
+  all values of a multi-dimensional array along a specified
+  dimension.  Read their documentation to see how this works (it will
+  help with the projection plots).
 
