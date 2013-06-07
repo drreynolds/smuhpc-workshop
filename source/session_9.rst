@@ -662,6 +662,7 @@ commands
 
   .. code-block:: bash
 
+     $ module load pgi
      $ pgc++ driver.cpp -I/grid/software/mpich2-1.3.2/include \
        -L/grid/software/mpich2-1.3.2/lib -lmpich -lmpl -lm -o driver.exe
 
@@ -759,7 +760,7 @@ First, load the ``mvapich2/1.6/pgi`` module,
 
 .. code-block:: bash
 
-   $ module load mvapich2/1.6/pgi pgi/13.2/64bit
+   $ module load pgi mvapich2/1.6/pgi 
 
 Second, compile your executable using one of the MPI wrapper scripts:
 ``mpicc``, ``mpicxx``, ``mpif90`` or ``mpif77``.  For example, we may
@@ -823,7 +824,7 @@ First, load the ``mvapich2/1.6/pgi-QL`` module,
 
 .. code-block:: bash
 
-   $ module load mvapich2/1.6/pgi-QL
+   $ module load pgi mvapich2/1.6/pgi-QL
 
 Second, compile your executable using one of the MPI wrapper scripts:
 ``mpicc``, ``mpicxx``, ``mpif90`` or ``mpif77``.  For example, we may
@@ -882,11 +883,11 @@ course, this is not required.
 
    Compilation can occur on any SMU HPC login node.
 
-   First, load the ``mpich2/1.3.2/pgi`` module,
+   First, load the ``pgi`` and ``mpich2/1.3.2/pgi`` modules,
 
    .. code-block:: bash
 
-      $ module load mpich2/1.3.2/pgi
+      $ module load pgi mpich2/1.3.2/pgi
 
    Second, compile your executable using one of the MPI wrapper scripts:
    ``mpicc``, ``mpicxx``, ``mpif90`` or ``mpif77``.  For example, we may
@@ -972,7 +973,37 @@ The primary ``mpiexec`` option that we use is ``-n #``, where ``#`` is
 the desired number of MPI processes to use in running the parallel job.
 
 However, before we can use ``mpiexec`` we must first enable it to
-launch processes on this node, using the ``mpd`` program:
+launch processes on this node, using the ``mpd`` program.  Before you
+run this, you need to set up a *secret password* for your MPI daemon.
+This only ever needs to be done once, so after you set it up this time
+you'll never need to do it again.  
+
+Create a file in your home directory named ``.mpd.conf``:
+
+.. code-block:: bash
+
+   $ gedit ~/.mpd.conf
+
+Inside this file, you need a single line of the form
+
+.. code-block:: text
+
+   password=<your secret password>
+
+where you should replace ``<your secret password>`` with a random set
+of characters and numbers that will be unique to only you.  This
+should **not** be the password for your login account, nor do you ever
+need to remember what you place in this file.
+
+Change the access permissions for this file so that only you can
+read/write:
+
+.. code-block:: bash
+
+   $ chmod 600 ~/.mpd.conf
+
+Once this file exists, contains your secret password, and has the
+appropriate permissions, you may launch ``mpd``:
 
 .. code-block:: bash
 
@@ -1005,16 +1036,15 @@ in use:
 
 .. code-block:: bash
 
-   $ jobs
-   [1]+  Running                 mpd &
-   $ kill %1
-   [1]+  Terminated              mpd
+   $ mpdallexit
 
-Although ``smuhpc3`` has 8 physical cores, because it is a shared
-login node among all SMU HPC users, you should **not** run any MPI
-jobs on it using more than 6 processes.  Similarly, for long-running
-jobs (e.g. over 30 minutes), you should limit yourself to using at
-most 4 processes. 
+.. note::
+
+   Although ``smuhpc3`` has 8 physical cores, because it is a shared
+   login node among all SMU HPC users, you should **not** run any MPI
+   jobs on it using more than 6 processes.  Similarly, for long-running
+   jobs (e.g. over 30 minutes), you should limit yourself to using at
+   most 4 processes. 
 
 
 
