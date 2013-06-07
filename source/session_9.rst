@@ -332,8 +332,7 @@ For example, if we set our condor job submission file to either
    output                = OMPtest.out
    executable            = driver.exe
    environment           = OMP_NUM_THREADS=7
-   Requirements          = regexp("wnode", Machine)
-   Requirements          = CAN_RUN_WHOLE_MACHINE
+   Requirements          = CAN_RUN_WHOLE_MACHINE && regexp("wnode", Machine)
    +RequiresWholeMachine = True
    queue
 
@@ -348,8 +347,7 @@ or to
    output                = OMPtest.out
    executable            = driver.exe
    environment           = OMP_NUM_THREADS=7
-   Requirements          = regexp("cnode", Machine)
-   Requirements          = CAN_RUN_WHOLE_MACHINE
+   Requirements          = CAN_RUN_WHOLE_MACHINE && regexp("cnode", Machine)
    +RequiresWholeMachine = True
    queue
   
@@ -390,8 +388,7 @@ For example, if we set our condor job submission file to
    output                = OMPtest.out
    executable            = driver.exe
    environment           = OMP_NUM_THREADS=11
-   Requirements          = regexp("cwnode", Machine)
-   Requirements          = CAN_RUN_WHOLE_MACHINE
+   Requirements          = CAN_RUN_WHOLE_MACHINE && regexp("cwnode", Machine)
    +RequiresWholeMachine = True
    queue
 

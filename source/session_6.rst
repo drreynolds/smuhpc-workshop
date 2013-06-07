@@ -714,6 +714,12 @@ single node of the larger machine:
    Requirements = CAN_RUN_WHOLE_MACHINE
    +RequiresWholeMachine = True
 
+If you wish to "require" both a specific node type and a whole node,
+you would combine **Requirements** statements, e.g.
+
+.. code-block:: text
+
+   Requirements = CAN_RUN_WHOLE_MACHINE && regexp("iwnode", Machine)
 
 
 .. index:: condor; ssh to job

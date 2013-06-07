@@ -17,7 +17,7 @@ int main(int argc, char* argv[]) {
   int ierr, numprocs, myid, n, is, ie, i;
   double *a, *b, stime, ftime, runtime, sum, mysum=0.0;
 
-  // intialize MPI, get total number of processes, this proc's ID
+  // initialize MPI, get total number of processes, this proc's ID
   ierr = MPI_Init(&argc, &argv);
   ierr = MPI_Comm_size(MPI_COMM_WORLD, &numprocs);
   ierr = MPI_Comm_rank(MPI_COMM_WORLD, &myid);
