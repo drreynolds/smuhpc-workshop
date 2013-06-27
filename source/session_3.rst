@@ -1497,3 +1497,14 @@ the previous topic, or [u] to go back to the main menu.
 Once you're finished reading up on the ``units`` command, press [q] to
 exit back to the command prompt.
 
+
+
+
+
+
+
+
+
+.. raw:: html
+   :file: counter.html
+

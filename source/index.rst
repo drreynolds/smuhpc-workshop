@@ -50,3 +50,15 @@ by the `SMU Center for Scientific Computation
    Postprocessing (Thu. AM) <session_7>
    Intro. Parallel Computing (Thu. PM) <session_8>
    Parallel Comp. on SMU HPC (Fri. AM) <session_9>
+
+
+
+
+
+
+
+
+
+.. raw:: html
+   :file: counter.html
+

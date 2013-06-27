@@ -1828,3 +1828,13 @@ use one node. Run the 16, 32 and 64 processor jobs using 8 cores per node.
 Determine the parallel speedup when running this code using MPI.  Does
 it speed up optimally (i.e. by a factor of 64)?
 
+
+
+
+
+
+
+
+.. raw:: html
+   :file: counter.html
+

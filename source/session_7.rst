@@ -764,3 +764,13 @@ tasks:
   dimension.  Read their documentation to see how this works (it will
   help with the projection plots).
 
+
+
+
+
+
+
+
+.. raw:: html
+   :file: counter.html
+

@@ -1033,3 +1033,12 @@ top of the output file) with the command
    $ sed -n 4326p test3.out
 
 
+
+
+
+
+
+
+.. raw:: html
+   :file: counter.html
+

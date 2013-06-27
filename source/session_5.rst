@@ -477,3 +477,14 @@ job in the ``pgdbg`` debugger like you did with ``gdb``:
 
 Press the "play" button to start the executable running, and use the
 mouse to interact with the debugger as needed.
+
+
+
+
+
+
+
+
+.. raw:: html
+   :file: counter.html
+

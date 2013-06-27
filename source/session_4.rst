@@ -1477,3 +1477,12 @@ changes from the shared repository, you ``push`` via
    be editing different files than your collaborators.
 
 
+
+
+
+
+
+
+.. raw:: html
+   :file: counter.html
+
