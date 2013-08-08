@@ -242,7 +242,7 @@ Top500 list since 1993.
    :scale: 90 %
    :align: center
 
-   [from `http://www.top500.org <http://www.top500.org>`_]
+   (figure from `http://www.top500.org <http://www.top500.org>`_)
 
 
 Note the trend to achieve performance advances through increases in parallelism.
@@ -263,7 +263,10 @@ list since 1993:
    :scale: 90 %
    :align: center
 
-   [from `http://www.top500.org <http://www.top500.org>`_]
+   (figure from `http://www.top500.org <http://www.top500.org>`_)
+
+
+Definitions of terms above:
 
 * MPP: Massively Parallel Processors (commercially-designed)
 
@@ -331,11 +334,11 @@ Common switches for commodity clusters include:
 * *Infiniband*: 40 Gbit/sec bandwidth, 1.07 μsec latency
 
 
-.. figure:: figs/network_pie.png
-   :scale: 100 %
-   :align: center
+.. figure:: figs/network_pie.png 
+   :scale: 90 % 
+   :align: center 
 
-   [from `http://www.top500.org <http://www.top500.org>`_]
+   (figure from `http://www.top500.org <http://www.top500.org>`_)
 
 
 Compare these to on-computer speeds of:
