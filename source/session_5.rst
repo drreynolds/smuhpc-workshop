@@ -9,7 +9,6 @@ Session 5: Advanced Programming
 
 *Instructor: Dan Reynolds*
 
-*Assistant: Amit Kumar*
 
 
 
@@ -49,7 +48,15 @@ collection <http://gcc.gnu.org/>`_ includes utilities for both of
 these tasks, as will be illustrated below.  Utilities with similar
 functionality are included with some other compilers, and I recommend
 that you look up the corresponding information for your compiler of
-choice. 
+choice.
+
+.. note::
+
+   In fact, OS X provides a free suite of programs, `Xcode
+   <https://developer.apple.com/xcode/>`_, that has incredibly useful
+   profiling and performance monitoring tools.  For users with OS X
+   Lion or newer, this tool is called `Instruments <https://developer.apple.com/library/mac/documentation/developertools/conceptual/instrumentsuserguide/Introduction/Introduction.html>`_; for users with
+   older versions of OS X it is called `Shark <https://developer.apple.com/legacy/library/documentation/DeveloperTools/Conceptual/SharkUserGuide/SharkUserGuide.pdf>`_.
 
 
 
@@ -61,8 +68,9 @@ Generating a profile
 
 In the GNU compilers (and many others), you can enable profiling information
 through adding in the ``-p`` compiler flag.  Add this compiler flag to
-the commands in the ``Makefile`` for the target ``driver1.exe`` [Hint: put
-it before the ``-o``].
+the commands in the ``Makefile`` for the target ``driver1.exe`` [Hint:
+either put it with the flags in the ``OPT`` variable, or in the
+compile line before the ``-o`` flag].
 
 .. index:: 
    pair: profiling; gmon.out
@@ -333,8 +341,9 @@ the compiler/OS, e.g.
    $ ./driver2.exe
    Segmentation fault
 
-There are many ways to track down this kind of error (e.g. print
-statements, staring, randomly changing things to see what happens).
+There are many ways to track down this kind of error (e.g. adding print
+statements everywhere, staring intently hoping for an epiphany,
+randomly changing things to see what happens). 
 In this session we will use the most efficient debugging approach,
 that of using a tool to track down the bug for us.
 
@@ -377,7 +386,8 @@ man page on the web <http://linux.die.net/man/1/gdb>`_.
   information on how to use the program itself.
 
 * The ``quit`` command inside of ``gdb`` will exit the debugger and
-  return you to the command line.
+  return you to the command line.  Alternatively, you may just type
+  ``^d`` ([control]-[d]) to exit.
 
 
 
@@ -478,7 +488,18 @@ job in the ``pgdbg`` debugger like you did with ``gdb``:
 Press the "play" button to start the executable running, and use the
 mouse to interact with the debugger as needed.
 
+.. note::
 
+   SMU only pays for a five-seat PGI license, meaning that only five
+   distinct compilation/debugging processes with the PGI tools may be
+   run simultaneously.  Typically, five is more than sufficient for a
+   campus of our size, since users spend most of their time writing
+   code, preparing input parameters and scripts for running a
+   simulation, or post-processing simulation data; the time spent
+   actually compiling and using a debugger is minimal.  However, if I
+   had everyone in the workshop try this simultaneously, we would
+   obviously exceed the five "seats," which is why this is left as a
+   personal exercise. 
 
 
 

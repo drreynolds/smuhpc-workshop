@@ -41,7 +41,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'SMU HPC Summer Workshop'
-copyright = u'2013, SMU Center for Scientific Computation (Daniel R. Reynolds)'
+copyright = u'2014, SMU Center for Scientific Computation (Daniel R. Reynolds)'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -132,7 +132,7 @@ html_theme_options = {
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-html_title = "2013 SMU HPC Summer Workshop"
+html_title = "2014 SMU HPC Summer Workshop"
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 #html_short_title = None

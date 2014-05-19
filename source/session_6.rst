@@ -9,7 +9,6 @@ Session 6: Using SMU HPC
 
 *Instructor: Dan Reynolds*
 
-*Assistant: Amit Kumar*
 
 
 What is SMU HPC?
@@ -27,18 +26,28 @@ Originally purchased in 2009 through funding from the `SMU Provost's
 office <http://smu.edu/provost/#1>`_, and subsequently added onto
 through grants to the `Physics <http://www.smu.edu/physics>`_ and
 `Math <http://www.smu.edu/math>`_ departments, the SMU HPC cluster is
-a shared resource available to all SMU faculty and graduate and
-undergraduate students involved in scientific computing projects.  It
-is administered by the `SMU Office of Information Technology
-<http://www.smu.edu/BusinessFinance/OIT>`_, and managed by the 
-`SMU Center for Scientific Computation
-<http://www.smu.edu/Academics/CSC>`_.
+a shared resource available to all SMU faculty and
+graduate/undergraduate students involved in scientific computing
+projects.  It is administered by the `SMU Office of Information
+Technology <http://www.smu.edu/BusinessFinance/OIT>`_, and managed by
+the `SMU Center for Scientific Computation
+<http://www.smu.edu/Academics/CSC>`_. 
+
+Our newest member of HPC at SMU, `Maneframe
+<https://blog.smu.edu/forum/2014/03/26/smu-welcomes-its-new-supercomputer-maneframe/>`_,
+functions similarly to our smaller existing clusters (directory
+layout, user accounts, module system, compilers, etc.).  However, at
+the time of this workshop it is still under construction, so we will
+use the existing cluster for the workshop.  When applicable, in the
+remaining workshop sessions I'll point out the differences between the
+new and old clusters.
+
 
 
 
 .. index:: SMU HPC; hardware
 
-SMU HPC hardware
+SMU HPC hardware (old cluster)
 --------------------------------------------------
 
 First, let's familiarize ourselves with the hardware that comprises
@@ -116,14 +125,16 @@ Disk nodes
 
 
 
+
+
 .. index:: SMU HPC; general information
 
 General information
 --------------------------------------------------
 
-* OS: Scientific Linux 5.5 (64 bit).
+* OS: Scientific Linux 5.5 (64 bit -- old cluster only)
 
-* Scheduler: Condor
+* Scheduler: Condor (old cluster only)
 
 * The software stack for the full cluster includes a variety of high
   performance mathematics and software libraries, as well as the GNU,
@@ -149,7 +160,7 @@ General information
 
 .. _session6_condor:
 
-Getting started
+Getting started (old cluster only)
 ================================================
 
 We will perform this session of the workshop on the ``smuhpc2`` login
@@ -241,7 +252,8 @@ Some widely used cluster batch systems are:
 .. index:: 
    seealso: SLURM; job scheduler
 
-* `Simple Linux Utility for Resource Management (SLURM) <http://slurm.schedmd.com/>`_
+* `Simple Linux Utility for Resource Management (SLURM)
+  <http://slurm.schedmd.com/>`_ -- this will be used on the new cluster
 
 .. index:: 
    seealso: Moab; job scheduler
@@ -261,7 +273,8 @@ Some widely used cluster batch systems are:
 .. index:: 
    seealso: condor; job scheduler
 
-* `Condor <http://research.cs.wisc.edu/htcondor/>`_
+* `Condor <http://research.cs.wisc.edu/htcondor/>`_ -- this is used on
+  the old cluster
 
 .. index:: 
    seealso: Oracle grid engine; job scheduler
@@ -278,6 +291,15 @@ Some widely used cluster batch systems are:
 
 * `Platform LSF <http://www-03.ibm.com/systems/technicalcomputing/platformcomputing/products/lsf/>`_
 
+
+.. note::
+
+   While the remainder of this session will focus on using Condor
+   for batch computing, the ideas represented here apply to nearly all
+   of the scheduling systems listed above.  As a result, even if you
+   never plan to use Condor in your research, the rest of this lesson
+   will lay a strong foundation for transitioning to other more
+   standard schedulers. 
 
 
 
@@ -685,7 +707,7 @@ There are three default macros:
 
 .. index:: condor; whole node vs shared node
 
-Whole vs shared node 
+Whole vs shared node (old cluster only)
 --------------------------------------------------
 
 When running batch jobs on the cluster, you may request to use a whole

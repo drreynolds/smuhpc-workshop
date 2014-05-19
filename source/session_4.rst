@@ -9,7 +9,6 @@ Session 4: More Programming
 
 *Instructor: Dan Reynolds*
 
-*Assistant: Amit Kumar*
 
 
 We will perform this session of the workshop on the ``smuhpc3`` login
@@ -230,7 +229,8 @@ or even as
    hello_f77.exe : 
            gfortran hello.f -o hello_f77.exe
 
-(which ignores the dependency on the source code files ``main.cpp``).
+(which ignores the dependency on the source code files ``hello.cpp``,
+``hello.c``, ``hello.f90`` and ``hello.f``, respectively).
 
 
 Makefile variables
@@ -451,7 +451,7 @@ listed below.
 Make resources:
 
 * `GNU Make manual
-  <http://dreynolds.math.smu.edu/Courses/Math6370_Spring13/make.pdf>`_ 
+  <http://runge.math.smu.edu/Courses/Math6370_Spring13/make.pdf>`_ 
 
 
 
@@ -462,7 +462,7 @@ Modules
 ================================================
 
 The *module* system is a command-line tool to help users manage their
-Linux environment variables (e.g. PATH, LD_LIBRARY_PATH).  It works by
+Linux environment variables (e.g. ``PATH``, ``LD_LIBRARY_PATH``).  It works by
 grouping related environment variable settings together based on
 various usage scenarios, such as
 
@@ -483,6 +483,17 @@ provides a simple user interface, and can be queried to learn all of
 the available modules on a system, making it easier to know which
 packages are or aren't already installed on a system.  
 
+.. note::
+
+   The *module* system is not installed by default on most Linux
+   systems (i.e. it is likely not installed on a standard linux
+   desktop).  However, it is *incredibly* useful when using a new
+   machine, most notably when things are installed in non-default
+   locations.  As most clusters and supercomputers must use
+   non-default installation options, modules are very popular on such
+   systems.  As such, it is installed both on our current and upcoming
+   SMU HPC clusters.
+
 
 The module system operates through the Linux executable, ``module``,
 followed by the desired command.  The primary module commands are as
@@ -496,31 +507,39 @@ follows:
   .. code-block:: bash
 
      $ module avail
-     Rebuilding cache file, please wait ... done.
+     ---------------- /grid/software/modulefiles/applications -----------------
+        R/2.10.0                   matlab/R2013a                     (D)
+        R/2.15.3           (D)     meep/1.1.1
+        R/3.0.0                    meep/1.2                          (D)
+        R/3.0.2                    mercurial/2.6.1
+        ROOT/5.32                  namd/2.9/ethernet/multicore-CUDA
+        ROOT/5.34.14       (D)     namd/2.9/ethernet/multicore
+        abinit                     namd/2.9/ethernet/tcp
+        es/0.98                    namd/2.9/ethernet/udp             (D)
+        feram/0.22.01              namd/2.9/infiniband/non-smp
+        java/1.7                   namd/2.9/infiniband/smp           (D)
+        lammps/1Feb14              python/2.6.5
+        mathematica/8.0.1          python/2.7.5                      (D)
+        matlab/R2011b
      
-     --------------- /grid/software/modulefiles/applications ---------------
-        R-2.10.0          meep/1.2                            (D)
-        R-2.15.3          mercurial-2.6.1
-        R-3.0.0           namd/2.9/x86_64/infiniband/non-smp
-        ROOT/5.32         namd/2.9/x86_64/infiniband/smp      (D)
-        abinit            namd/2.9/x86_64/multicore/CUDA
-        java-1.7          python-2.6.5
-        mathematica       python-2.7.5
-        meep/1.1.1
+     ------------------ /grid/software/modulefiles/compilers ------------------
+        g95/0.92/32bit          gcc/4.7.2          nag/5.2-64bit
+        g95/0.92/64bit  (D)     gcc/4.8.0          pgi/10.5-64bit
+        gcc/4.5.1               gcc/4.8.2  (D)     pgi/13.2-64bit  (D)
      
-     ---------------- /grid/software/modulefiles/compilers -----------------
-        g95/0.92/32bit          gcc/4.5.1          pgi/10.5-64bit
-        g95/0.92/64bit  (D)     gcc/4.8.0  (D)     pgi/13.2-64bit  (D)
+     ------------------ /grid/software/modulefiles/libraries ------------------
+        CFITSIO                 mpich2/1.1.1/gcc
+        LibYAML/0.1.4           mpich2/1.3.2/pgi
+        YAML-CPP/0.5.1          mpich2/1.4.1/gcc
+        boost/1.54.0            mpich3/3.1/gcc
+        boost/1.55.0    (D)     mvapich2/1.6/gcc-QL
+        fftw/3.2.2              mvapich2/1.6/gcc
+        fftw/3.3.3      (D)     mvapich2/1.6/pgi-QL
+        gsl/1.9                 mvapich2/1.6/pgi         (D)
+        gsl/1.15        (D)     mvapich2/1.9a2/gcc
+        hdf5/1.8.3              openmpi/1.6.5/gcc/4.8.0
      
-     ---------------- /grid/software/modulefiles/libraries -----------------
-        fftw                      mvapich2/1.6/gcc-QL
-        gsl/1.9                   mvapich2/1.6/gcc
-        gsl/1.15          (D)     mvapich2/1.6/pgi-QL
-        hdf5/1.8.3                mvapich2/1.6/pgi     (D)
-        mpich2/1.1.1/gcc          mvapich2/1.9a2/gcc
-        mpich2/1.3.2/pgi
-     
-     ----------------- /grid/software/modulefiles/physics ------------------
+     ------------------- /grid/software/modulefiles/physics -------------------
         clhep/2.0.4.5       clhep/2.0.4.7       clhep/2.1.2.3  (D)
      
        Where:
@@ -624,21 +643,15 @@ follows:
  
   .. code-block:: bash
 
-     $ module show R-3.0.0
-     Rebuilding cache file, please wait ... done.
-
+     $ module show R/3.0.0
      ------------------------------------------------------------
-        /grid/software/modulefiles/applications/R-3.0.0.lua:
+        /grid/software/modulefiles/applications/R/3.0.0.lua:
      ------------------------------------------------------------
      whatis("loads R executables in current environment")
      setenv("R_HOME", "/grid/software/R-3.0.0")
-     prepend_path("PATH", "/grid/software/R-3.0.0/bin:/grid/software/gcc-4.8
-     .0/bin")
+     prepend_path("PATH", "/grid/software/R-3.0.0/bin:/grid/software/gcc-4.8.0/bin")
      prepend_path("MANPATH", "/grid/software/R-3.0.0/share/man")
-     prepend_path("LD_LIBRARY_PATH", "/grid/software/R-3.0.0/lib64:/grid/sof
-     tware/R-3.0.0/lib64:/grid/software/gcc-4.8.0/lib64:/grid/software/gcc-4
-     .8.0/lib:/grid/software/gmp-5.1.1/lib:/grid/software/mpfr-3.1.2/lib:/gr
-     id/software/mpc-1.0.1/lib")
+     prepend_path("LD_LIBRARY_PATH", "/grid/software/R-3.0.0/lib64:/grid/software/R-3.0.0/lib64:/grid/software/gcc-4.8.0/lib64:/grid/software/gcc-4.8.0/lib:/grid/software/gmp-5.1.1/lib:/grid/software/mpfr-3.1.2/lib:/grid/software/mpc-1.0.1/lib")
 
 .. index:: module; help
 
@@ -674,7 +687,8 @@ the ``pgc++`` compiler.  Using the module system, this simplifies to
 
 Even for this simple example where we only need to add something to
 our PATH, the module system can be invaluable since it is rare that
-you know the global location of a file *a priori*.  
+you know the global location of a file when you first log into a new
+system.
 
 
 
@@ -1179,6 +1193,11 @@ with a few additions/exceptions:
   your local repository to a remote repository.
 
 
+However, *unlike SVN*, Git does not allow you to use the shortcut
+names for standard commands; for example ``git ci`` is an illegal
+command, but ``git commit`` is allowed.
+
+
 .. index:: 
    pair: git; web hosting
 
@@ -1258,6 +1277,11 @@ mercury):
   your local repository to a remote repository.
 
 
+Unlike Git, but as with SVN, Mercurial allows use of popular command
+shortcuts like ``ci``, ``stat`` and ``up`` instead of their longer
+alternatives (``commit``, ``status`` and ``update``).
+
+
 .. index:: 
    pair: hg; web hosting
 
@@ -1304,7 +1328,7 @@ a shared project.  We'll first need to load the Mercurial module:
 
 .. code-block:: bash
 
-   $ module load mercurial-2.6.1
+   $ module load mercurial/2.6.1
 
 The first step in using a version control system
 on an existing repository is to do the initial download of the code
@@ -1372,11 +1396,11 @@ file:
 where, the "A" denotes that the file has been added to the
 repository.  Other keys include:
 
-* "M" -- the file has been modified
+* ``M`` -- the file has been modified
 
-* "!" -- the file has been deleted
+* ``!`` -- the file has been deleted
 
-* "R" -- the file has been removed from the repository
+* ``R`` -- the file has been removed from the repository
 
 
 .. index:: hg; diff
@@ -1473,14 +1497,65 @@ changes from the shared repository, you ``push`` via
 
 .. note::
 
-   Typically this process is not difficult, since typically you will
+   Typically this process is not difficult, since you will usually
    be editing different files than your collaborators.
 
 
 
 
+Comparison with Dropbox/Google Drive/etc.
+--------------------------------------------
 
+With the advent of "the cloud", we are inundated with options for
+storing files and sharing them with others.  As a result, many of us
+have come up with preferred strategies for working with our files,
+such as with `Dropbox <http://dropbox.com>`_ or `Google Drive
+<http://drive.google.com>`_.  
 
+Unfortunately, while these cloud storage options are great solutions
+for sharing files with others, they are *terrible* choices for typical
+software projects:
+
+1. Typically very difficult or impossible to retrieve prior versions
+   of a file, and even when possible, it may only be done based on
+   date/time, and does not include "checkin" messages describing the
+   differences between files.  VCS systems store specific "versions"
+   of each file, with checkins labeled using (hopefully descriptive)
+   messages.  Better yet, VCS systems allow you to "tag" a specific
+   state of the repository (e.g. to mark it for release as version
+   "2.0").  The repository may be "reverted" to its status at any tag
+   or after any checkin with only one (or a few) simple commands.
+
+2. Unless all authors *never* edit the same file, merging changes
+   between multiple authors becomes difficult, if not impossible.  VCS
+   systems allow multiple users to edit the same file, merging changes
+   automatically (if made to separate parts of the file), or
+   requesting the newest checkin to manually merge portions of the
+   code that overlap.
+
+3. No "sandboxing" of code -- the moment that you edit the file it is
+   changed in the cloud, making it impossible for one user to compile
+   while another is actively editing and saving files (since they
+   typically will not compile at every save).  VCS systems allow you
+   to save files to disk for compilation and testing, and only share
+   the changes with others *when you decide that the changes should
+   be shared*.
+
+4. No simple "diff" capabilities, to see *exactly* what has changed in
+   each file at any point in time.  VCS systems all supply some kind
+   of "diff" to allow quick comparison between versions of a code.
+
+All of that said, some people use a combination of a VCS and a cloud
+storage solution to get the benefits of both.  For example, many
+smaller groups will set up a distributed version control system (Git
+or Mercurial) *inside* a Dropbox folder, that they can then share with
+other developers (for example, see `this blog post
+<http://rogerstringer.com/2012/04/16/using-dropbox-as-a-git-repository/>`_).
+In this way, you can benefit from using the cloud to share files with
+others (Dropbox or Google Drive), while also benefiting from a VCS
+system for all of the options discussed above.  That said, in my
+experience it's just as free and more useful to use a professional
+repository hosting service like `Bitbucket <http://bitbucket.org>`_.
 
 
 .. raw:: html

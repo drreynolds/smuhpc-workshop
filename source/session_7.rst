@@ -9,7 +9,6 @@ Session 7: Postprocessing
 
 *Instructor: Dan Reynolds*
 
-*Assistant: Amit Kumar*
 
 
 Getting started
@@ -49,7 +48,7 @@ Run the executable at the command-line.
 
    $ ./advection.exe
 
-You should see a set of output, ending with the lines:
+You should see a set of output, ending with lines similar to:
 
 .. code-block:: text
 
@@ -58,16 +57,16 @@ You should see a set of output, ending with the lines:
    total runtime = 3.1000000000000000e-01
 
 List the files in the subdirectory; you should see a new set of files
-with the names ``u_sol*.txt``.  These files contain solution data from
+with the names ``u_sol.###.txt``.  These files contain solution data from
 the simulation that you just ran, which models the propagation of an
 acoustic wave over a periodic, two-dimensional surface, using a coarse
 :math:`50\times 50` spatial grid.
 
 In the following sections, we will work on importing these data files
-into either a Matlab or Python environment, and then some simple data
-analysis.  For the remainder of this session, both Matlab and Python
-will be presented, though you may choose to specialize in only your
-preferred interactive environment.
+into either a Matlab or Python environment, and then performing some
+simple data analysis.  For the remainder of this session, both Matlab
+and Python will be presented, though you may choose to specialize in
+only your preferred interactive environment.
 
 
 
@@ -130,7 +129,12 @@ happening (we'll discuss in greater detail during class):
 * ``u`` holds a two-dimensional array of size ``nx`` by ``ny``, stored
   in a one-dimensional index space of length ``nx*ny``.  The mapping
   between the 2D physical space and 1D index space is handled by the
-  ``idx()`` macro, defined in ``advection.h``.
+  ``idx()`` macro, defined in ``advection.h``, of the form
+
+  .. code-block:: c++
+
+     // simple macro to map a 2D index to a 1D address space
+     #define idx(i,j,nx)  ((j)*(nx)+(i))
 
 * This function is called once every output time; these outputs are
   indexed by the integer ``noutput``, and correspond to the solution
@@ -138,17 +142,18 @@ happening (we'll discuss in greater detail during class):
 
 * At each output time, this routine writes two files: 
 
-  * The first is the solution file (``u_sol.###.txt``), that holds the
-    2D data array, printed as one long array with the :math:`x`
-    coordinate the faster index.  In this same file, after ``u`` is
-    stored, the physical time of the output, ``t`` is also stored.
+  * The first file is the solution file (``u_sol.###.txt``), that
+    holds the 2D data array, printed as one long array with the
+    :math:`x` coordinate the faster index.  In this same file, after
+    ``u`` is stored, the physical time of the output, ``t`` is
+    also stored. 
 
-  * The second is a metadata file (``u_sol_meta.txt``), that contains
-    the problem size and the total number of outputs that have been
-    written so far in the simulation. 
+  * The second file is a metadata file (``u_sol_meta.txt``), that
+    contains the problem size and the total number of outputs that
+    have been written so far in the simulation. 
 
 
-We will first build a Matlab/Python function that will read in the
+We will first build Matlab and Python functions that can read in the
 metadata file.  First. let's view the contents of the metadata file:
 
 .. code-block:: text
@@ -158,9 +163,14 @@ metadata file.  First. let's view the contents of the metadata file:
    50
    25
 
-Hence we only need to read three numbers in a single column and store
-them appropriately.  The relevant Matlab code is in the file
-``load_info.m``, and relies on the built-in function ``load``: 
+Here the first "50" corresponds to ``nx``, the second "50" corresponds
+to ``ny``, and the "25" corresponds to the total number of solutions
+that have been output (i.e. the final value for ``noutput``).  
+
+Due to this file's simple structure, we we only need to read three
+numbers in a single column and store them appropriately.  The relevant
+Matlab code is in the file ``load_info.m``, and relies on the built-in
+Matlab function ``load``:
 
 .. index:: 
    pair: load_info(); Matlab
@@ -186,8 +196,8 @@ them appropriately.  The relevant Matlab code is in the file
    return
    % end of function
 
-and the relevant Python code is in the file ``load_info.py``, and
-relies on the Numpy function ``loadtxt``: 
+The corresponding Python code is in the file ``load_info.py``, which
+similarly relies on the built-in Numpy function ``loadtxt``:
 
 .. index:: 
    pair: load_info(); Python
@@ -214,11 +224,11 @@ relies on the Numpy function ``loadtxt``:
 
    # end of file
 
-In both of these files, the data in the file ``u_sol_meta.txt`` is
+In both of these scripts, the data in the file ``u_sol_meta.txt`` is
 input and converted to a one-dimensional array of numbers.  In the
 Matlab code we name these and return each separately.  In the Python
-code we merely return the array and leave naming to the calling
-routine. 
+code we merely return the array, leaving unpacking and naming to the
+calling routine. 
 
 .. note::
 
@@ -234,21 +244,24 @@ routine.
       2 50
       3 25
 
-   However, since I do not know how to use R, all of the following
+   However, since I do not know how to use R all of the following
    examples will only be in Matlab or Python.  Of course, if you are
    more familiar with R, you are welcome to attempt the remainder of
    this session with that instead of Matlab or Python.
 
 Now that we've seen a simple approach for loading an array into Matlab
 and Python, we can move on to functions for reading the larger
-``u_sol.###.txt`` files.  As with the above functions, we may use
-``load`` or ``loadtxt`` to input the data, which we will then
-split into the solution component, ``u``, and the current time,
-``t``.  Since ``u`` holds a two-dimensional array, but is stored in a
-flattened one-dimensional format, we can use ``reshape`` (both
-languages) to convert it to the two-dimensional representation.
+``u_sol.###.txt`` files.  As with the above functions, since the data
+is output in a single (but very long) column of numbers, we may use
+``load`` or ``loadtxt`` to input the data.  Once this data has been
+read in, however, we will then split it into the solution component,
+``u``, and the current time, ``t``.  Since ``u`` holds a
+two-dimensional array, but is stored in a flattened one-dimensional
+format, we can use ``reshape`` (the same command in both Matlab and
+Python) to convert it from the one-dimensional to the two-dimensional
+representation.
 
-Here's the Matlab code, ``load_data_2d.m``:
+First, the Matlab code, ``load_data_2d.m``:
 
 .. index:: 
    pair: load_data_2d(); Matlab
@@ -341,23 +354,38 @@ How these work:
   the two-dimensional domain size and the total number of time steps
   written to disk, and perform a quick check to see whether ``tstep``
   is an allowable time step index.
+  
+  * *Matlab:* The function namespace for Matlab corresponds to all
+    ".m" files in the current folder, followed by all built-in
+    functions.  So as long as both of the scripts  ``load_info.m`` and
+    ``load_data_2d.m`` are in the same folder, the ``load_data_2d``
+    function can call the ``load_info`` function automatically.
+
+  * *Python:* Since Python protects the namespace by default, any
+    non-built-in Python functions from other files must be loaded before
+    they may be executed.  As a result, ``load_data_2d.py`` must import
+    the ``load_info`` function from the ``load_data.py`` file before it
+    may be used (*note: the ".py" extension for the ``load_data.py``
+    file is assumed, and should not be added to the "from" portion of
+    the ``import`` command).
 
 * The routine then combines the time step index into a string that
   represents the correct file name (e.g. ``u_sol.006.txt``), and calls
   the relevant ``load`` or ``loadtxt`` routine to input the data.
 
-.. index:: C vs Fortran ordering
-
 * The routine then splits the data into the one-dimensional version of
   ``u`` (called ``u1D``) and ``t``, before reshaping ``u1D`` into a
   two-dimensional version of the solution, before returning the values.
 
-  **Note**: in the Python version, we must specify that the data is
-  ordered in "Fortran" style, i.e. that the first index is the fastest
-  (as opposed to "C" style, where it is the slowest).  Fortran
-  ordering is the default in Matlab, whereas C ordering is the default
-  in Python.
+.. note:: 
 
+   .. index:: C vs Fortran ordering
+
+   In the Python version, we must specify that the data is
+   ordered in "Fortran" style, i.e. that the first index is the fastest
+   (as opposed to "C" style, where it is the slowest).  Fortran
+   ordering is the default in Matlab, whereas C ordering is the default
+   in Python.
 
 These data input routines can be used by Matlab or Python scripts to
 first read in the data, before either performing analysis or plotting.
@@ -365,7 +393,7 @@ first read in the data, before either performing analysis or plotting.
 A few general comments on the above approach:
 
 * By storing the values as raw text, these files are larger than
-  necessary.  In this example, the files are not too large (~58 KB
+  necessary.  In this example the files are not too large (~58 KB
   each), but in more realistic simulations it would be preferred to
   store data in a more compressed format.  Two approaches for this are
   to:
@@ -426,6 +454,9 @@ libraries have the following benefits over doing things manually:
     information on netcdf4-python
     <https://code.google.com/p/netcdf4-python/>`_). 
 
+* Last but not least: someone else writes and debugs the code,
+  allowing you to focus on your work instead of spending your time
+  fiddling with I/O.
 
 
 
@@ -507,7 +538,6 @@ and then the Python code, ``plot_solution.py``:
    # import the requisite modules
    from pylab import *
    import numpy as np
-   from os import *
    from mpl_toolkits.mplot3d import Axes3D
    from matplotlib import cm
    import matplotlib.pyplot as plt
@@ -639,7 +669,7 @@ visualization include:
 * Difficulty dealing with three-dimensional plotting: while slices and
   projections are simple, 3D data sets require much more interactive
   visualization, including isocontour surface plots, moving slices,
-  rotating, etc..  
+  rotating, etc.
 
 * Difficulty dealing with data output from parallel simulations: you
   need to read in each processor's data file and glue them together
@@ -753,16 +783,21 @@ tasks:
   a 3D data set, e.g. 
    
   * Matlab: ``dslice = squeeze(d(:,:,2))`` -- here, the ``squeeze``
-    command may be used to eliminate now-trivial 3rd dimension that
-    has length 1.
+    command may be used to eliminate the now-trivial 3rd dimension
+    that has length 1.
 
   * Python/Numpy: ``dslice = d[:][:][2]``  or even ``dslice = d[:,:,2]``
-    (since Numpy arrays allow both forms of syntax).
+    (both forms of syntax are equivalent for Numpy arrays).
 
 * Both Matlab and Python/Numpy have a ``sum`` command that will add
   all values of a multi-dimensional array along a specified
   dimension.  Read their documentation to see how this works (it will
-  help with the projection plots).
+  help with the average value and with the projection plots).
+
+* Both Matlab and Python/Numpy have ``max`` and ``min`` commands that
+  can be applied to array-valued data.  Read their documentation to
+  see how this works (it will help with the maximum and minimum
+  values). 
 
 
 

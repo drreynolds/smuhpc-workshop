@@ -10,7 +10,6 @@ Session 3: Introduction to Scripts and Programs
 
 *Instructor: Dan Reynolds*
 
-*Assistant: Amit Kumar*
 
 
 Getting started
@@ -1181,19 +1180,23 @@ just like any other Linux program, via
    The three "x" characters in the string at the left of
    the line states state that the program may be executed by the owner
    (dreynolds), the group (math), and others (anyone on the system),
-   respectively. 
+   respectively.  If you recall changing the permissions of
+   ``bash_example.sh`` and ``python_example.py``, you used ``chmod``
+   to set these same "x"es manually; the compiler automatically does
+   this for you in the compilation stage.
 
 
 For those who would like additional information on learning computing
 languages, I'd recommend that you pursue some of the following links,
-and look through some of the provided code for this workshop.  The
-best ways to learn a new language are through following examples and
-practicing; if you'd like some programming "homework" for practice,
-ask me after class.  Also, `Google <http://google.com>`_ is a great
-resource if you're ever in trouble when programming, since the odds
-are good that someone else has had the same questions as you, which
-have been answered on public forums.  Just describe your question and
-do a web search.
+and look through some of the provided code for this workshop
+(especially in some of the following sessions).  The best ways to
+learn a new language are through following examples and practicing; if
+you'd like some programming "homework" for practice, ask me after
+class.  Also, `Google <http://google.com>`_ is a great resource if
+you're ever in trouble when programming, since the odds are good that
+someone else has had the same questions as you, which have been
+answered on public forums.  Just describe your question and do a web
+search.
 
 
 .. index::
@@ -1291,6 +1294,8 @@ First create a download directory
 .. index:: wget
 
 Download the software using ``wget`` into your new download directory
+(``wget`` stands for "World Wide Web Get", though apparently they
+thought that ``wwwget`` was too long to use):
 
 .. code-block:: bash
 
@@ -1333,6 +1338,20 @@ called "tarballs"), these two commands may be combined together via
 
    $ tar -zxvf units-1.74.tar.gz
 
+
+.. note::
+
+   All of us have unzipped a file, only to discover that whoever put
+   it together zipped the files themselves instead of a folder of
+   files.  As a result, when we unzipped the files, they "exploded"
+   into the current directory, hiding or even overwriting our existing
+   files.  This is colloquially referred to as a "tarbomb".  *Do not
+   do this*.  When making a zip file or tar file, be considerate of
+   others and always put your files in a folder, then zip that new
+   folder so that when unpacked, all contents are contained nicely in
+   the sub-folder.
+
+
 Again, list the contents of the directory, then go to the ``units-1.74`` sub-directory
 
 .. code-block:: bash
@@ -1341,13 +1360,19 @@ Again, list the contents of the directory, then go to the ``units-1.74`` sub-dir
    $ cd units-1.74
 
 
+
+
+
 Configuring and creating the Makefile
 """""""""""""""""""""""""""""""""""""""""""""""""
 
 
 The first thing to do is carefully read the ``README`` and ``INSTALL``
-text files (use the ``less`` command). These contain important
-information on how to compile and run the software
+text files (use the ``less`` command).  If the package author is doing
+her job correctly, this these files will contain important
+information on how to compile and run the software (if not, they may
+contain useless or outdated information).  *This* package was put
+together by a responsible author.
 
 .. code-block:: bash
 
@@ -1392,8 +1417,9 @@ Now you can go ahead and build the package by running the ``make`` command
    $ make
 
 After a short while (depending on the speed of the computer), the
-executables will be created. You can check to see everything compiled
-successfully by typing 
+executable(s) and/or libraries will be created.  For many packages,
+you can check to see whether everything compiled successfully by
+typing 
 
 .. code-block:: bash
 
@@ -1405,7 +1431,8 @@ If everything is okay, you can now install the package.
 
    $ make install
 
-This will install the files into the ``~/units-1.7.4`` directory you created earlier.
+This will install the files into the ``~/units-1.7.4`` directory you
+created earlier.  
 
 
 Running the software
@@ -1496,6 +1523,18 @@ the previous topic, or [u] to go back to the main menu.
 
 Once you're finished reading up on the ``units`` command, press [q] to
 exit back to the command prompt.
+
+
+
+.. note::
+
+   If for some reason you don't actually want such a critically
+   important program installed in your home directory, you can delete
+   it with the command  
+
+   .. code-block:: bash
+
+      $ rm -rf ~/units-1.7.4
 
 
 

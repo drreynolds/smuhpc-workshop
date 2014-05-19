@@ -9,7 +9,6 @@ Session 8: Introduction to Parallel Computing
 
 *Instructor: Dan Reynolds*
 
-*Assistant: Amit Kumar*
 
 
 
@@ -824,7 +823,7 @@ on one computer, but slow.
 
 * *Fix overall problem size* and increase the number of processors, *p*.
 
-* Hope that the execution time decreases in inverse proportion *p*.
+* Hope that the execution time decreases in inverse proportion to *p*.
 
 .. figure:: figs/strong_scaling.png
    :scale: 80%
@@ -857,12 +856,9 @@ measures:
 
 .. math::
 
-   \mbox{Parallel speedup} = (\mbox{sequential execution time}) / (\mbox{parallel execution time})
-
-
-.. math::
-
-   \mbox{Parallel efficiency} = (\mbox{Parallel speedup}) / (\mbox{processors used})
+   \mbox{Parallel speedup} &\ = \ \frac{\mbox{sequential execution time}}{\mbox{parallel execution time}} \\
+   \mbox{Parallel efficiency} &\ = \ \frac{\mbox{Parallel speedup}}{\mbox{processors used}}
+   \ = \ \frac{\mbox{sequential execution time}}{(\mbox{parallel execution time})(\mbox{processors used})}
 
 
 .. index:: Amdahl's law
@@ -878,7 +874,7 @@ We typically compare these metrics against the theoretically
   processor.
 
 * The theoretical time for :math:`p` processors to accomplish the same
-  task should be :math:`t (f + (1-f) / p)`.
+  task should be :math:`t \left(f + \frac{1-f}{p}\right)`.
 
 .. image:: figs/amdahl_speedups.png
    :scale: 70%
@@ -892,7 +888,7 @@ We typically compare these metrics against the theoretically
 General parallel computing resources:
 
 * Class: `Math 6370, Introduction to Parallel Scientific Computing
-  <http://dreynolds.math.smu.edu/Courses/Math6370_Spring13/>`_ 
+  <http://runge.math.smu.edu/Courses/Math6370_Spring13/>`_ 
 
 * Book: `Designing and Building Parallel Programs, by Ian Foster
   <http://www.mcs.anl.gov/~itf/dbpp/>`_ 

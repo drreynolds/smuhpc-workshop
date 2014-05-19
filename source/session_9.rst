@@ -3,13 +3,12 @@
 
 .. _session9:
 
-*****************************************************
-Session 9: Parallel Computing on SMU HPC
-*****************************************************
+*******************************************************
+Session 9: Parallel Computing on SMU HPC (old cluster)
+*******************************************************
 
 *Instructor: Dan Reynolds*
 
-*Assistant: Amit Kumar*
 
 
 We will perform this session of the workshop using ``smuhpc2``,
@@ -44,7 +43,7 @@ General information
 
 .. index:: SMU HPC clusters
 
-As seen in :ref:`session6`, the SMU HPC cluster is actually currently
+As seen in :ref:`session6`, the older SMU HPC cluster is actually
 comprised of four separate computing clusters: two batch processing
 clusters for high-throughput computing, and two smaller parallel
 computing clusters.  For future reference throughout the remainder of
@@ -301,7 +300,15 @@ BASH/SH/KSH users with the command
    $ export OMP_NUM_THREADS=2
 
 Re-run ``driver.exe`` first using 1 and then using 2 OpenMP
-threads.  Notice the speedup when running with multiple threads. 
+threads.  Notice the speedup when running with multiple threads.  Also
+notice that although the result, ``Final rms norm`` is essentially the
+same in both runs, the results differ slightly after around the 11th
+digit.  The reasoning is a bit beyond the scope of this session, but
+in short this is due to a combination of floating-point roundoff
+errors and differences in the order of arithmetic operations.  The
+punch line being that bitwise identicality between runs is difficult
+to achieve in parallel computations, and in any case fact may not be
+entirely necessary in the first place.
 
 
 
@@ -824,7 +831,7 @@ First, load the ``mvapich2/1.6/pgi-QL`` module,
 
 .. code-block:: bash
 
-   $ module load pgi mvapich2/1.6/pgi-QL
+   $ module load pgi/10.5-64bit mvapich2/1.6/pgi-QL
 
 Second, compile your executable using one of the MPI wrapper scripts:
 ``mpicc``, ``mpicxx``, ``mpif90`` or ``mpif77``.  For example, we may
@@ -921,7 +928,7 @@ When running jobs on a dedicated parallel cluster (or a single workstation),
 parallel jobs and processes are not regulated through a queueing
 system. This has some immediate benefits: 
 
-* You never have to wait to run a program.
+* You never have to wait to start running a program.
 
 * It is easy to set up and run parallel jobs.
 
@@ -929,7 +936,7 @@ system. This has some immediate benefits:
 
 However, dedicated clusters also have some serious deficiencies:
 
-* A single user can hog all of the resources.
+* A single user can monopolize all of the available resources.
 
 * More than one job can be running on a processor at a time, so
   different processes must fight for system resources (giving
@@ -1042,9 +1049,9 @@ in use:
 
    Although ``smuhpc3`` has 8 physical cores, because it is a shared
    login node among all SMU HPC users, you should **not** run any MPI
-   jobs on it using more than 6 processes.  Similarly, for long-running
+   jobs on it using more than 4 processes.  Similarly, for long-running
    jobs (e.g. over 30 minutes), you should limit yourself to using at
-   most 4 processes. 
+   most 2 processes. 
 
 
 
@@ -1127,7 +1134,7 @@ is reproduced here:
    +WantParallelSchedulingGroups = TRUE
    queue
 
-As should be clear from the structure of this file, you only need to
+As should be clear from the comments in this file, you only need to
 modify the first few blocks of options:
 
 * ``arguments`` -- this should include *both* your executable file

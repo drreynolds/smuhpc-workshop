@@ -4,23 +4,23 @@
    contain the root `toctree` directive.
 
 ######################################
-2013 SMU HPC Summer Workshop
+2014 SMU HPC Summer Workshop
 ######################################
 
 Welcome to the main site for the tutorials and hands-on
-exercises associated with the 2013 SMU HPC Summer workshop, sponsored
+exercises associated with the 2014 SMU HPC Summer workshop, sponsored
 by the `SMU Center for Scientific Computation
 <http://www.smu.edu/academics/csc>`_. 
 
-**Location**:  Fondren Library, room 103b
+**Location**:  Fondren Library, room 103c
 
-**Dates**:   June 3-7, 2013
+**Dates**:   May 19-23, 2014
 
 **Times**: 
 
-* Morning sessions: 8-11
+* Morning sessions: 9-12
 
-* Afternoon sessions: 12-3
+* Afternoon sessions: 1-4
 
 **Instructors**: 
 
@@ -33,7 +33,8 @@ by the `SMU Center for Scientific Computation
 * Amit Kumar
 
 
-`Additional Information and Registration <http://www.smu.edu/BusinessFinance/OIT/StayInformed/SMUHPC>`_
+..
+   `Additional Information and Registration <http://www.smu.edu/BusinessFinance/OIT/StayInformed/SMUHPC>`_
 
 
 **Schedule**:
