@@ -212,10 +212,94 @@ Now that you know which lines are executed, and how often, you should
 remove the ``gcov`` compiler options, but keep the ``-p`` in your
 ``Makefile``. 
 
-Determine what, if anything, can be optimized in this routine.  Is
-there a simpler way that the arithmetic could be accomplished?  Is it
-accessing memory in an optimal manner?  Is it doing any redundant
-computations? 
+Determine what, if anything, can be optimized in this routine.  The
+topic of code optimization is bigger than we can cover in a single
+workshop session, but here are some standard techniques.
+
+.. note:: Code optimization techniques
+
+   1. Is there a simpler way that the arithmetic could be accomplished?
+      Sometimes the most natural way of writing down a problem does not
+      result in the least amount of effort.  For example, we may implement
+      a line of code to evaluate the polynomial :math:`p(x) =
+      2x^4-3x^3+5x^2-8x+7` using either
+
+      .. code-block:: c++
+  
+         p = 2.0*x*x*x*x - 3.0*x*x*x + 5.0*x*x - 8*x + 7.0;
+
+      or 
+
+      .. code-block:: c++
+
+         p = (((2.0*x - 3.0)*x + 5.0)*x - 8.0)*x + 7.0;
+
+      The first line requires 10 multiplication and 4 addition/subtraction
+      operations, while the second requires only 4 multiplications and 4
+      additions/subtractions.
+
+   2. Is the code accessing memory in an optimal manner?  Computers store
+      and access memory from RAM one "page" at a time, meaning that if you
+      retrieve a single number, the numbers nearby that value are also
+      stored in fast-access cache memory.  So, if each iteration of a loop
+      uses values that are stored in disparate portions of RAM, each value
+      could require retrieval of a separate page.  Alternatively, if each
+      loop iteration uses values from memory that are stored nearby one
+      another, many numbers in a row can be retrieved using a single RAM
+      access.  Since RAM access speeds are significantly slower than cache
+      access speeds, something as small as a difference in loop ordering
+      can make a huge difference in speed.
+
+   3. Is the code doing redundant computations?  While modern computers
+      can perform many calculations in the time it takes to access one
+      page of RAM, some calculations are costly enough to warrant
+      computing it only once and storing the result for later reuse.
+      This is especially pertinent for things that are performed a
+      large number of times.  For example, consider the following two
+      algorithms:
+
+      .. code-block:: c++
+
+         for (i=1; i<10000; i++) {
+	    d[i] = u[i-1]/h/h - 2.0*u[i]/h/h + u[i+1]/h/h;
+         } 
+
+      and
+
+      .. code-block:: c++
+
+         double hinv2 = 1.0/h/h;
+         for (i=1; i<10000; i++) {
+	    d[i] = (u[i-1] - 2.0*u[i] + u[i+1])*hinv2;
+         }
+
+      Since floating-point division is significantly more costly than
+      multiplication (roughly :math:`10\times`), and the division by
+      :math:`h^2` is done redundantly both within and between loop
+      iterations, the second of these algorithms is typically much
+      faster than the first.
+
+   4. Is the code doing unnecessary data copies?  In many programming
+      languages, a function can be written to use either call-by-value
+      or call-by-reference.  In call-by-value, all arguments to a
+      function are copied from the calling routine into a new set of
+      variables that are local to the called function.  This 
+      allows the called function to modify the input variables without
+      concern about corrupting data in the calling routine.  In
+      call-by-reference, the called function only receives memory
+      references to the actual data held by the calling routine.  This
+      allows the called function to directly modify the data held by the
+      calling routine.  While call-by-reference is obviously more
+      "dangerous," it avoids unnecessary (and costly) memory
+      allocation/copying/deallocation in the executing code.  As such,
+      highly efficient code typically uses call-by-reference, with the
+      programmer responsible for ensuring that data requiring protection
+      in the calling program is manually copied before function calls, or
+      that the functions themselves are constructed to avoid modifying the
+      underlying data.
+
+      In C and C++, call-by-value is the
+      [unfortunate] default, whereas Fortran uses call-by-reference.  
 
 Find what you can fix, so long as you do not change the
 mathematical result.  Delete and re-compile the executable,
@@ -420,7 +504,32 @@ write from an illegal memory location, i.e. a memory location that is
 not a part of a currently-available variable.  Examples of bugs that
 can cause a seg-fault are iterating outside of the bounds of an array,
 or a mismatch between the arguments that a program uses to call a
-function and the arguments that the function expects to receive. 
+function and the arguments that the function expects to receive.  
+
+.. note:: Tips for tracking/fixing segmentation faults
+
+   Using a debugger: 
+
+   1. determine exactly the line of code causing the
+      fault,
+
+   2. if the fault is inside a loop, determine exactly which
+      iteration of the loop is causing the fault,
+
+   3. use print statements in the debugger to see which variable is
+      uninitialized, e.g. to see if the array ``x`` has entry ``i``
+      you could use
+
+      .. code-block:: bash
+
+         (gdb) print x[i]
+
+   Once you identify the precise location of the segmentation fault,
+   go back to see where the data is allocated.  Was it allocated with
+   a different size and/or shape?  Was it not allocated at all?
+
+   If the data is allocated in a different manner than it is being
+   used, determine which location needs fixing and try your best.
 
 Upon finding and fixing the bug causing the segmentation fault, the
 correctly-executing program should write the following line: 
