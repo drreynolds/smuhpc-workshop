@@ -526,7 +526,7 @@ function and the arguments that the function expects to receive.
 
    Once you identify the precise location of the segmentation fault,
    go back to see where the data is allocated.  Was it allocated with
-   a different size and/or shape?  Was it not allocated at all?
+   a different size, shape or type?  Was it not allocated at all?
 
    If the data is allocated in a different manner than it is being
    used, determine which location needs fixing and try your best.
