@@ -922,7 +922,7 @@ Running MPI code
 .. _session9-running_MPI_command_line:
 
 Running MPI code interactively
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When running jobs on a dedicated parallel cluster (or a single workstation),
 parallel jobs and processes are not regulated through a queueing
@@ -953,11 +953,11 @@ On SMU HPC, we should only run interactive programs on ``smuhpc3``,
 ``smuhpc3``, and go to the directory where you've downloaded the
 ``session9_MPI`` codes.
 
-To run locally on this node, we need to use the ``mpich2/1.1.1/gcc`` module,
+To run locally on this node, we need to use the ``mpich2/1.4.1/gcc`` module,
 
 .. code-block:: bash
 
-   $ module load mpich2/1.1.1/gcc
+   $ module load mpich2/1.4.1/gcc
 
 We then must compile using one of the MPI wrapper scripts:
 ``mpicc``, ``mpicxx``, ``mpif90`` or ``mpif77``; here we use
@@ -965,6 +965,25 @@ We then must compile using one of the MPI wrapper scripts:
 .. code-block:: bash
 
    $ mpicxx driver.cpp -lm -o driver_GNU_interactive.exe
+
+.. note::
+
+   Interactive use of MPI is allowed on SMU HPC for testing/debugging
+   purposes only, since larger/longer runs should be run on the
+   compute nodes through the queueing system.  MPICH includes multiple
+   libraries to aid in this debugging process, that can be enabled by
+   adding the flags ``-llmpe -lmpe`` to the compile line above.  When
+   requesting debugging help from SMU HPC staff, please include these
+   libraries when compiling your code, e.g.
+
+   .. code-block:: bash
+
+      $ mpicxx driver.cpp -lm -llmpe -lmpe -o driver_GNU_interactive.exe
+
+   For further information on MPE, see the pages `MPE
+   <http://www.mcs.anl.gov/research/projects/perfvis/software/MPE/>`_
+   and `MPE by example
+   <https://wiki.mpich.org/mpich/index.php/MPE_by_example>`_. 
 
 Since ``smuhpc3`` has 8 physical CPU cores, we are limited to using at
 most 8 MPI processes.  The command-line program that launches our
@@ -979,45 +998,7 @@ calling syntax of ``mpiexec`` is
 The primary ``mpiexec`` option that we use is ``-n #``, where ``#`` is
 the desired number of MPI processes to use in running the parallel job.
 
-However, before we can use ``mpiexec`` we must first enable it to
-launch processes on this node, using the ``mpd`` program.  Before you
-run this, you need to set up a *secret password* for your MPI daemon.
-This only ever needs to be done once, so after you set it up this time
-you'll never need to do it again.  
-
-Create a file in your home directory named ``.mpd.conf``:
-
-.. code-block:: bash
-
-   $ gedit ~/.mpd.conf
-
-Inside this file, you need a single line of the form
-
-.. code-block:: text
-
-   password=<your secret password>
-
-where you should replace ``<your secret password>`` with a random set
-of characters and numbers that will be unique to only you.  This
-should **not** be the password for your login account, nor do you ever
-need to remember what you place in this file.
-
-Change the access permissions for this file so that only you can
-read/write:
-
-.. code-block:: bash
-
-   $ chmod 600 ~/.mpd.conf
-
-Once this file exists, contains your secret password, and has the
-appropriate permissions, you may launch ``mpd``:
-
-.. code-block:: bash
-
-   $ mpd &
-
-Once this returns to the prompt, we may launch our jobs.  Run the
-program using 1 process: 
+First, run the program using 1 process: 
 
 .. code-block:: bash
 
@@ -1038,20 +1019,14 @@ Run the program using 4 processes:
 All of these will run the MPI processes as separate threads on
 ``smuhpc3``.
 
-Once finished, you should kill your ``mpd`` job since it is no longer
-in use:
-
-.. code-block:: bash
-
-   $ mpdallexit
-
 .. note::
 
    Although ``smuhpc3`` has 8 physical cores, because it is a shared
    login node among all SMU HPC users, you should **not** run any MPI
-   jobs on it using more than 4 processes.  Similarly, for long-running
-   jobs (e.g. over 30 minutes), you should limit yourself to using at
-   most 2 processes. 
+   jobs on it using more than 4 processes.  Similarly, for longer-running
+   tests (e.g. over 30 minutes), you should limit yourself to using at
+   most 2 processes.  That said, long-running jobs should instead be
+   run using the worker nodes, using the processes described below.
 
 
 
