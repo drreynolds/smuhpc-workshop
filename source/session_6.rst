@@ -4,1055 +4,800 @@
 .. _session6:
 
 *****************************************************
-Session 6: Using SMU HPC
+Session 6: Postprocessing
 *****************************************************
 
 *Instructor: Dan Reynolds*
 
 
 
-What is SMU HPC?
+Getting started
 ================================================
 
-While we've technically been using the SMU HPC cluster throughout this
-workshop, in reality we've only been using standard Linux tools as if
-``smuhpc`` were a single computer.  The real value in the SMU HPC
-cluster is its ability to run large numbers of simultaneous jobs
-(a.k.a. *high throughput computing*) and/or its ability to run jobs
-that span multiple processors at once (a.k.a. *high performance
-computing* or *parallel computing*).
-
-Originally purchased in 2009 through funding from the `SMU Provost's
-office <http://smu.edu/provost/#1>`_, and subsequently added onto
-through grants to the `Physics <http://www.smu.edu/physics>`_ and
-`Math <http://www.smu.edu/math>`_ departments, the SMU HPC cluster is
-a shared resource available to all SMU faculty and
-graduate/undergraduate students involved in scientific computing
-projects.  It is administered by the `SMU Office of Information
-Technology <http://www.smu.edu/BusinessFinance/OIT>`_, and managed by
-the `SMU Center for Scientific Computation
-<http://www.smu.edu/Academics/CSC>`_. 
-
-Our newest member of HPC at SMU, `Maneframe
-<https://blog.smu.edu/forum/2014/03/26/smu-welcomes-its-new-supercomputer-maneframe/>`_,
-functions similarly to our smaller existing clusters (directory
-layout, user accounts, module system, compilers, etc.).  However, at
-the time of this workshop it is still under construction, so we will
-use the existing cluster for the workshop.  When applicable, in the
-remaining workshop sessions I'll point out the differences between the
-new and old clusters.
-
-
-
-
-.. index:: SMU HPC; hardware
-
-SMU HPC hardware (old cluster)
---------------------------------------------------
-
-First, let's familiarize ourselves with the hardware that comprises
-the SMU HPC cluster.  We can group the portions of SMU HPC into a few
-simple categories: *login nodes*, *batch worker nodes*, *parallel
-nodes*, *interactive nodes* and *disk nodes*.
-
-
-Login nodes
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-* ``smuhpc.smu.edu`` -- main login node, used for compiling source code,
-  setting up job submission files, input files, transferring data
-  to/from ``smuhpc``, etc..  This node *should not* be used for running
-  intensive calculations.
-* ``smuhpc2.smu.edu`` -- clone of ``smuhpc.smu.edu``, with identical usage.
-* ``smuhpc3.smu.edu`` -- interactive login node, used for interactive
-  computations, such as using Matlab, Mathematica, Python or R.
-* ``smuhpc4.smu.edu`` -- clone of ``smuhpc.smu.edu``, primarily used for
-  interacting with the parallel nodes.
-
-
-Batch worker nodes
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-* 107 nodes have 8 cores each (for 856 in total).  Each node has 48 GB
-  of RAM and and 250 GB of local disk space.  [``wnode1-27``, ``cnode1-80``]
-
-* 56 nodes have 12 cores each (for 672 in total).  Each node has 72 GB
-  of RAM and and 500 GB of local disk space.  [``cwnode1-56``]
-
-* all batch nodes are connected with a gigabit ethernet network.
-
-
-Parallel nodes
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-* 16 nodes have 8 cores each (for 128 in total).  Each node has 48 GB
-  of RAM and 500 GB of local disk space.  These are connected via a
-  `Quadrics <http://en.wikipedia.org/wiki/Quadrics>`_ infiniband
-  network.  [``inode1-16``]
-
-* 32 nodes have 12 cores each (for 384 in total).  Each node has 72 GB 
-  of RAM and 500 GB of local disk space.  These are connected via a 
-  `QLogic <http://qlogic.com/pages/default.aspx>`_ infiniband
-  network.  [``iwnode1-32``]
-
-
-Interactive nodes
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-* 2 high-memory data analysis and shared-memory parallel nodes.  Both
-  have 8 cores each, 144 GB of RAM and 3 TB of local disk space.
-  [``highmem1`` and ``highmem2``]
-
-* 2 GPU computing nodes:
-
-  * ``gpu1``: 8 CPU cores, 6 GB of RAM and 2 NVIDIA GTX 295 cards.
-    Each of these GPU cards has 960 GPU cores and 3585 MB of RAM. 
-
-  * ``gpu2``: 16 CPU cores, 128 GB of RAM and 2 NVIDIA Tesla 2090 cards.
-    Each of these GPU cards has 512 GPU cores and 6 GB of RAM.
-
-
-Disk nodes
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-* One 437 TB parallel Lustre file system is attached to all nodes, and
-  is managed by 12 Object Storage Servers and a metadata server.  In
-  the next few weeks an additional 96 TB will be added to the existing
-  Lustre file system.
-
-* An additional 14 TB usable NFS file system is attached to all nodes
-  for non-parallel use.
-
-
-
-
-
-.. index:: SMU HPC; general information
-
-General information
---------------------------------------------------
-
-* OS: Scientific Linux 5.5 (64 bit -- old cluster only)
-
-* Scheduler: Condor (old cluster only)
-
-* The software stack for the full cluster includes a variety of high
-  performance mathematics and software libraries, as well as the GNU,
-  NAG and PGI compiler suites, as well as Matlab, Mathematica, R and
-  Python for batch scripting and interactive data analysis.
-
-* To log into any of ``gpu1``, ``gpu2``, ``highmem1`` or ``highmem2``,
-  you must first log into one of the login nodes (``smuhpc``,
-  ``smuhpc2``, ``smuhpc3`` or ``smuhpc4``) and then SSH from there to
-  the relevant machine, e.g.
-
-  .. code-block:: bash
-
-     $ ssh -CX highmem2
-
-* Users may not log directly into any of the worker or disk nodes.
-
-* The SMU HPC `wiki page
-  <https://wiki.smu.edu/display/smuhpc/SMUHPC>`_ (requires SMU login)
-  has more detailed information on the hardware and software
-  configuration of the cluster.
-
-
-.. _session6_condor:
-
-Getting started (old cluster only)
-================================================
-
-We will perform this session of the workshop on the ``smuhpc2`` login
+We will perform this session of the workshop on the ``smuhpc3`` login
 node, so log in there to begin.
 
-In order to use any of the commands for this session, we must first
-set up our account to use the condor job scheduler.  This is
-accomplished by "sourcing" the appropriate initialization script.
-Determine which shell you are using with the command
-
-.. code-block:: bash
-
-   $ echo $SHELL
-
-* BASH users: add the following line to your ``~/.bashrc`` file:
-
-  .. code-block:: bash
-
-     source /grid/condor/condor.sh
-
-  and reload your BASH initialization script with the command
-
-  .. code-block:: bash
-
-     $ source ~/.bashrc
-
-* TCSH users: add the following line to your ``~/.tcshrc`` file:
-
-  .. code-block:: tcsh
-
-     source /grid/condor/condor.csh
-
-  and reload your TCSH initialization script with the command
-
-  .. code-block:: tcsh
-
-     $ source ~/.tcshrc
-
-* It is unlikely that you are using a shell other than BASH or TCSH,
-  but if so:
- 
-  * SH or KSH users: emulate the BASH instructions for your login script.
-
-  * CSH users: emulate the TCSH instructions for your login script.
-
-Note: now that this has been added to your initialization script, you
-should never need to do this step again.
-
-
-
-.. index:: condor, job scheduler
-
-The condor job scheduler
-================================================
-
-In this session we'll focus on the *high throughput* portion of the
-SMU HPC cluster, i.e. the portion of the cluster that should be used
-for serial (non-parallel) jobs.  This portion of the cluster is
-managed by the `Condor <http://research.cs.wisc.edu/htcondor/>`_
-job scheduler, which is a piece of software designed "to develop,
-implement, deploy, and evaluate mechanisms and policies that support
-High Throughput Computing (HTC) on large collections of distributively
-owned computing resources" [from `http://research.cs.wisc.edu/htcondor
-<http://research.cs.wisc.edu/htcondor>`_]. 
-
-More generally, a *job scheduler* is a program that manages unattended
-background program execution (a.k.a. *batch processing*).  The basic
-features of any job scheduler include:
-
-* Interfaces which help to define workflows and/or job dependencies.
-
-* Automatic submission of executions.
-
-* Interfaces to monitor the executions.
-
-* Priorities and/or queues to control the execution order of unrelated
-  jobs.
-
-In the context of high-throughput and high-performance computing, the
-primary role of a job scheduler is to manage the job queue for all
-of the compute nodes of the cluster.  It's goal is typically
-to schedule queued jobs so that all of the compute nodes are utilized
-to their capacity, yet doing so in a fair manner that gives priority
-to users who have used less resources and/or contributed more to the
-acquisition of the system.  
-
-Some widely used cluster batch systems are:
-
-.. index:: 
-   seealso: SLURM; job scheduler
-
-* `Simple Linux Utility for Resource Management (SLURM)
-  <http://slurm.schedmd.com/>`_ -- this will be used on the new cluster
-
-.. index:: 
-   seealso: Moab; job scheduler
-
-* `Moab <http://docs.adaptivecomputing.com/mwm/help.htm#topics/0-intro/productOverview.htm>`_
-
-.. index:: 
-   seealso: Torque; job scheduler
-
-* `Torque <http://www.adaptivecomputing.com/products/open-source/torque/>`_
-
-.. index:: 
-   seealso: LoadLeveler; job scheduler
-
-* `LoadLeveler <http://www-03.ibm.com/systems/software/loadleveler/index.html>`_
-
-.. index:: 
-   seealso: condor; job scheduler
-
-* `Condor <http://research.cs.wisc.edu/htcondor/>`_ -- this is used on
-  the old cluster
-
-.. index:: 
-   seealso: Oracle grid engine; job scheduler
-
-* `Oracle Grid Engine <http://www.oracle.com/us/products/tools/oracle-grid-engine-075549.html>`_
-
-.. index:: 
-   seealso: Argent job scheduler; job scheduler
-
-* `Argent Job Scheduler <http://help.argent.com/#product_downloads_job_scheduler>`_
-
-.. index:: 
-   seealso: Platform LSF; job scheduler
-
-* `Platform LSF <http://www-03.ibm.com/systems/technicalcomputing/platformcomputing/products/lsf/>`_
-
-
-.. note::
-
-   While the remainder of this session will focus on using Condor
-   for batch computing, the ideas represented here apply to nearly all
-   of the scheduling systems listed above.  As a result, even if you
-   never plan to use Condor in your research, the rest of this lesson
-   will lay a strong foundation for transitioning to other more
-   standard schedulers. 
-
-
-
-Condor commands
---------------------------------------------------
-
-While there are a `multitude of condor commands
-<http://research.cs.wisc.edu/htcondor/manual/v7.6/9_Command_Reference.html>`_,
-only some are of value to a new user:
-
-.. index:: condor; condor_submit
-
-* ``condor_submit`` -- this is the main interface between a user and
-  the condor scheduler, that queues jobs for execution.  The usage
-  command (with the most-helpful optional arguments on SMU HPC in
-  brackets) is 
-
-  .. code-block:: bash
-
-     $ condor_submit [-verbose] [-debug] [-append command ... ] [job file]
-
-  where these options are:
-
-  * ``-verbose`` -- Verbose output about the created job
-
-  * ``-debug`` -- Cause debugging information to be sent to
-    ``stderr``, based on the value of the configuration variable
-    ``TOOL_DEBUG``.  
-
-  * ``-append command`` -- Augment the commands in the submit
-    description file with the given command. This command will be
-    considered to immediately precede the ``Queue`` command within the
-    job file, and come after all other previous commands.
-
-    Multiple commands may be specified by using the ``-append`` option
-    multiple times. 
-
-    Commands with spaces in them must be enclosed in double quote marks. 
-
-  * job file -- The pathname to the condor job submission file
-    (described in the next section). If this optional argument is
-    missing or equal to ``-``, then the commands are taken from
-    standard input.
-
-.. index:: condor; condor_q
-
-* ``condor_q`` -- displays information about jobs in the condor
-  queue.  The usage command with the most helpful arguments is
-
-  .. code-block:: bash
-
-     $ condor_q [-help] [-run] [-hold] [-long] [{processID | username} ]
-
-  where the options are:
-
-  * ``-help`` -- returns a brief description of the supported options 
-
-  * ``-run`` -- returns information about running jobs. 
-
-  * ``-hold`` -- returns information about jobs in the hold
-    state. Also displays the time the job was placed into the hold
-    state and the reason why the job was placed in the hold state.  
-
-  * ``-long`` -- displays job information in long format 
-
-  * ``processID`` -- limits output to only the condor process ID for a specific job
-
-  * ``username`` -- limits output to only jobs submitted by a specific
-    user
-
-.. index:: condor; condor_rm
-
-* ``condor_rm`` -- removes jobs from the condor queue.  The usage
-  command with the most typical arguments is
-
-  .. code-block:: bash
-
-     condor_rm [-help] {processID | username}
-
-  where the options are:
-
-  * ``-help`` -- displays usage information 
-
-  * ``processID`` -- removes a job with a specific process ID
-
-  * ``username`` -- removes all jobs launched by a user (you can only
-    remove your own)
-
-
-
-
-.. index:: condor job submission file
-
-Job submission file
---------------------------------------------------
-
-The way that a user interacts with Condor is through creating a *job
-submission file* that describes the job you want to run:
-
-.. index:: condor job submission file; line continuation
-
-* For lengthy lines within the submit description file, ``\`` may be
-  used as a line continuation character.  Placing the backslash at
-  the end of a line causes the current line's command to be continued
-  with the next line of the file. 
-
-.. index:: 
-   pair: condor job submission file; comment
-
-* Submit file description files may contain comments, characterized as any
-  line beginning with a ``#`` character. 
-
-.. index:: condor job submission file; case-independence
-
-* These submission file options are case-independent (i.e. "Universe" ==
-  "uNivErSE"), although any file or path names are not.  
-
-
-The main condor job submission file options on SMU HPC are as follows: 
-
-.. index:: condor job submission file; arguments 
-
-* **arguments** --  List of arguments to be supplied to the executable
-  as part of the command line.  For example, 
-
-  .. code-block:: text
-
-     arguments = "arg1 arg2 arg3"
-
-  Argument rules:
-
-  1. The entire string representing the command line arguments is
-     surrounded by double quote marks. This permits the white space
-     characters of spaces and tabs to potentially be embedded within a
-     single argument. Putting the double quote mark within the
-     arguments is accomplished by escaping it with another double
-     quote mark. 
-
-  2. The white space characters of spaces or tabs delimit arguments.
-
-  3. To embed white space characters of spaces or tabs within a single
-     argument, surround the entire argument with single quote marks. 
-
-  4. To insert a literal single quote mark, escape it within an
-     argument already delimited by single quote marks by adding
-     another single quote mark. 
-
-.. index:: condor job submission file; environment 
-
-* **environment** -- List of additional environment variables to
-  supply to the executable.  For example,
-
-  .. code-block:: text
-
-     environment = "OMP_NUM_THREADS=4 LD_LIBRARY_PATH=/users/dreynolds/sw"
-
-  Environment rules:
-
-  1. Put double quote marks around the entire argument string. This
-     distinguishes the new syntax from the old. The old syntax does
-     not have double quote marks around it. Any literal double quote
-     marks within the string must be escaped by repeating the double
-     quote mark. 
-
-  2. Each environment entry has the form ``<name>=<value>``
-
-  3. Use white space (space or tab characters) to separate environment
-     entries. 
-
-  4. To put any white space in an environment entry, surround the
-     space and as much of the surrounding entry as desired with single
-     quote marks. 
-
-  5. To insert a literal single quote mark, repeat the single quote
-     mark anywhere inside of a section surrounded by single quote
-     marks. 
-
-.. index:: condor job submission file; error file
-
-* **error** --  Path and file name indicating where Condor should put
-  the standard error (``stderr``) from running your job.  For example, 
-
-  .. code-block:: text
-
-     error = myjob.err
-
-  * If the file does not begin with a ``/``, the name indicates a
-    relative path; otherwise it is an absolute path.  
-
-  * You must have appropriate permissions to write to the supplied file.
-
-  * The default is ``/dev/null``, corresponding to ignoring all error
-    messages. 
-
-.. index:: condor job submission file; executable
-
-* **executable** -- The path and file name of your executable
-  program. For example,
-
-  .. code-block:: text
-
-     executable  = myjob.sh
-
-  * If the file does not begin with a ``/``, the name indicates a
-    relative path; otherwise it is an absolute path.  
-
-  * You must have appropriate permissions to read/execute the supplied file.
-
-.. index:: condor job submission file; getenv
-
-* **getenv** {True, False} -- Propagates the environment variables
-  present in your shell upon submitting the job to the job when it
-  runs. For example, 
-
-  .. code-block:: text
-
-     getenv = true
-
-  If both **getenv** and **environment** are used, the values supplied
-  by **environment** take precedence.
-
-.. index:: condor job submission file; input
-
-* **input** -- File containing any keyboard input values
-  (i.e. standard input, ``stdin``) that your program requires.  For
-  example,
-
-  .. code-block:: text
-
-     input = 100
-
-  * If not specified, the default value of ``/dev/null`` (i.e. no input)
-    is used.
-
-  * You must have appropriate permissions to read from the supplied file.
-
-  * Note that this command does not refer to the command-line arguments
-    of the program, which are supplied by the **arguments** command.
-
-.. index:: condor job submission file; log
-
-* **log** --  File name indicating where Condor will record
-  information about your job's execution.  While it is not required,
-  it's usually a good idea to have Condor keep a log in case things go
-  wrong.  For example,
-
-  .. code-block:: text
-
-     log = myjob.log
-
-  * If the file does not begin with a ``/``, the name indicates a
-    relative path; otherwise it is an absolute path.  
-
-  * You must have appropriate permissions to write to the supplied file.
-
-  * The default is ``/dev/null``, corresponding to ignoring all log
-    messages. 
-
-.. index:: condor job submission file; notification
-
-* **notification** {Always, Complete, Error, Never} -- The set of
-  job-related events for which the job owner is sent an email.  The
-  default is "Complete", indicating notification when the job
-  finishes.  "Error" indicates to notify if the job terminated
-  abnormally. For example,
-
-  .. code-block:: text
-
-     notification = Always
-
-.. index:: condor job submission file; notify_user
-
-* **notify_user** -- The email address to which condor will send
-  **notification** messages.  For example,
-
-  .. code-block:: text
-
-     notify_user = username@smu.edu
-
-  If left unspecified, condor will send a message to
-  ``job-owner@submit-machine-name`` (which ends up going to the system
-  administrators, who probably don't really appreciate it).
-
-.. index:: condor job submission file; output
-
-* **output** --  File name indicating where Condor should put the
-  standard output (``stdout``) from running your job.  For example,
-
-  .. code-block:: text
-
-     output = myjob.out
-
-  * If the file does not begin with a ``/``, the name indicates a
-    relative path; otherwise it is an absolute path.  
-
-  * You must have appropriate permissions to write to the supplied file.
-
-  * The default is ``/dev/null``, corresponding to ignoring all output
-    messages. 
-
-.. index:: condor job submission file; universe
-
-* **universe** {vanilla, parallel} -- These specify what
-  type of computation you plan to run.  For example,
-
-  .. code-block:: text
-
-     universe  = vanilla
-
-  * The "vanilla" universes corresponds to single-node batch
-    processing, in which condor will run your job on the first
-    available node to completion.  
-
-  * The "parallel" universe corresponds to MPI-based parallel jobs
-    that require multiple compute nodes to run.
-
-.. index:: condor job submission file; machine_count
-
-* **machine_count** -- Only applicable with the "parallel" universe,
-  this option tells Condor how many nodes should be allocated to the
-  parallel job.  For example,
-
-  .. code-block:: text
-
-     machine_count = 2
-
-.. index:: condor job submission file; requirements
-
-* **requirements** -- Option allowing you to provide additional
-  requirements that must be satisfied before launching your job.  This
-  typically refers to the type of node you wish to run on.  For
-  example, to request that you job run on a 12-core batch node, you
-  could use 
-
-  .. code-block:: text
-
-     requirements = regexp("cwnode", Machine)
-
-  or to request that it run on the 8-core-per-node parallel portion of
-  the cluster,
-
-  .. code-block:: text
-
-     requirements = regexp("inode", Machine)
-
-  or to run on the 12-core-per-node parallel portion of the cluster,
-
-  .. code-block:: text
-
-     requirements = regexp("iwnode", Machine)
-
-.. index:: condor job submission file; queue
-
-* **queue** -- This places your job into the queue, and should follow
-  all arguments that specify how to run the job.  For example,
-
-  .. code-block:: text
-
-     queue
-
-  One condor job file may contain multiple **queue** commands, each
-  with different argument lists, allowing for submission of many
-  condor jobs at once using the same submission file.
-
-
-
-.. index:: condor job submission file; macros
-
-In setting up this file, you have may insert parameterless macros, of
-the form ``$(macro_name)``, anywhere in your job submission file.
-Custom macros may be defined via the syntax
-
-.. code-block:: text
-
-   <macro_name> = <string>
-
-There are three default macros:
-
-.. index:: condor job submission file; Cluster
-
-* **Cluster** -- the value of the ``ClusterID`` on which the job has
-  is queued.
-
-.. index:: condor job submission file; Process
-
-* **Process** -- the Condor process ID number for this job.  For
-  example,
-
-  .. code-block:: text
-
-     output = myjob.$(Process).out
-
-.. index:: condor job submission file; Node
-
-* **Node** -- only defined for jobs in the "Parallel" universe, this
-  holds the name of the node on which the process is running (useful
-  if each node reports different information, e.g. for debugging).
-  For example, 
-
-  .. code-block:: text
-
-     output = myjob.out.$(Node)
-
-
-
-.. index:: condor; whole node vs shared node
-
-Whole vs shared node (old cluster only)
---------------------------------------------------
-
-When running batch jobs on the cluster, you may request to use a whole
-node for your job (the default is to share the node with other users).
-Reasons why you may wish to request an entire node for your job
-include: 
-
-* Need for reliable timing information.
-
-* Need for all of the memory on the node.
-
-* Use of threads (e.g. OpenMP, Pthreads, Intel Threading Building
-  Blocks, MPI, etc.) that will spawn additional processes on top of
-  the one that is launched.
-
-* Poor inter-personal skills.
-
-
-If you wish for your job to use an entire node, you only need to add
-two lines to your Condor job submission file.  These lines are
-[inappropriately] named "whole machine", even they only refer to a
-single node of the larger machine: 
-
-.. code-block:: text
-
-   Requirements = CAN_RUN_WHOLE_MACHINE
-   +RequiresWholeMachine = True
-
-If you wish to "require" both a specific node type and a whole node,
-you would combine **Requirements** statements, e.g.
-
-.. code-block:: text
-
-   Requirements = CAN_RUN_WHOLE_MACHINE && regexp("iwnode", Machine)
-
-
-.. index:: condor; ssh to job
-
-Condor SSH to job
---------------------------------------------------
-
-In some instances, you may wish to request a worker node from the
-Condor pool for dedicated **interactive** use only.  Since a typical
-user is not allowed to SSH directly to a worker node, Condor supplies
-a modified SSH executable that will allow users to log into a worker
-node that has been dedicated to that user.  This behavior is called
-*SSH to job*, and is only allowed when a job has been submitted in
-"whole machine" mode as described above.
-
-Once your job is running, you can log into it via the commands
-
-.. code-block:: bash
-
-   $ source /grid/condor/condor.sh
-   $ condor_ssh_to_job <processID>
-
-where here ``<processID>`` is the integer ID number for your running job.
-
-
-
-
-.. index:: 
-   pair: condor; resources
-
-Condor resources:
---------------------------------------------------
-
-* :download:`SMU HPC Condor tutorial <files/condor.pdf>`
-
-* `Condor manual (version 7.6.10, HTML)
-  <http://research.cs.wisc.edu/htcondor/manual/v7.6/index.html>`_ 
-
-* `Condor manual (version 7.6.10, PDF)
-  <http://research.cs.wisc.edu/htcondor/manual/v7.6/condor-V7_6_10-Manual.pdf>`_ 
-
-
-
-
-Condor Examples
-================================================
-
-In the following, we have a few example Condor usage scenarios to
-familiarize you with how to interact with the high-throughput portion
-of the SMU HPC cluster.
-
-To do these examples, first retrieve the corresponding set of files
-either through :download:`clicking here <code/session6.tgz>` or by copying the
+Scientific simulation is worthless unless the results of those
+simulations can be analyzed and understood.  Unfortunately, most
+classes on scientific computing focus almost exclusively on how to
+create the methods for performing the simulations, with little time
+(if any) dedicated to the analysis of those results.  While one
+session of a workshop is insufficient to fully rectify this situation,
+we'll try to get get you started down the right path, by first
+focusing on how to input simulation data into more interactive
+computing environments, and then how to postprocess and visualize that
+data.  While there are many available interactive computing
+environments that can be used for these purposes, we'll focus on two
+of the most popular options, Matlab and Python.
+
+
+Retrieve the set of files for this session either through
+:download:`clicking here <code/session6.tgz>` or by copying the
 relevant files at the command line:
 
 .. code-block:: bash
 
    $ cp ~dreynolds/SMUHPC_tutorial/session6.tgz .
 
-Unzip this file, and enter the resulting subdirectory
+Unzip this file, enter the resulting directory, and build the
+executable with ``make``.
+
+Run the executable at the command-line.
 
 .. code-block:: bash
 
-   $ tar -zxf session6.tgz
-   $ cd session6
+   $ ./advection.exe
 
-Before we can use this example, we need to set up our environment
-correctly:
+You should see a set of output, ending with lines similar to:
+
+.. code-block:: text
+
+   writing output file 24, step = 2399, t = 0.48
+   writing output file 25, step = 2499, t = 0.5
+   total runtime = 3.1000000000000000e-01
+
+List the files in the subdirectory; you should see a new set of files
+with the names ``u_sol.###.txt``.  These files contain solution data from
+the simulation that you just ran, which models the propagation of an
+acoustic wave over a periodic, two-dimensional surface, using a coarse
+:math:`50\times 50` spatial grid.
+
+In the following sections, we will work on importing these data files
+into either a Matlab or Python environment, and then performing some
+simple data analysis.  For the remainder of this session, both Matlab
+and Python will be presented, though you may choose to specialize in
+only your preferred interactive environment.
+
+
+
+
+Importing/exporting data
+================================================
+
+Before we can understand how to load data into Matlab or Python, we
+must understand how it was written from the program.  Here is the C++
+function used to output the two-dimensional data array ``u``:
+
+.. code-block:: c++
+
+   // Daniel R. Reynolds
+   // SMU HPC Workshop
+   // 20 May 2013
+
+   // Inclusions
+   #include <stdio.h>
+   #include <string.h>
+   #include "advection.h"
+
+   // Writes current solution to disk
+   int output(double *u, double t, int nx, int ny, int noutput) {
+
+     // set output file name
+     char outname[100];
+     sprintf(outname, "u_sol.%03i.txt", noutput);
+
+     // open output file
+     FILE *FID = fopen(outname,"w");
+     if (FID == NULL) {
+       fprintf(stderr, "output: error opening output file %s\n", outname);
+       return 1;
+     }
+
+     // output the solution values 
+     for (int j=0; j<ny; j++) 
+       for (int i=0; i<nx; i++) 
+         fprintf(FID, "%.16e\n",u[idx(i,j,nx)]);
+
+     // write current solution time and close the data set
+     fprintf(FID, "%.16e\n", t);
+     fclose(FID);
+    
+     // now output a metadata file, containing general run information
+     FID = fopen("u_sol_meta.txt","w");
+     fprintf(FID, "%i\n", nx);
+     fprintf(FID, "%i\n", ny);
+     fprintf(FID, "%i\n", noutput);
+     fclose(FID);
+
+     return 0;
+   } // end output
+
+
+A few contextual notes about this code to better understand what is
+happening (we'll discuss in greater detail during class):
+
+* ``u`` holds a two-dimensional array of size ``nx`` by ``ny``, stored
+  in a one-dimensional index space of length ``nx*ny``.  The mapping
+  between the 2D physical space and 1D index space is handled by the
+  ``idx()`` macro, defined in ``advection.h``, of the form
+
+  .. code-block:: c++
+
+     // simple macro to map a 2D index to a 1D address space
+     #define idx(i,j,nx)  ((j)*(nx)+(i))
+
+* This function is called once every output time; these outputs are
+  indexed by the integer ``noutput``, and correspond to the solution
+  at the physical time ``t``.
+
+* At each output time, this routine writes two files: 
+
+  * The first file is the solution file (``u_sol.###.txt``), that
+    holds the 2D data array, printed as one long array with the
+    :math:`x` coordinate the faster index.  In this same file, after
+    ``u`` is stored, the physical time of the output, ``t`` is
+    also stored. 
+
+  * The second file is a metadata file (``u_sol_meta.txt``), that
+    contains the problem size and the total number of outputs that
+    have been written so far in the simulation. 
+
+
+We will first build Matlab and Python functions that can read in the
+metadata file.  First. let's view the contents of the metadata file:
+
+.. code-block:: text
+
+   $ cat u_sol_meta.txt 
+   50
+   50
+   25
+
+Here the first "50" corresponds to ``nx``, the second "50" corresponds
+to ``ny``, and the "25" corresponds to the total number of solutions
+that have been output (i.e. the final value for ``noutput``).  
+
+Due to this file's simple structure, we we only need to read three
+numbers in a single column and store them appropriately.  The relevant
+Matlab code is in the file ``load_info.m``, and relies on the built-in
+Matlab function ``load``:
+
+.. index:: 
+   pair: load_info(); Matlab
+
+.. code-block:: matlab
+
+   function [nx,ny,nt] = load_info()
+   % Usage: [nx,ny,nt] = load_info()
+   %
+   % Outputs: nx,ny are the grid size, and nt is the total number of
+   % time steps that have been output to disk.
+   %
+   % Daniel R. Reynolds
+   % SMU HPC Workshop
+   % 20 May 2013
+
+   % input general problem information
+   load u_sol_meta.txt;   % reads values from disk, storing in a vector
+   nx = u_sol_meta(1);    % unpack vector to name each output
+   ny = u_sol_meta(2);
+   nt = u_sol_meta(3);
+   
+   return
+   % end of function
+
+The corresponding Python code is in the file ``load_info.py``, which
+similarly relies on the built-in Numpy function ``loadtxt``:
+
+.. index:: 
+   pair: load_info(); Python
+
+.. code-block:: python
+
+   # Defines the function load_info().
+   #
+   # Daniel R. Reynolds
+   # SMU HPC Workshop
+   # 20 May 2013
+
+   # import requisite modules
+   import numpy as np
+
+   def load_info():
+       """Returns the mesh size and total number of output times 
+          from the input file 'u_sol_meta.txt'.  Has calling syntax:
+             nx,ny,nt = load_info(). """
+       
+       # reads integer values from disk, storing in a vector
+       data = np.loadtxt("u_sol_meta.txt", dtype=int)
+       return data     # return entire vector
+
+   # end of file
+
+In both of these scripts, the data in the file ``u_sol_meta.txt`` is
+input and converted to a one-dimensional array of numbers.  In the
+Matlab code we name these and return each separately.  In the Python
+code we merely return the array, leaving unpacking and naming to the
+calling routine. 
+
+.. note::
+
+   In the R package for interactive statistical data analysis, the
+   corresponding command to Matlab's ``load`` and Python/Numpy's
+   ``loadtxt`` is the R function ``read.table``, e.g. 
+
+   .. code-block:: text
+
+      > read.table("u_sol_meta.txt")
+        V1
+      1 50
+      2 50
+      3 25
+
+   However, since I do not know how to use R all of the following
+   examples will only be in Matlab or Python.  Of course, if you are
+   more familiar with R, you are welcome to attempt the remainder of
+   this session with that instead of Matlab or Python.
+
+Now that we've seen a simple approach for loading an array into Matlab
+and Python, we can move on to functions for reading the larger
+``u_sol.###.txt`` files.  As with the above functions, since the data
+is output in a single (but very long) column of numbers, we may use
+``load`` or ``loadtxt`` to input the data.  Once this data has been
+read in, however, we will then split it into the solution component,
+``u``, and the current time, ``t``.  Since ``u`` holds a
+two-dimensional array, but is stored in a flattened one-dimensional
+format, we can use ``reshape`` (the same command in both Matlab and
+Python) to convert it from the one-dimensional to the two-dimensional
+representation.
+
+First, the Matlab code, ``load_data_2d.m``:
+
+.. index:: 
+   pair: load_data_2d(); Matlab
+
+.. code-block:: matlab
+
+   function [t,u] = load_data_2d(tstep)
+   % Usage: [t,u] = load_data_2d(tstep)
+   %
+   % Input: tstep is an integer denoting which time step output to load
+   % 
+   % Outputs: t is the physical time, and u is the 2D array containing
+   % the result at the requested time step 
+   %
+   % Daniel R. Reynolds
+   % SMU HPC Workshop
+   % 20 May 2013
+   
+   % input general problem information
+   [nx,ny,nt] = load_info();
+   
+   % ensure that tstep is allowable
+   if (tstep < 0 || tstep > nt) 
+      error('load_data_2d error: illegal tstep')
+   end
+   
+   % set filename string and load as a long 1-dimensional array
+   infile = sprintf('u_sol.%03i.txt',tstep);
+   data = load(infile);
+         
+   % separate data array from current time, and reshape data into 2D
+   u1D = data(1:end-1);
+   t = data(end);
+   u = reshape(u1D, [nx, ny]);      
+  
+   return
+
+and here is the corresponding Python code, ``load_data_2d.py``:
+
+.. index:: 
+   pair: load_data_2d(); Python
+
+.. code-block:: python
+
+   # Defines the function load_data_2d().
+   #
+   # Daniel R. Reynolds
+   # SMU HPC Workshop
+   # 20 May 2013
+   
+   # import requisite modules
+   import numpy as np
+   from load_info import load_info
+   
+   def load_data_2d(tstep):
+       """Returns the solution over the mesh for a given time snapshot.  
+          Has calling syntax:
+             t,u = load_data_2d(tstep)
+          Input: tstep is an integer denoting which time step output to load.
+          Outputs: t is the physical time, and u is the 2D array containing 
+                   the result at the requested time step."""
+   
+       # load the parallelism information
+       nx,ny,nt = load_info()
+   
+       # check that tstep is allowed
+       if (tstep < 0 or tstep > nt):
+           print 'load_data_2d error: illegal tstep!'
+           return
+   
+       # determine data file name and load as a long 1-dimensional array
+       infile = 'u_sol.' + repr(tstep).zfill(3) + '.txt' 
+       data = np.loadtxt(infile, dtype=np.double)
+   
+       # separate data array from current time and reshape data into 2D
+       u1D = data[:len(data)-1]
+       t = data[-1];
+       u = np.reshape(u1D, (nx,ny), order='F')
+   
+       return [t,u]
+
+
+How these work:
+
+* These routines take as input an integer, ``tstep``, that corresponds
+  to the desired time step output file (the ``###`` in the file
+  name). 
+
+* They then call the corresponding ``load_info`` function to find out
+  the two-dimensional domain size and the total number of time steps
+  written to disk, and perform a quick check to see whether ``tstep``
+  is an allowable time step index.
+  
+  * *Matlab:* The function namespace for Matlab corresponds to all
+    ".m" files in the current folder, followed by all built-in
+    functions.  So as long as both of the scripts  ``load_info.m`` and
+    ``load_data_2d.m`` are in the same folder, the ``load_data_2d``
+    function can call the ``load_info`` function automatically.
+
+  * *Python:* Since Python protects the namespace by default, any
+    non-built-in Python functions from other files must be loaded before
+    they may be executed.  As a result, ``load_data_2d.py`` must import
+    the ``load_info`` function from the ``load_data.py`` file before it
+    may be used (*note: the ".py" extension for the ``load_data.py``
+    file is assumed, and should not be added to the "from" portion of
+    the ``import`` command).
+
+* The routine then combines the time step index into a string that
+  represents the correct file name (e.g. ``u_sol.006.txt``), and calls
+  the relevant ``load`` or ``loadtxt`` routine to input the data.
+
+* The routine then splits the data into the one-dimensional version of
+  ``u`` (called ``u1D``) and ``t``, before reshaping ``u1D`` into a
+  two-dimensional version of the solution, before returning the values.
+
+.. note:: 
+
+   .. index:: C vs Fortran ordering
+
+   In the Python version, we must specify that the data is
+   ordered in "Fortran" style, i.e. that the first index is the fastest
+   (as opposed to "C" style, where it is the slowest).  Fortran
+   ordering is the default in Matlab, whereas C ordering is the default
+   in Python.
+
+These data input routines can be used by Matlab or Python scripts to
+first read in the data, before either performing analysis or plotting.
+
+A few general comments on the above approach:
+
+* By storing the values as raw text, these files are larger than
+  necessary.  In this example the files are not too large (~58 KB
+  each), but in more realistic simulations it would be preferred to
+  store data in a more compressed format.  Two approaches for this are
+  to:
+
+  a. Zip each file after it is written to disk, through using library
+     routines (e.g. ``libz``, ``libzip``, ``libgzip``), and the
+     uncompress them when reading.  If the file is compressed with
+     ``gzip``, Numpy's ``loadtxt`` routine will automatically unzip as
+     it reads.
+
+  b. Write the data to disk in binary format.
+
+* Performance-wise, it is best to write out data in the
+  order in which it is stored in memory during the simulation.  In
+  this example, the data is stored with the ``x`` index being the
+  fastest, hence the "Fortran" ordering of the data file.
+
+.. index:: HDF5, netCDF
+
+High-quality alternatives to such manual I/O approaches abound.  Two
+popular I/O libraries in high-performance computing are `HDF5
+<http://www.hdfgroup.org/HDF5/>`_ and `netCDF
+<http://www.unidata.ucar.edu/software/netcdf/>`_.  Both of these
+libraries have the following benefits over doing things manually:
+
+* Natively output in binary format for smaller file sizes.
+
+* Allow you to output descriptive information in addition to just the
+  data (e.g. units of each field, version of the code).
+
+* Allow you to output multiple items to the same file (e.g. density,
+  momentum, energy).
+
+* Support parallel computing, allowing many MPI tasks to write to the
+  same file.
+
+* Professional visualization utilities typically have readers built-in
+  for these file types.
+
+* Have data input utilities in both Matlab and Python:
+
+  * Matlab/HDF5: ``h5create``, ``h5disp``, ``h5info``, ``h5read``,
+    ``h5readatt``, ``h5write``, ``h5writeatt``.  All are built into
+    Matlab (see `this Matlab help page
+    <http://www.mathworks.com/help/matlab/high-level-functions.html>`_
+    for information).
+
+  * Matlab/netCDF: although not built into Matlab, there are
+    contributed versions of netCDF readers on `Matlab Central
+    <http://www.mathworks.com/matlabcentral/fileexchange/15177-netcdf-reader>`_. 
+
+  * Python/HDF5: the Python module ``h5py`` contains a full Pythonic
+    interface to the HDF5 data format (`click here for more
+    information on h5py <https://code.google.com/p/h5py/>`_).
+
+  * Python/netCDF: the Python module ``netcdf4-python`` contains
+    interfaces to the majority of netCDF (`click here for more
+    information on netcdf4-python
+    <https://code.google.com/p/netcdf4-python/>`_). 
+
+* Last but not least: someone else writes and debugs the code,
+  allowing you to focus on your work instead of spending your time
+  fiddling with I/O.
+
+
+
+Post-processing 
+================================================
+
+We will now use the above data input routines to do some
+post-processing of these simulated results.  For this example, we'll
+create surface plots of the field ``u``, one for each time step, and
+write them to the disk.  Of course, once the data is available in our
+preferred scripting environment (Matlab, Python, etc.), we can easily
+perform additional data analysis, as will be included in the hands-on
+exercise at the end of this session.
+
+As we did earlier, we'll first show the code and then go through the
+steps.  You may focus on your preferred computing environment, since
+both scripts are functionally equivalent.
+
+First the Matlab code, ``plot_solution.m``:
+
+.. index:: 
+   pair: plot_solution(); Matlab
+
+.. code-block:: matlab
+
+   % Plotting script for 2D acoustic wave propagation example
+   % simulation.  This script inputs the file u_sol_meta.txt to determine
+   % simulation information (grid size and total number of time steps).
+   % It then calls load_data_2d() to read the solution data from each
+   % time step, plotting the results (and saving them to disk).
+   %
+   % Daniel R. Reynolds
+   % SMU HPC Workshop
+   % 20 May 2013
+   clear
+   
+   % input general problem information
+   [nx,ny,nt] = load_info();
+   
+   % loop over time steps
+   for tstep = 0:nt
+   
+      % load time step data
+      [t,u] = load_data_2d(tstep);
+   
+      % plot current solution (and save to disk)
+      xvals = linspace(0,1,nx);
+      yvals = linspace(0,1,ny);
+      h = surf(yvals,xvals,u);
+      shading flat
+      view([50 44])
+      axis([0, 1, 0, 1, -1, 1])
+      xlabel('x','FontSize',14), ylabel('y','FontSize',14)
+      title(sprintf('u(x,y) at t = %g, mesh = %ix%i',t,nx,ny),'FontSize',14)
+      pfile = sprintf('u_surf.%03i.png',tstep);
+      saveas(h,pfile);
+      
+      %disp('pausing: hit enter to continue')
+      %pause
+   end
+
+and then the Python code, ``plot_solution.py``:
+
+.. index:: 
+   pair: plot_solution(); Python
+
+.. code-block:: python
+
+   # Plotting script for 2D acoustic wave propagation example
+   # simulation.  This script calls load_info() to determine
+   # simulation information (grid size and total number of time steps).
+   # It then calls load_data_2d() to read the solution data from each
+   # time step, plotting the results (and saving them to disk).
+   #
+   # Daniel R. Reynolds
+   # SMU HPC Workshop
+   # 20 May 2013
+   
+   # import the requisite modules
+   from pylab import *
+   import numpy as np
+   from mpl_toolkits.mplot3d import Axes3D
+   from matplotlib import cm
+   import matplotlib.pyplot as plt
+   from load_info import load_info
+   from load_data_2d import load_data_2d
+   
+   # input general problem information
+   nx,ny,nt = load_info()
+   
+   # iterate over time steps
+   for tstep in range(nt+1):
+   
+       # input solution at this time
+       t,u = load_data_2d(tstep)
+   
+       # set string constants for output plots, current time, mesh size
+       pname = 'u_surf.' + repr(tstep).zfill(3) + '.png'
+       tstr = repr(round(t,4))
+       nxstr = repr(nx)
+       nystr = repr(ny)
+   
+       # set x and y meshgrid objects
+       xspan = np.linspace(0.0, 1.0, nx)
+       yspan = np.linspace(0.0, 1.0, ny)
+       X,Y = np.meshgrid(xspan,yspan)
+   
+       # plot current solution as a surface, and save to disk
+       fig = plt.figure(1)
+       ax = fig.add_subplot(111, projection='3d')
+       ax.plot_surface(X, Y, u, rstride=1, cstride=1, cmap=cm.jet,
+                       linewidth=0, antialiased=True, shade=True)
+       ax.set_xlabel('y')
+       ax.set_ylabel('x')
+       title('u(x,y) at t = ' + tstr + ', mesh = ' + nxstr + 'x' + nystr)
+       savefig(pname)
+   
+       #ion()
+       #plt.show()
+       #ioff()
+       #raw_input('pausing: hit enter to continue')
+
+       plt.close()
+   
+   # end of script
+
+
+How these work:
+
+* These first call ``load_info`` to determine the simulation grid size
+  and total number of time steps that have been output to disk.
+
+* These then loop over each time step, and:
+
+  * Call ``load_data_2d`` to read the simulation time and solution
+    array. 
+
+  * Create arrays for the :math:`x` and :math:`y` coordinates of each
+    solution data point.
+
+  * Plot ``u`` at that time step as a 2D surface plot, setting the
+    plot labels and title appropriately.
+
+  * Save the plot to disk in files of the form ``u_surf.###.png``.
+
+  * (Commented out) Pause the loop until the user hits "enter".
+
+
+Run this code as usual, using either Matlab,
+
+.. code-block:: bash
+
+   $ module load matlab
+   $ matlab -r plot_solution
+
+or Python,
 
 .. code-block:: bash
 
    $ module load gcc
    $ module load python
+   $ python ./plot_solution.py
+
+You should then see a set of ``.png`` images in the directory:
+
+.. code-block:: bash
+
+   $ ls
+   Makefile          plot_solution.m   u_sol.012.txt  u_sol_meta.txt  u_surf.013.png
+   advection.cpp     plot_solution.py  u_sol.013.txt  u_surf.000.png  u_surf.014.png
+   advection.exe     u_sol.000.txt     u_sol.014.txt  u_surf.001.png  u_surf.015.png
+   advection.h       u_sol.001.txt     u_sol.015.txt  u_surf.002.png  u_surf.016.png
+   density.txt       u_sol.002.txt     u_sol.016.txt  u_surf.003.png  u_surf.017.png
+   initialize.cpp    u_sol.003.txt     u_sol.017.txt  u_surf.004.png  u_surf.018.png
+   input.txt         u_sol.004.txt     u_sol.018.txt  u_surf.005.png  u_surf.019.png
+   load_data_2d.m    u_sol.005.txt     u_sol.019.txt  u_surf.006.png  u_surf.020.png
+   load_data_2d.py   u_sol.006.txt     u_sol.020.txt  u_surf.007.png  u_surf.021.png
+   load_data_2d.pyc  u_sol.007.txt     u_sol.021.txt  u_surf.008.png  u_surf.022.png
+   load_info.m       u_sol.008.txt     u_sol.022.txt  u_surf.009.png  u_surf.023.png
+   load_info.py      u_sol.009.txt     u_sol.023.txt  u_surf.010.png  u_surf.024.png
+   load_info.pyc     u_sol.010.txt     u_sol.024.txt  u_surf.011.png  u_surf.025.png
+   output.cpp        u_sol.011.txt     u_sol.025.txt  u_surf.012.png
 
 
-.. index:: condor examples; single shared node job
 
-Running a job
+You can view these plots on SMUHPC with the command, e.g.
+
+.. code-block:: bash
+
+   $ display u_surf.009.png
+
+Alternately, you can open them all and cycle through them by
+right-clicking and selecting "Next":
+
+.. code-block:: bash
+
+   $ display u_surf.*.png
+
+
+
+
+
+Advanced visualization
+================================================
+
+
+A few difficulties with using either Matlab or Python for data
+visualization include:
+
+* Difficulty dealing with three-dimensional plotting: while slices and
+  projections are simple, 3D data sets require much more interactive
+  visualization, including isocontour surface plots, moving slices,
+  rotating, etc.
+
+* Difficulty dealing with data output from parallel simulations: you
+  need to read in each processor's data file and glue them together
+  manually, and such in-core processing is impossible when the data
+  sets grow too large.
+
+As a result, there are a variety of high-quality visualization
+packages that are designed for interactive 3D visualization, as
+discussed below.  None of these are installed on SMUHPC at present,
+though all are freely-available and open-source, so if you need/want
+one you should make a request to the SMUHPC system administrators.
+
+
+.. index:: Mayavi
+
+Mayavi
 --------------------------------------------------
 
-In this example, we'll run the Python scrpit ``myjob.py``, that
-performs a simple algorithm for approximating :math:`\pi` using a
-composite trapezoidal numerical integration formula to approximate 
+Mayavi is a Python plotting package designed primarily for interactive
+3D visualization. See:
 
-.. math::
-
-   \int_0^1 \frac{4}{1+x^2}\,\mathrm dx
-
-This script accepts a single integer-valued command-line argument,
-corresponding to the number of subintervals to use in the
-approximation, with the typical tradeoff that *the harder you work, the
-better your answer*.
-
-While you can run this at the command line:
-
-.. code-block:: bash
-
-   $ python ./myjob.py 50
-
-as we increase the number of subintervals to obtain a more accurate
-approximation it can take longer to run, so as "good citizens" we
-should instead run it on dedicated compute nodes instead of the shared
-login nodes.  
-
-Before submitting this script to condor, we need to ensure that
-``myjob.py`` has "executable" permissions:
-
-.. code-block:: bash
-
-   $ chmod +x ./myjob.py 
+* `Mayavi Documentation <http://code.enthought.com/projects/mayavi/docs/development/html/mayavi/index.html>`_
+* `Mayavi Gallery <http://code.enthought.com/projects/mayavi/docs/development/html/mayavi/auto/examples.html>`_
 
 
-Create a new job submission file, ``test1.job`` using the editor of
-your choice (e.g. ``gedit`` or ``emacs``), and fill in the arguments
+.. index:: VisIt
 
-.. code-block:: text
-
-   universe     = vanilla
-   getenv       = true
-   log          = test1.log
-   error        = test1.err
-   output       = test1.out
-   notification = always
-   notify_user  = username@smu.edu
-   executable   = myjob.py
-   arguments    = 5000000
-   queue
-
-Submit this to the condor scheduler with the command
-
-.. code-block:: bash
-
-   $ condor_submit test1.job
-
-View your jobs in the queue by supplying your username to
-``condor_q``, e.g.
-
-.. code-block:: bash
-
-   $ condor_q dreynolds
-
-(if nothing shows up, it's because the job already finished)
-
-When the job finishes, you should see the files ``test1.log``,
-``test1.err`` and ``test1.out`` in your directory.  Open these files
-and view their contents.  If everything ran correctly, the error file
-should be empty, the log file should have some general condor-related
-information, and the output file should have our desired results.
-
-
-
-.. index:: condor examples; multiple shared node jobs
-
-.. _running_multiple_condor_jobs:
-
-Running many jobs
+VisIt
 --------------------------------------------------
 
-Suppose now that we wanted to run this script multiple times with
-different arguments, in order to experimentally measure how rapidly
-the approximation to :math:`\pi` converges as we change the number of
-subintervals.  
+`VisIt <https://wci.llnl.gov/codes/visit>`_ is an open source
+visualization package being developed at `Lawrence Livermore National
+Laboratory <http://www.llnl.gov>`_. It is designed for large-scale
+visualization problems (i.e. large data sets, rendered in parallel).
+VisIt has a GUI interface, as well as a Python interface for
+scripting.  See:
 
-To this end, we have a few options:
-
-1. Write separate job files for each command line argument (here, the
-   number of subintervals), and submit each to condor separately.
-   This has the benefit of creating a reproducible set of tests, where
-   the inputs for each test are quite clear, but can take quite some
-   time to set up.  
-
-2. Reuse our existing job file, but when calling ``condor_submit`` we can
-   use the ``-append`` option to modify the command line argument and
-   output/log/error file names.  
-
-   The problems with this approach are that (a) we may forget the
-   command-line arguments we had to use for the different calls,
-   making our results more difficult to reproduce, and (b) all results
-   would be written to the same output files, obliterating results
-   from all but the last run.  
-
-   However, this could be automated by creating a BASH
-   script that calls ``condor_submit`` for us multiple times, with the
-   customized calls hard-coded into the script.  This would again
-   allow for reproducibility.  Additionally, the **output** condor
-   argument could use the **Process** macro to create separate output
-   files for each run.
-
-3. We could write a single job file that has separate blocks of
-   options, each separated by a different **queue** command, allowing
-   us to run multiple tests with a single submission file.  
-
-All of the above approaches are equally valid, but we'll choose option
-3 since it requires the least typing.  
-
-Create a new condor job submission file, ``test2.job`` with the contents
-
-.. code-block:: text
-
-   universe     = vanilla
-   getenv       = true
-   log          = test2a.log
-   error        = test2a.err
-   output       = test2a.out
-   notification = always
-   notify_user  = username@smu.edu
-   executable   = myjob.py
-   arguments    = 500
-   queue
-
-   log        = test2b.log
-   error      = test2b.err
-   output     = test2b.out
-   arguments  = 5000
-   queue
-
-   log        = test2c.log
-   error      = test2c.err
-   output     = test2c.out
-   arguments  = 50000
-   queue
-
-   log        = test2d.log
-   error      = test2d.err
-   output     = test2d.out
-   arguments  = 500000
-   queue
-
-   log        = test2e.log
-   error      = test2e.err
-   output     = test2e.out
-   arguments  = 5000000
-   queue
-
-Note that only the first block specifies the **universe**, **getenv**
-**executable**, **notification** and **notify_user**; since these will
-be reused for all of our runs we do not need to change them for each
-subsequent job.
-
-Launch these jobs as before, with the command
-
-.. code-block:: bash
-
-   $ condor_submit test2.job
-
-To view our results in a single command, use
-
-.. code-block:: bash
-
-   $ cat test2*.out
+* `VisIt Documentation <https://wci.llnl.gov/codes/visit/doc.html>`_
+* `VisIt Gallery <https://wci.llnl.gov/codes/visit/gallery.html>`_
+* `VisIt Tutorial <http://www.visitusers.org/index.php?title=Short_Tutorial>`_
 
 
+.. index:: ParaView
 
-.. index:: condor examples; single whole node job
-
-Running on a whole node 
+ParaView
 --------------------------------------------------
 
-All of our above tests were performed on nodes where other users' jobs
-could also be running.  As previously discussed, sometimes our
-computational experiments cannot be run on shared resources, e.g. if
-we need reliable timings, if we need to use more than 2 GB of
-RAM, or if our job will spawn additional threads as it runs to fill up
-all the cores on a given node.  In such situations, we wish to request
-that our job run on a node that is dedicated to our one job.
+Like VisIt, `ParaView <http://www.paraview.org>`_ is another open
+source package for large-scale visualization developed at the
+U.S. Department of Energy National Labs.  It also has both a GUI
+interface and a Python interface for scripting.  See:
 
-This is accomplished by adding a small number of additional arguments
-to our earlier job submission file.  Let's run one of these, wherein
-we will now run the executable ``myjob.sh`` on a dedicated node.  This
-script also requires a command-line argument, e.g. ``n``, and it then
-computes the first ``n`` prime numbers using a simplistic version of
-the *trial division* algorithm.
-
-Before submitting this script to condor, we need to ensure that
-``myjob.sh`` has "executable" permissions:
-
-.. code-block:: bash
-
-   $ chmod +x ./myjob.sh
-
-Create a new condor job submission file, ``test3.job`` with the contents
-
-.. code-block:: text
-
-   universe              = vanilla
-   getenv                = true
-   log                   = test3.log
-   error                 = test3.err
-   output                = test3.out
-   executable            = myjob.sh
-   arguments             = 5000
-   Requirements          = CAN_RUN_WHOLE_MACHINE
-   +RequiresWholeMachine = True
-   queue
-
-and launch it as usual,
-
-.. code-block:: bash
-
-   $ condor_submit test3.job
+* `ParaView Documentation
+  <http://www.paraview.org/paraview/help/documentation.html>`_ 
+* `ParaView Gallery
+  <http://www.paraview.org/paraview/project/imagegallery.php>`_ 
 
 
-.. index:: sed
 
-After the run finishes, find the 4324th prime number (on line 4326 of
-``test3.out`` because of the two extra lines that condor adds to the
-top of the output file) with the command
 
-.. code-block:: bash
+Exercise
+================================================
 
-   $ sed -n 4326p test3.out
+In the set of files for this session, you will find one additional
+file that you have not yet used, ``density.txt``.  This is a
+snapshot of a three-dimensional cosmological density field at a
+redshift of approximately :math:`z = 9`.  Unlike the previous
+example, this file contains only the data field itself, with no
+auxiliary metadata.  Like the previous example, this data is stored in
+a single column, with :math:`x` being the fastest index and :math:`z`
+the slowest.  The three-dimensional grid is uniform in each direction,
+(i.e. it has size :math:`N\times N\times N`) so the total number of
+lines in the file should equal :math:`N^3`. 
+
+Create a Matlab or Python script that accomplishes the following
+tasks:
+
+1. Determine the maximum density over the domain, and where it occurs.
+
+2. Determine the minimum density over the domain, and where it occurs.
+
+3. Determine the average density over the domain.
+
+4. Generate the following two-dimensional plots, and save each to disk:
+ 
+   * Slice through the center of the domain parallel to the
+     :math:`xy` plane. 
+
+   * Slice through the center of the domain parallel to the
+     :math:`xz` plane. 
+
+   * Slice through the center of the domain parallel to the
+     :math:`yz` plane. 
+
+   * Plot a projection of the density onto the :math:`xy` plane
+     (i.e. add all entries in the :math:`z` direction to collapse the
+     3D set to 2D).
+
+   * Plot a projection of the density onto the :math:`xz` plane.
+
+   * Plot a projection of the density onto the :math:`yz` plane.
+
+
+*Hints*: 
+
+* If you plot the :math:`log` of the density, you will get more
+  interesting pictures.  In both Matlab and Python/Numpy, this is
+  easily computed using whole-array operations, e.g. ``logd = log(d)``.
+
+* Both Matlab and Python allow array slicing to extract a plane from
+  a 3D data set, e.g. 
+   
+  * Matlab: ``dslice = squeeze(d(:,:,2))`` -- here, the ``squeeze``
+    command may be used to eliminate the now-trivial 3rd dimension
+    that has length 1.
+
+  * Python/Numpy: ``dslice = d[:][:][2]``  or even ``dslice = d[:,:,2]``
+    (both forms of syntax are equivalent for Numpy arrays).
+
+* Both Matlab and Python/Numpy have a ``sum`` command that will add
+  all values of a multi-dimensional array along a specified
+  dimension.  Read their documentation to see how this works (it will
+  help with the average value and with the projection plots).
+
+* Both Matlab and Python/Numpy have ``max`` and ``min`` commands that
+  can be applied to array-valued data.  Read their documentation to
+  see how this works (it will help with the maximum and minimum
+  values). 
 
 
 

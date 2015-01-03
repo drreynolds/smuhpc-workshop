@@ -1,805 +1,1034 @@
-:tocdepth: 3
+:tocdepth: 2
 
 
 .. _session7:
 
 *****************************************************
-Session 7: Postprocessing
+Session 7: Introduction to Parallel Computing
 *****************************************************
 
 *Instructor: Dan Reynolds*
 
 
 
-Getting started
+
+What is parallel computing?
 ================================================
 
-We will perform this session of the workshop on the ``smuhpc3`` login
-node, so log in there to begin.
-
-Scientific simulation is worthless unless the results of those
-simulations can be analyzed and understood.  Unfortunately, most
-classes on scientific computing focus almost exclusively on how to
-create the methods for performing the simulations, with little time
-(if any) dedicated to the analysis of those results.  While one
-session of a workshop is insufficient to fully rectify this situation,
-we'll try to get get you started down the right path, by first
-focusing on how to input simulation data into more interactive
-computing environments, and then how to postprocess and visualize that
-data.  While there are many available interactive computing
-environments that can be used for these purposes, we'll focus on two
-of the most popular options, Matlab and Python.
+Parallel computing has historically focused on state-of-the-art
+engineering and scientific applications. Now video game consoles,
+laptops and desktops have begun to transition toward chips with
+multiple processors as well. 
 
 
-Retrieve the set of files for this session either through
-:download:`clicking here <code/session7.tgz>` or by copying the
-relevant files at the command line:
+.. index:: Moore's law
 
-.. code-block:: bash
+Motivation: Moore's law
+--------------------------------------------------
 
-   $ cp ~dreynolds/SMUHPC_tutorial/session7.tgz .
+Historically, we have depended on hardware advances to enable faster
+and larger simulations.  In 1965, Gordon Moore observed that the CPU
+and RAM transistor count about doubled each year. “Moore’s Law” has
+since been revised to a doubling once every 2 years, with startling
+accuracy. However physical limits, e.g. power consumption, heat
+emission, and even the size of the atom, are making such advances more
+difficult, and will eventually halt this expansion.
 
-Unzip this file, enter the resulting directory, and build the
-executable with ``make``.
+.. figure:: figs/Moore_law.png
+   :scale: 90 %
+   :align: center
 
-Run the executable at the command-line.
+   [from `Wikipedia -- Moore's Law
+   <http://en.wikipedia.org/wiki/Moore%27s_law>`_]
 
-.. code-block:: bash
 
-   $ ./advection.exe
+.. index:: CPU vs memory/disk speed
 
-You should see a set of output, ending with lines similar to:
+Motivation: CPU vs memory/disk speed
+--------------------------------------------------
+
+* The overall rate of computation is determined not just by the
+  processor speed, but also by the ability of the memory system to
+  feed data to it. 
+
+* Thanks to Moore’s law, clock rates of high-end processors have
+  increased at roughly 40% per year over the last decade. 
+
+* However, over that same time interval, RAM access times have
+  improved at roughly 10% per year. 
+
+* This growing mismatch between processor speed and RAM latency
+  presents an increasing performance bottleneck, since the CPU spends
+  more and more time waiting on data from RAM. 
+
+
+
+Motivation: the parallel solution
+--------------------------------------------------
+
+In addition, many simulations require incredible amounts of memory to
+achieve high-accuracy solutions (PDE & Monte-Carlo solvers, etc.),
+which cannot fit on a single computer alone.
+
+The natural solution to these problems is the use of parallel
+computing:
+
+* Use multiple processors concurrently to solve a problem in less
+  time.
+
+* Use multiple computers to store data for large problems.
+
+.. index:: Gordon Bell Prize
+
+The Gordon Bell Prize (below) is awarded to each year’s simulation
+that achieves the highest FLOP rate:
+
+.. figure:: figs/algorithm_moore.png
+   :scale: 50 %
+   :align: center
+
+   [from David E. Keyes, HiPC 2007]
+
+
+.. index:: Flynn's parallel architecture taxonomy, SIMD, MIMD, SISD, MISD
+
+Flynn's parallel architecture taxonomy
+--------------------------------------------------
+
+We classify parallel computers according to their control structure along the
+metrics:
+
+.. image:: figs/flynn.png
+   :scale: 70 %
+   :align: center
+
+* Single/multiple instruction streams: how many types of instructions
+  may be performed at once?
+
+* Single/multiple data streams: how many data streams may be operated
+  on at once?
+
+* Most modern parallel computers (and personal comp.) are MIMD.
+
+* SIMD was popular until 1990s.
+
+* MISD never used to large extent.
+
+
+
+Parallel computing hardware
+================================================
+
+We typically group parallel computing architectures into two primary
+categories according to the memory layout on these machines: *shared
+memory* and *distributed memory*.  However, modern parallel computing
+facilities are in fact comprised of a hybrid between these two
+categories. 
+
+
+.. index:: multiprocessor, SMP
+
+Parallel architectures: multiprocessors
+--------------------------------------------------
+
+In the 80’s, vendors began to attach multiple processors to the same
+memory. 
+
+.. image:: figs/smp.png
+   :scale: 80 %
+   :align: center
+
+* Perhaps the most easily usable (but costliest) approach for
+  parallelism. 
+
+* Straightforward extension of uniprocessor: multiple CPUs are
+  attached to the bus, all sharing the same primary memory, so the
+  same memory address on different CPUs refers to the same memory
+  location. 
+
+* Also called a Shared Memory Parallel (SMP) computer.
+
+* Processors interact and synchronize with each other through shared
+  variables. 
+
+* Local cache memory keeps CPUs busy; but can lead to cache coherency
+  issues. 
+
+* Performance is limited by bus bandwidth.
+
+* Allows efficient use of at most a few dozen processors.
+
+* Larger SMP systems exist, but rapidly become prohibitively
+  expensive.
+
+
+.. index:: multi-core
+
+Parallel architectures: multi-core
+--------------------------------------------------
+
+Most modern computer processors employ multiple computational cores: 
+
+.. image:: figs/multicore.png
+   :scale: 80 %
+   :align: center
+
+* Replicates much (but not all) of a processor’s logic on multiple
+  chips. 
+
+* Allows the processor to behave like a shared-memory parallel
+  machine. 
+
+* Each core has local cache: Data, Instruction and Address (TLB).
+
+* These local caches are all at Level 1 (closest to the CPU). 
+
+However, the cores *share* the unified L2 cache: 
+
+* Typically much larger than L1 cache.
+
+* Contains both instructions and data.
+
+Limitations:
+
+* Bus bandwidth (like SMPs).
+
+* Slower effective cache bandwidth than SMPs, since L2 cache is
+  shared. 
+
+
+.. index:: multicomputer, DMP
+
+Parallel architectures: multicomputers
+--------------------------------------------------
+
+A more cost-effective approach to construction of larger parallel
+computers relies on a network to connect disjoint computers together:
+
+.. image:: figs/distributed.png
+   :scale: 70%
+   :align: center
+
+* Each processor only has direct access to its own local memory
+  address space; the same address on different processors refers to
+  different memory locations. 
+
+* Processors interact with one another through passing messages.
+
+* Commercial multicomputers typically provide a custom switching
+  network to provide low-latency, high-bandwidth access between
+  processors.
+
+* Commodity clusters are build using commodity computers and
+  switches/LANs. 
+
+* Clearly less costly than SMP, but have increased latency/decreased
+  bandwidth between CPUs.
+
+* Construction may be *symmetric*, *asymmetric*, or *mixed*.
+
+* Theoretically extensible to arbitrary processor counts, but software
+  becomes complicated and networking gets expensive. 
+
+
+Machine size history
+--------------------------------------------------
+
+Historical plot of the processor count in computers comprising the
+Top500 list since 1993. 
+
+.. figure:: figs/parallelism_history.png
+   :scale: 90 %
+   :align: center
+
+   (figure from `http://www.top500.org <http://www.top500.org>`_)
+
+
+Note the trend to achieve performance advances through increases in parallelism.
+
+Such rapid parallelism increases have put limitations on the parallel
+architectures that may be used.
+
+
+.. index:: parallel architecture history, MPP, Cluster, SMP, Constellation
+
+History of parallel architectures
+--------------------------------------------------
+
+Historical plot of the computer architectures comprising the Top500
+list since 1993: 
+
+.. figure:: figs/architecture_history.png
+   :scale: 90 %
+   :align: center
+
+   (figure from `http://www.top500.org <http://www.top500.org>`_)
+
+
+Definitions of terms above:
+
+* MPP: Massively Parallel Processors (commercially-designed)
+
+* Cluster: ‘loosely’ coupled commodity parts
+
+* SMP: Shared Memory Parallel
+
+* Constellations: Distributed group of SMP Machines
+
+Note the extinction of large shared-memory machines, replaced by
+distributed-memory MPP and Cluster machines.
 
 .. code-block:: text
 
-   writing output file 24, step = 2399, t = 0.48
-   writing output file 25, step = 2499, t = 0.5
-   total runtime = 3.1000000000000000e-01
+   "Anyone can build a fast CPU. The trick is to build a fast system."
+   -- Seymour Cray 
 
-List the files in the subdirectory; you should see a new set of files
-with the names ``u_sol.###.txt``.  These files contain solution data from
-the simulation that you just ran, which models the propagation of an
-acoustic wave over a periodic, two-dimensional surface, using a coarse
-:math:`50\times 50` spatial grid.
 
-In the following sections, we will work on importing these data files
-into either a Matlab or Python environment, and then performing some
-simple data analysis.  For the remainder of this session, both Matlab
-and Python will be presented, though you may choose to specialize in
-only your preferred interactive environment.
 
 
+.. index:: distributed parallel networks
 
-
-Importing/exporting data
-================================================
-
-Before we can understand how to load data into Matlab or Python, we
-must understand how it was written from the program.  Here is the C++
-function used to output the two-dimensional data array ``u``:
-
-.. code-block:: c++
-
-   // Daniel R. Reynolds
-   // SMU HPC Workshop
-   // 20 May 2013
-
-   // Inclusions
-   #include <stdio.h>
-   #include <string.h>
-   #include "advection.h"
-
-   // Writes current solution to disk
-   int output(double *u, double t, int nx, int ny, int noutput) {
-
-     // set output file name
-     char outname[100];
-     sprintf(outname, "u_sol.%03i.txt", noutput);
-
-     // open output file
-     FILE *FID = fopen(outname,"w");
-     if (FID == NULL) {
-       fprintf(stderr, "output: error opening output file %s\n", outname);
-       return 1;
-     }
-
-     // output the solution values 
-     for (int j=0; j<ny; j++) 
-       for (int i=0; i<nx; i++) 
-         fprintf(FID, "%.16e\n",u[idx(i,j,nx)]);
-
-     // write current solution time and close the data set
-     fprintf(FID, "%.16e\n", t);
-     fclose(FID);
-    
-     // now output a metadata file, containing general run information
-     FID = fopen("u_sol_meta.txt","w");
-     fprintf(FID, "%i\n", nx);
-     fprintf(FID, "%i\n", ny);
-     fprintf(FID, "%i\n", noutput);
-     fclose(FID);
-
-     return 0;
-   } // end output
-
-
-A few contextual notes about this code to better understand what is
-happening (we'll discuss in greater detail during class):
-
-* ``u`` holds a two-dimensional array of size ``nx`` by ``ny``, stored
-  in a one-dimensional index space of length ``nx*ny``.  The mapping
-  between the 2D physical space and 1D index space is handled by the
-  ``idx()`` macro, defined in ``advection.h``, of the form
-
-  .. code-block:: c++
-
-     // simple macro to map a 2D index to a 1D address space
-     #define idx(i,j,nx)  ((j)*(nx)+(i))
-
-* This function is called once every output time; these outputs are
-  indexed by the integer ``noutput``, and correspond to the solution
-  at the physical time ``t``.
-
-* At each output time, this routine writes two files: 
-
-  * The first file is the solution file (``u_sol.###.txt``), that
-    holds the 2D data array, printed as one long array with the
-    :math:`x` coordinate the faster index.  In this same file, after
-    ``u`` is stored, the physical time of the output, ``t`` is
-    also stored. 
-
-  * The second file is a metadata file (``u_sol_meta.txt``), that
-    contains the problem size and the total number of outputs that
-    have been written so far in the simulation. 
-
-
-We will first build Matlab and Python functions that can read in the
-metadata file.  First. let's view the contents of the metadata file:
-
-.. code-block:: text
-
-   $ cat u_sol_meta.txt 
-   50
-   50
-   25
-
-Here the first "50" corresponds to ``nx``, the second "50" corresponds
-to ``ny``, and the "25" corresponds to the total number of solutions
-that have been output (i.e. the final value for ``noutput``).  
-
-Due to this file's simple structure, we we only need to read three
-numbers in a single column and store them appropriately.  The relevant
-Matlab code is in the file ``load_info.m``, and relies on the built-in
-Matlab function ``load``:
-
-.. index:: 
-   pair: load_info(); Matlab
-
-.. code-block:: matlab
-
-   function [nx,ny,nt] = load_info()
-   % Usage: [nx,ny,nt] = load_info()
-   %
-   % Outputs: nx,ny are the grid size, and nt is the total number of
-   % time steps that have been output to disk.
-   %
-   % Daniel R. Reynolds
-   % SMU HPC Workshop
-   % 20 May 2013
-
-   % input general problem information
-   load u_sol_meta.txt;   % reads values from disk, storing in a vector
-   nx = u_sol_meta(1);    % unpack vector to name each output
-   ny = u_sol_meta(2);
-   nt = u_sol_meta(3);
-   
-   return
-   % end of function
-
-The corresponding Python code is in the file ``load_info.py``, which
-similarly relies on the built-in Numpy function ``loadtxt``:
-
-.. index:: 
-   pair: load_info(); Python
-
-.. code-block:: python
-
-   # Defines the function load_info().
-   #
-   # Daniel R. Reynolds
-   # SMU HPC Workshop
-   # 20 May 2013
-
-   # import requisite modules
-   import numpy as np
-
-   def load_info():
-       """Returns the mesh size and total number of output times 
-          from the input file 'u_sol_meta.txt'.  Has calling syntax:
-             nx,ny,nt = load_info(). """
-       
-       # reads integer values from disk, storing in a vector
-       data = np.loadtxt("u_sol_meta.txt", dtype=int)
-       return data     # return entire vector
-
-   # end of file
-
-In both of these scripts, the data in the file ``u_sol_meta.txt`` is
-input and converted to a one-dimensional array of numbers.  In the
-Matlab code we name these and return each separately.  In the Python
-code we merely return the array, leaving unpacking and naming to the
-calling routine. 
-
-.. note::
-
-   In the R package for interactive statistical data analysis, the
-   corresponding command to Matlab's ``load`` and Python/Numpy's
-   ``loadtxt`` is the R function ``read.table``, e.g. 
-
-   .. code-block:: text
-
-      > read.table("u_sol_meta.txt")
-        V1
-      1 50
-      2 50
-      3 25
-
-   However, since I do not know how to use R all of the following
-   examples will only be in Matlab or Python.  Of course, if you are
-   more familiar with R, you are welcome to attempt the remainder of
-   this session with that instead of Matlab or Python.
-
-Now that we've seen a simple approach for loading an array into Matlab
-and Python, we can move on to functions for reading the larger
-``u_sol.###.txt`` files.  As with the above functions, since the data
-is output in a single (but very long) column of numbers, we may use
-``load`` or ``loadtxt`` to input the data.  Once this data has been
-read in, however, we will then split it into the solution component,
-``u``, and the current time, ``t``.  Since ``u`` holds a
-two-dimensional array, but is stored in a flattened one-dimensional
-format, we can use ``reshape`` (the same command in both Matlab and
-Python) to convert it from the one-dimensional to the two-dimensional
-representation.
-
-First, the Matlab code, ``load_data_2d.m``:
-
-.. index:: 
-   pair: load_data_2d(); Matlab
-
-.. code-block:: matlab
-
-   function [t,u] = load_data_2d(tstep)
-   % Usage: [t,u] = load_data_2d(tstep)
-   %
-   % Input: tstep is an integer denoting which time step output to load
-   % 
-   % Outputs: t is the physical time, and u is the 2D array containing
-   % the result at the requested time step 
-   %
-   % Daniel R. Reynolds
-   % SMU HPC Workshop
-   % 20 May 2013
-   
-   % input general problem information
-   [nx,ny,nt] = load_info();
-   
-   % ensure that tstep is allowable
-   if (tstep < 0 || tstep > nt) 
-      error('load_data_2d error: illegal tstep')
-   end
-   
-   % set filename string and load as a long 1-dimensional array
-   infile = sprintf('u_sol.%03i.txt',tstep);
-   data = load(infile);
-         
-   % separate data array from current time, and reshape data into 2D
-   u1D = data(1:end-1);
-   t = data(end);
-   u = reshape(u1D, [nx, ny]);      
-  
-   return
-
-and here is the corresponding Python code, ``load_data_2d.py``:
-
-.. index:: 
-   pair: load_data_2d(); Python
-
-.. code-block:: python
-
-   # Defines the function load_data_2d().
-   #
-   # Daniel R. Reynolds
-   # SMU HPC Workshop
-   # 20 May 2013
-   
-   # import requisite modules
-   import numpy as np
-   from load_info import load_info
-   
-   def load_data_2d(tstep):
-       """Returns the solution over the mesh for a given time snapshot.  
-          Has calling syntax:
-             t,u = load_data_2d(tstep)
-          Input: tstep is an integer denoting which time step output to load.
-          Outputs: t is the physical time, and u is the 2D array containing 
-                   the result at the requested time step."""
-   
-       # load the parallelism information
-       nx,ny,nt = load_info()
-   
-       # check that tstep is allowed
-       if (tstep < 0 or tstep > nt):
-           print 'load_data_2d error: illegal tstep!'
-           return
-   
-       # determine data file name and load as a long 1-dimensional array
-       infile = 'u_sol.' + repr(tstep).zfill(3) + '.txt' 
-       data = np.loadtxt(infile, dtype=np.double)
-   
-       # separate data array from current time and reshape data into 2D
-       u1D = data[:len(data)-1]
-       t = data[-1];
-       u = np.reshape(u1D, (nx,ny), order='F')
-   
-       return [t,u]
-
-
-How these work:
-
-* These routines take as input an integer, ``tstep``, that corresponds
-  to the desired time step output file (the ``###`` in the file
-  name). 
-
-* They then call the corresponding ``load_info`` function to find out
-  the two-dimensional domain size and the total number of time steps
-  written to disk, and perform a quick check to see whether ``tstep``
-  is an allowable time step index.
-  
-  * *Matlab:* The function namespace for Matlab corresponds to all
-    ".m" files in the current folder, followed by all built-in
-    functions.  So as long as both of the scripts  ``load_info.m`` and
-    ``load_data_2d.m`` are in the same folder, the ``load_data_2d``
-    function can call the ``load_info`` function automatically.
-
-  * *Python:* Since Python protects the namespace by default, any
-    non-built-in Python functions from other files must be loaded before
-    they may be executed.  As a result, ``load_data_2d.py`` must import
-    the ``load_info`` function from the ``load_data.py`` file before it
-    may be used (*note: the ".py" extension for the ``load_data.py``
-    file is assumed, and should not be added to the "from" portion of
-    the ``import`` command).
-
-* The routine then combines the time step index into a string that
-  represents the correct file name (e.g. ``u_sol.006.txt``), and calls
-  the relevant ``load`` or ``loadtxt`` routine to input the data.
-
-* The routine then splits the data into the one-dimensional version of
-  ``u`` (called ``u1D``) and ``t``, before reshaping ``u1D`` into a
-  two-dimensional version of the solution, before returning the values.
-
-.. note:: 
-
-   .. index:: C vs Fortran ordering
-
-   In the Python version, we must specify that the data is
-   ordered in "Fortran" style, i.e. that the first index is the fastest
-   (as opposed to "C" style, where it is the slowest).  Fortran
-   ordering is the default in Matlab, whereas C ordering is the default
-   in Python.
-
-These data input routines can be used by Matlab or Python scripts to
-first read in the data, before either performing analysis or plotting.
-
-A few general comments on the above approach:
-
-* By storing the values as raw text, these files are larger than
-  necessary.  In this example the files are not too large (~58 KB
-  each), but in more realistic simulations it would be preferred to
-  store data in a more compressed format.  Two approaches for this are
-  to:
-
-  a. Zip each file after it is written to disk, through using library
-     routines (e.g. ``libz``, ``libzip``, ``libgzip``), and the
-     uncompress them when reading.  If the file is compressed with
-     ``gzip``, Numpy's ``loadtxt`` routine will automatically unzip as
-     it reads.
-
-  b. Write the data to disk in binary format.
-
-* Performance-wise, it is best to write out data in the
-  order in which it is stored in memory during the simulation.  In
-  this example, the data is stored with the ``x`` index being the
-  fastest, hence the "Fortran" ordering of the data file.
-
-.. index:: HDF5, netCDF
-
-High-quality alternatives to such manual I/O approaches abound.  Two
-popular I/O libraries in high-performance computing are `HDF5
-<http://www.hdfgroup.org/HDF5/>`_ and `netCDF
-<http://www.unidata.ucar.edu/software/netcdf/>`_.  Both of these
-libraries have the following benefits over doing things manually:
-
-* Natively output in binary format for smaller file sizes.
-
-* Allow you to output descriptive information in addition to just the
-  data (e.g. units of each field, version of the code).
-
-* Allow you to output multiple items to the same file (e.g. density,
-  momentum, energy).
-
-* Support parallel computing, allowing many MPI tasks to write to the
-  same file.
-
-* Professional visualization utilities typically have readers built-in
-  for these file types.
-
-* Have data input utilities in both Matlab and Python:
-
-  * Matlab/HDF5: ``h5create``, ``h5disp``, ``h5info``, ``h5read``,
-    ``h5readatt``, ``h5write``, ``h5writeatt``.  All are built into
-    Matlab (see `this Matlab help page
-    <http://www.mathworks.com/help/matlab/high-level-functions.html>`_
-    for information).
-
-  * Matlab/netCDF: although not built into Matlab, there are
-    contributed versions of netCDF readers on `Matlab Central
-    <http://www.mathworks.com/matlabcentral/fileexchange/15177-netcdf-reader>`_. 
-
-  * Python/HDF5: the Python module ``h5py`` contains a full Pythonic
-    interface to the HDF5 data format (`click here for more
-    information on h5py <https://code.google.com/p/h5py/>`_).
-
-  * Python/netCDF: the Python module ``netcdf4-python`` contains
-    interfaces to the majority of netCDF (`click here for more
-    information on netcdf4-python
-    <https://code.google.com/p/netcdf4-python/>`_). 
-
-* Last but not least: someone else writes and debugs the code,
-  allowing you to focus on your work instead of spending your time
-  fiddling with I/O.
-
-
-
-Post-processing 
-================================================
-
-We will now use the above data input routines to do some
-post-processing of these simulated results.  For this example, we'll
-create surface plots of the field ``u``, one for each time step, and
-write them to the disk.  Of course, once the data is available in our
-preferred scripting environment (Matlab, Python, etc.), we can easily
-perform additional data analysis, as will be included in the hands-on
-exercise at the end of this session.
-
-As we did earlier, we'll first show the code and then go through the
-steps.  You may focus on your preferred computing environment, since
-both scripts are functionally equivalent.
-
-First the Matlab code, ``plot_solution.m``:
-
-.. index:: 
-   pair: plot_solution(); Matlab
-
-.. code-block:: matlab
-
-   % Plotting script for 2D acoustic wave propagation example
-   % simulation.  This script inputs the file u_sol_meta.txt to determine
-   % simulation information (grid size and total number of time steps).
-   % It then calls load_data_2d() to read the solution data from each
-   % time step, plotting the results (and saving them to disk).
-   %
-   % Daniel R. Reynolds
-   % SMU HPC Workshop
-   % 20 May 2013
-   clear
-   
-   % input general problem information
-   [nx,ny,nt] = load_info();
-   
-   % loop over time steps
-   for tstep = 0:nt
-   
-      % load time step data
-      [t,u] = load_data_2d(tstep);
-   
-      % plot current solution (and save to disk)
-      xvals = linspace(0,1,nx);
-      yvals = linspace(0,1,ny);
-      h = surf(yvals,xvals,u);
-      shading flat
-      view([50 44])
-      axis([0, 1, 0, 1, -1, 1])
-      xlabel('x','FontSize',14), ylabel('y','FontSize',14)
-      title(sprintf('u(x,y) at t = %g, mesh = %ix%i',t,nx,ny),'FontSize',14)
-      pfile = sprintf('u_surf.%03i.png',tstep);
-      saveas(h,pfile);
-      
-      %disp('pausing: hit enter to continue')
-      %pause
-   end
-
-and then the Python code, ``plot_solution.py``:
-
-.. index:: 
-   pair: plot_solution(); Python
-
-.. code-block:: python
-
-   # Plotting script for 2D acoustic wave propagation example
-   # simulation.  This script calls load_info() to determine
-   # simulation information (grid size and total number of time steps).
-   # It then calls load_data_2d() to read the solution data from each
-   # time step, plotting the results (and saving them to disk).
-   #
-   # Daniel R. Reynolds
-   # SMU HPC Workshop
-   # 20 May 2013
-   
-   # import the requisite modules
-   from pylab import *
-   import numpy as np
-   from mpl_toolkits.mplot3d import Axes3D
-   from matplotlib import cm
-   import matplotlib.pyplot as plt
-   from load_info import load_info
-   from load_data_2d import load_data_2d
-   
-   # input general problem information
-   nx,ny,nt = load_info()
-   
-   # iterate over time steps
-   for tstep in range(nt+1):
-   
-       # input solution at this time
-       t,u = load_data_2d(tstep)
-   
-       # set string constants for output plots, current time, mesh size
-       pname = 'u_surf.' + repr(tstep).zfill(3) + '.png'
-       tstr = repr(round(t,4))
-       nxstr = repr(nx)
-       nystr = repr(ny)
-   
-       # set x and y meshgrid objects
-       xspan = np.linspace(0.0, 1.0, nx)
-       yspan = np.linspace(0.0, 1.0, ny)
-       X,Y = np.meshgrid(xspan,yspan)
-   
-       # plot current solution as a surface, and save to disk
-       fig = plt.figure(1)
-       ax = fig.add_subplot(111, projection='3d')
-       ax.plot_surface(X, Y, u, rstride=1, cstride=1, cmap=cm.jet,
-                       linewidth=0, antialiased=True, shade=True)
-       ax.set_xlabel('y')
-       ax.set_ylabel('x')
-       title('u(x,y) at t = ' + tstr + ', mesh = ' + nxstr + 'x' + nystr)
-       savefig(pname)
-   
-       #ion()
-       #plt.show()
-       #ioff()
-       #raw_input('pausing: hit enter to continue')
-
-       plt.close()
-   
-   # end of script
-
-
-How these work:
-
-* These first call ``load_info`` to determine the simulation grid size
-  and total number of time steps that have been output to disk.
-
-* These then loop over each time step, and:
-
-  * Call ``load_data_2d`` to read the simulation time and solution
-    array. 
-
-  * Create arrays for the :math:`x` and :math:`y` coordinates of each
-    solution data point.
-
-  * Plot ``u`` at that time step as a 2D surface plot, setting the
-    plot labels and title appropriately.
-
-  * Save the plot to disk in files of the form ``u_surf.###.png``.
-
-  * (Commented out) Pause the loop until the user hits "enter".
-
-
-Run this code as usual, using either Matlab,
-
-.. code-block:: bash
-
-   $ module load matlab
-   $ matlab -r plot_solution
-
-or Python,
-
-.. code-block:: bash
-
-   $ module load gcc
-   $ module load python
-   $ python ./plot_solution.py
-
-You should then see a set of ``.png`` images in the directory:
-
-.. code-block:: bash
-
-   $ ls
-   Makefile          plot_solution.m   u_sol.012.txt  u_sol_meta.txt  u_surf.013.png
-   advection.cpp     plot_solution.py  u_sol.013.txt  u_surf.000.png  u_surf.014.png
-   advection.exe     u_sol.000.txt     u_sol.014.txt  u_surf.001.png  u_surf.015.png
-   advection.h       u_sol.001.txt     u_sol.015.txt  u_surf.002.png  u_surf.016.png
-   density.txt       u_sol.002.txt     u_sol.016.txt  u_surf.003.png  u_surf.017.png
-   initialize.cpp    u_sol.003.txt     u_sol.017.txt  u_surf.004.png  u_surf.018.png
-   input.txt         u_sol.004.txt     u_sol.018.txt  u_surf.005.png  u_surf.019.png
-   load_data_2d.m    u_sol.005.txt     u_sol.019.txt  u_surf.006.png  u_surf.020.png
-   load_data_2d.py   u_sol.006.txt     u_sol.020.txt  u_surf.007.png  u_surf.021.png
-   load_data_2d.pyc  u_sol.007.txt     u_sol.021.txt  u_surf.008.png  u_surf.022.png
-   load_info.m       u_sol.008.txt     u_sol.022.txt  u_surf.009.png  u_surf.023.png
-   load_info.py      u_sol.009.txt     u_sol.023.txt  u_surf.010.png  u_surf.024.png
-   load_info.pyc     u_sol.010.txt     u_sol.024.txt  u_surf.011.png  u_surf.025.png
-   output.cpp        u_sol.011.txt     u_sol.025.txt  u_surf.012.png
-
-
-
-You can view these plots on SMUHPC with the command, e.g.
-
-.. code-block:: bash
-
-   $ display u_surf.009.png
-
-Alternately, you can open them all and cycle through them by
-right-clicking and selecting "Next":
-
-.. code-block:: bash
-
-   $ display u_surf.*.png
-
-
-
-
-
-Advanced visualization
-================================================
-
-
-A few difficulties with using either Matlab or Python for data
-visualization include:
-
-* Difficulty dealing with three-dimensional plotting: while slices and
-  projections are simple, 3D data sets require much more interactive
-  visualization, including isocontour surface plots, moving slices,
-  rotating, etc.
-
-* Difficulty dealing with data output from parallel simulations: you
-  need to read in each processor's data file and glue them together
-  manually, and such in-core processing is impossible when the data
-  sets grow too large.
-
-As a result, there are a variety of high-quality visualization
-packages that are designed for interactive 3D visualization, as
-discussed below.  None of these are installed on SMUHPC at present,
-though all are freely-available and open-source, so if you need/want
-one you should make a request to the SMUHPC system administrators.
-
-
-.. index:: Mayavi
-
-Mayavi
+Distributed parallel networks
 --------------------------------------------------
 
-Mayavi is a Python plotting package designed primarily for interactive
-3D visualization. See:
+Since clusters pass messages to communicate between CPUs, the speed of
+a parallel computation inherently depends on the speed of the network.
 
-* `Mayavi Documentation <http://code.enthought.com/projects/mayavi/docs/development/html/mayavi/index.html>`_
-* `Mayavi Gallery <http://code.enthought.com/projects/mayavi/docs/development/html/mayavi/auto/examples.html>`_
+* Networks can consist of simple LAN networks, or can be customized
+  switches. 
 
-
-.. index:: VisIt
-
-VisIt
---------------------------------------------------
-
-`VisIt <https://wci.llnl.gov/codes/visit>`_ is an open source
-visualization package being developed at `Lawrence Livermore National
-Laboratory <http://www.llnl.gov>`_. It is designed for large-scale
-visualization problems (i.e. large data sets, rendered in parallel).
-VisIt has a GUI interface, as well as a Python interface for
-scripting.  See:
-
-* `VisIt Documentation <https://wci.llnl.gov/codes/visit/doc.html>`_
-* `VisIt Gallery <https://wci.llnl.gov/codes/visit/gallery.html>`_
-* `VisIt Tutorial <http://www.visitusers.org/index.php?title=Short_Tutorial>`_
-
-
-.. index:: ParaView
-
-ParaView
---------------------------------------------------
-
-Like VisIt, `ParaView <http://www.paraview.org>`_ is another open
-source package for large-scale visualization developed at the
-U.S. Department of Energy National Labs.  It also has both a GUI
-interface and a Python interface for scripting.  See:
-
-* `ParaView Documentation
-  <http://www.paraview.org/paraview/help/documentation.html>`_ 
-* `ParaView Gallery
-  <http://www.paraview.org/paraview/project/imagegallery.php>`_ 
-
-
-
-
-Exercise
-================================================
-
-In the set of files for this session, you will find one additional
-file that you have not yet used, ``density.txt``.  This is a
-snapshot of a three-dimensional cosmological density field at a
-redshift of approximately :math:`z = 9`.  Unlike the previous
-example, this file contains only the data field itself, with no
-auxiliary metadata.  Like the previous example, this data is stored in
-a single column, with :math:`x` being the fastest index and :math:`z`
-the slowest.  The three-dimensional grid is uniform in each direction,
-(i.e. it has size :math:`N\times N\times N`) so the total number of
-lines in the file should equal :math:`N^3`. 
-
-Create a Matlab or Python script that accomplishes the following
-tasks:
-
-1. Determine the maximum density over the domain, and where it occurs.
-
-2. Determine the minimum density over the domain, and where it occurs.
-
-3. Determine the average density over the domain.
-
-4. Generate the following two-dimensional plots, and save each to disk:
+* A shared medium (e.g. LAN) allows only one message at a time.
  
-   * Slice through the center of the domain parallel to the
-     :math:`xy` plane. 
+  * Each processor ‘listens’ to every message, receiving only those
+    sent to it. 
+  
+  * To send a message, a processor must wait until the medium is
+    unused. 
 
-   * Slice through the center of the domain parallel to the
-     :math:`xz` plane. 
+  * If two processors send at the same time, messages interfere and
+    must re-send.
 
-   * Slice through the center of the domain parallel to the
-     :math:`yz` plane. 
+* Switched media support point-to-point messages among pairs of
+  processors, with each processor having its own communication path to
+  the switch. 
 
-   * Plot a projection of the density onto the :math:`xy` plane
-     (i.e. add all entries in the :math:`z` direction to collapse the
-     3D set to 2D).
+  * Allow concurrent transmission of messages between different
+    processor pairs.
 
-   * Plot a projection of the density onto the :math:`xz` plane.
+  * Support the scaling of the network to allow large numbers of
+    processors. 
 
-   * Plot a projection of the density onto the :math:`yz` plane.
+* Switched network topologies vary by computer: ring, mesh,
+  binary-tree, hypertree, butterfly, hypercube and shuffle-exchange
+  networks are all common.
+
+.. index:: fast ethernet, gigabit ethernet, infiniband
+
+Common switches for commodity clusters include:
+
+* *Fast Ethernet*: 100 Mbit/sec bandwidth, 100 μsec latency
+
+* *Gigabit Ethernet*: 1-10 Gbit/sec bandwidth, 100 μsec latency
+
+* *Infiniband*: 40 Gbit/sec bandwidth, 1.07 μsec latency
 
 
-*Hints*: 
+.. figure:: figs/network_pie.png 
+   :scale: 90 % 
+   :align: center 
 
-* If you plot the :math:`log` of the density, you will get more
-  interesting pictures.  In both Matlab and Python/Numpy, this is
-  easily computed using whole-array operations, e.g. ``logd = log(d)``.
+   (figure from `http://www.top500.org <http://www.top500.org>`_)
 
-* Both Matlab and Python allow array slicing to extract a plane from
-  a 3D data set, e.g. 
+
+Compare these to on-computer speeds of:
+
+* L1 cache: 700 Gbit/sec (Intel Sandybridge)
+
+* L2 cache: 400 Gbit/sec (Intel Sandybridge)
+
+* Memory bus: 168 Gbit/sec (PC3-1333 DDR3-SDRAM)
+
+* Disk: 6 Gbit/sec (SATA-3)
+
+
    
-  * Matlab: ``dslice = squeeze(d(:,:,2))`` -- here, the ``squeeze``
-    command may be used to eliminate the now-trivial 3rd dimension
-    that has length 1.
-
-  * Python/Numpy: ``dslice = d[:][:][2]``  or even ``dslice = d[:,:,2]``
-    (both forms of syntax are equivalent for Numpy arrays).
-
-* Both Matlab and Python/Numpy have a ``sum`` command that will add
-  all values of a multi-dimensional array along a specified
-  dimension.  Read their documentation to see how this works (it will
-  help with the average value and with the projection plots).
-
-* Both Matlab and Python/Numpy have ``max`` and ``min`` commands that
-  can be applied to array-valued data.  Read their documentation to
-  see how this works (it will help with the maximum and minimum
-  values). 
 
 
+.. index:: parallel computing paradigms
+
+Parallel computing paradigms: shared vs distributed memory
+=================================================================
+
+
+The question then arises as to how we may use these parallel
+computers.  There are a number of options:
+
+* Auto-parallelizing compilers (easiest):
+
+  * Automatically identify and parallelize existing sequential
+    programs. 
+
+  * Difficult to do well: although an algorithm may be inherently
+    parallelizable, the compiler may have difficulty realizing the
+    extent, and putting it into practice.
+
+* Extend a sequential language (most popular):
+
+  * Extend sequential programming languages with functions that allow
+    creation, termination synchronization and communication of
+    parallel processes.
+
+  * May be developed as a subroutine library or compiler directives;
+    thereby allowing reuse of the sequential language, compiler, and
+    most code. 
+
+* Create a new parallel language from scratch (High Performance
+  Fortran, UPC, C*)
+
+* Add a parallel programming layer: A separate parallel programming
+  system calls sequential procedures to orchestrate the combined
+  program. 
+
+
+.. code-block:: text
+
+   “I know how to make 4 hourses pull a cart – I don’t know how to make
+   1024 chickens do it.” -- Enrico Clementi
+
+
+.. index:: Jiffy Lube example
+
+MIMD example -- the "Jiffy Lube" model
+--------------------------------------------------
+
+Jiffy Lube advertises a “12-point check”, consisting of changing the
+oil and filter, interior vacuum, battery check, windshield wiper
+check, brake fluid check, tire pressure check, etc.; 6 attendants
+cooperate to do these tasks on each car.
+
+* In *coarse-grained parallelism*, the major tasks are done in
+  parallel. Here, the vacuuming, battery and fluid checks can be done
+  while the oil is being changed.
+
+* In *fine-grained parallelism*, tasks requiring similar processing
+  are done in parallel – 4 attendants could each check the pressure of
+  a tire. 
+
+* *Data dependencies* arise when certain tasks must wait to be started
+  until others have finished and their results are made available.
+
+  * The oil cannot be refilled until the oil filter has been changed,
+    creating a *coarse-grained data dependency*.
+
+  * If a tire needs to be changed and 5 attendants are each assigned
+    to tighten a different lug nut, they cannot proceed concurrently
+    since the nuts must be tightened in a given order – a *fine-grained
+    data dependency*. 
+
+
+Other relevant MIMD definitions [and their Jiffy Lube equivalents]:
+
+* *Data partitioning* – multiple but essentially identical processes
+  each work on a portion of the data to be processed [check tire
+  pressure or tighten lug nuts] 
+
+* *Function partitioning* – multiple processes perform different kinds
+  of tasks [one vacuums, another checks the battery, a third does the
+  oil change] 
+
+* *Prescheduled loops* – work distribution to multiple processors is
+  fixed by the programmer in the code or by the compiler at compile
+  time [Pete always checks the battery, Flo always does the oil
+  change] 
+
+* *Statically scheduled loops* – work distribution is fixed at run
+  time. For example, it can depend on the number of processors [the
+  first one to work in the morning gets to do wipers all day] 
+
+* *Dynamically scheduled loops* – work distribution determined during
+  execution, when a processor becomes available it takes the next item
+  that needs work [once Frank finishes vacuuming, he does the next
+  item on the checklist] 
+
+
+General parallel computing definitions
+--------------------------------------------------
+
+.. index:: parallel decomposition
+
+* *Partitioning/Decomposition*: the means by which an overall
+  computation is divided into smaller parts, some or all of which may
+  be executed in parallel. 
+
+.. index:: parallel tasks
+
+* *Tasks*: programmer-defined computational subunits determined
+  through the decomposition.
+
+.. index:: parallel concurrency
+
+* *Concurrency*: the degree to which multiple tasks can be executed in
+  parallel at any given time (more is better).
+
+.. index:: parallel granularity
+
+* *Granularity*: the size of tasks into which a problem is decomposed 
+
+  * A decomposition into a large number of small tasks is called
+    *fine-grained*. 
+
+  * A decomposition into a small number of large tasks is called
+    *coarse-grained*. 
+
+.. index:: parallel task interaction
+
+* *Task-interaction*: the tasks that a problem is decomposed into
+  often share input, output, or intermediate data that must be
+  communicated.
+
+.. index:: parallel processes
+
+* *Processes*: individual threads of execution. A single processor may
+  execute multiple processes, each of which can operate on multiple
+  tasks. 
+
+
+The primary question in parallel algorithms -- decomposition
+----------------------------------------------------------------
+
+Any decomposition strategy must determine a set of primitive tasks.
+
+*Goals*:
+
+* Identify as many primitive tasks as possible (increases potential
+  parallelism): prefer at least an order of magnitude more tasks than
+  processors. 
+
+* Minimize redundant computations and data storage (efficiency,
+  scalability). 
+
+* Want primitive tasks to be roughly equal work (load balancing).
+
+* Want the number of tasks to increase as the problem gets larger
+  (scalability). 
+
+*Data decompositions* are approaches that first divide the data into
+pieces and then determine how to associate computations with each
+piece of data. 
+
+*Functional decompositions* are approaches that first divide the
+computation into functional parts and then determine how to associate
+data items with the individual computations.
+
+
+
+Overhead and load balancing
+--------------------------------------------------
+
+After decomposition, we must map tasks onto processes with the goal
+that all tasks finish in the shortest time.
+
+.. index:: overhead
+
+We strive to minimize *overheads* for executing the tasks, including:
+
+* The time spent communicating between processors,
+
+* The time some processors spend sitting idle,
+
+* The time spent in the spawning of new threads.
+
+Idle processes occur due to:
+
+* An uneven load distribution,
+
+* Unresolved dependencies from an earlier parallel task set,
+
+* A heterogeneous machine, where processors operate at different
+  speeds.
+
+.. index:: load balancing
+
+*Load balancing* is the attempt to map processes with the dual
+objectives: 
+
+* Reduce the amount of inter-processor communication.
+
+* Reduce the amount of time some processors are idle while others are
+  working. 
+
+This can be a non-trivial task, since these two objectives usually 
+conflict with each other. 
+
+
+
+Data decompositions
+------------------------------------
+
+.. index:: parallel decomposition; domain decomposition
+
+Domain decomposition
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Tasks are statically or semi-statically mapped onto processes based on
+  spatial location; each task performs similar operations on different
+  data (subdomains).
+
+* Work is interspersed with communication to synchronize the tasks or
+  share data.
+
+* The degree of parallelism increases with problem size, enabling
+  effective use of more processes on larger problems.
+
+
+Typical domain decomposition approaches:
+
+.. figure:: figs/decomp_1D.png
+   :scale: 80 %
+   :align: center
+
+   1D -- decompose processes along a single physical dimension.
+
+
+.. figure:: figs/decomp_2D.png
+   :scale: 100 %
+   :align: center
+
+   2D -- decompose processes along two physical dimensions; this
+   typically requires a logically-rectangular physical domain.
+
+
+.. figure:: figs/decomp_3D.png
+   :scale: 70 %
+   :align: center
+
+   3D -- decompose processes along three physical dimensions;
+   typically requires a logically-cuboid physical domain.
+
+
+
+Domain decomposition example: PDE approximation of an aircraft
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+
+Suppose we want to simulate 3D elasticity for vibrations/deformations
+in an aircraft.
+
+* A relevant domain decomposition of the problem could be:
+
+  * Process 0 solves the model over the fuselage,
+
+  * Process 1 solves the model over the left wing,
+
+  * Process 2 solves the model over the right wing,
+
+  * Process 3 solves the model over the tail.
+
+* The processes must communicate to send relevant data about how the
+  fuselage interacts with the wings and tail. 
+
+* Not all processes need to communicate – only those who own adjacent
+  parts of the plane.
+
+* If the wing deformations are greater than the tail, computations on
+  processes 1 and 2 could take longer than process 3.
+
+
+.. index:: parallel decomposition; work pool
+
+Work pool model
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. image:: figs/work_pool.png
+   :scale: 70%
+   :align: center
+
+* Tasks are dynamically mapped onto processes, where any task may
+  potentially be performed by any process. 
+
+* Useful for load balancing if individual tasks may take dramatically
+  different amounts of time. 
+
+* Typical when the data is small compared to the computation
+  associated with tasks, and/or there are *many* more tasks than
+  processes. 
+
+
+Work pool example: particle dynamics
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+Suppose we wish to simulate the dynamics (position and velocity) of a
+large number of collisionless particles in an external force field,
+and where particles with a greater speed require increased processing.
+
+* This model first divides the overall set into a large number of
+  subsets [e.g. each particle, or small packets of particles].
+
+* Each process begins work on evolving a different subset of
+  particles. 
+
+* When each task finishes with their set, they begin work on another
+  set, until all of the sets of particles have been processed. 
+
+* The granularity of tasks can be adjusted to trade-off between load
+  imbalance and the overhead of accessing the queue of remaining
+  particles. 
+
+* The pool may be stored in a physically-shared list, or some
+  physically-distributed data structure requiring communication to
+  determine the remaining work to be done. 
+
+
+
+Functional decompositions
+------------------------------------
+
+.. index:: parallel decomposition; manager-worker
+
+Manager-worker
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This approach goes by many names: *master-slave*, *professor-student*,
+*Wonka-Loompa*. 
+
+.. image:: figs/manager_worker.png
+   :scale: 70%
+   :align: center
+
+* One or more manager processes generate tasks and assign them to
+  worker processes.
+
+* Tasks may be allocated *a priori* if the manager can estimate the
+  task size. 
+
+* Alternatively, workers can be assigned small pieces when they are
+  ready for more work.
+
+* Care must be taken to ensure that the manager does not become a
+  bottleneck. 
+
+* Should choose granularity of tasks so that the cost of doing work
+  dominates the cost of assigning/transferring work.
+
+
+Manager-worker example: simulated annealing
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+*Simulated annealing* is a stochastic optimization algorithm for
+functions with multiple local minima.
+
+* At each iteration, a current solution is randomly changed to create
+  an alternate solution in the neighborhood of the current solution. 
+
+* The new iterate replaces the current solution if its function value
+  is lower. 
+
+* If the value is higher it can also replace the objective function
+  with probability :math:`e^{-\Delta/T}`, where :math:`\Delta` is the
+  difference in function values and :math:`T` is the ‘temperature’.
+
+A manager process can set up a work queue with many initial iterates. 
+
+* The manager assigns workers to each investigate different
+  neighborhoods. 
+
+* The manager keeps track of the *n* best solutions, adding new,
+  refined neighborhoods to the queue to improve these ‘optimal’
+  solutions.
+
+* The manager decides when work stops by either setting a pre-defined
+  iteration limit, or by noticing stagnation of the optimal solution
+  set. 
+
+
+.. index:: parallel decomposition; pipeline
+
+Pipeline model
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. image:: figs/pipeline.png
+   :scale: 70%
+   :align: center
+
+* A stream of data is passed through a succession of processes, each
+  of which performs some task on the data.
+
+* The pipeline typically involves a static mapping of tasks onto
+  processes. 
+
+* Forms a chain of producers and consumers, with each process
+  consuming the output of preceding processes, and producing data for
+  subsequent processes. 
+
+* Load balancing is a function of task granularity:
+ 
+  * The larger the granularity the longer it takes to fill the
+    pipeline.
+
+  * Too fine a granularity can increase overheads in the transmission
+    of data. 
+
+
+Pipeline example: repeated LU solves
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+Suppose we have the matrix decomposition :math:`A=LU`, where :math:`L`
+and :math:`U` are lower and upper triangular matrices, respectively,
+and we wish to solve :math:`Ax=b` for many different right-hand side
+vectors :math:`b`.  
+
+* Solution of :math:`Ax=b` may be performed through the two solves
+  :math:`Ly=b` and then :math:`Ux=y`. 
+
+* :math:`Ly=b` involves forward substitution:
+
+  * :math:`y_1` is computed.
+
+  * :math:`y_j, j=2,\ldots,n` are computed by updating :math:`b` with
+    the preceding :math:`y`.  
+
+* Then, :math:`Ux=y` involves backward substitution:
+
+  * :math:`x_n` is computed
+
+  * :math:`x_j, j=1,\ldots,n-1` are computed by updating :math:`y`
+    with the previously-computed :math:`x` values.
+
+* By distributing matrix rows onto processors, :math:`Ly=b` is a
+  pipeline from top to bottom, and :math:`Ux=y` is a pipeline in the
+  reverse direction. 
+
+* Once one :math:`b` is finished we start the next.
+
+.. image:: figs/LU_parallel.png
+   :scale: 100%
+   :align: center
+
+
+
+.. _parallel_computing_metrics:
+
+Parallel computing metrics
+------------------------------------
+
+.. index:: parallel scalability
+
+*Scalability* is the ability of a parallel algorithm to effectively
+utilize a parallel machine.
+
+.. index:: strong scaling
+
+*Strong scaling*:  the goal is speed up algorithms that are possible
+on one computer, but slow. 
+
+* *Fix overall problem size* and increase the number of processors, *p*.
+
+* Hope that the execution time decreases in inverse proportion to *p*.
+
+.. figure:: figs/strong_scaling.png
+   :scale: 80%
+   :align: center
+
+   [from David E. Keyes, HiPC 2007]
+
+
+.. index:: weak scaling
+
+*Weak scaling*: the goal is to enable problems that cannot fit on one
+computer due to large size (resolution-limited). 
+
+* *Fix problem size per processor*, and increase *p*.
+
+* Hope that the execution time remains constant, as both problem size
+  and process count are increased proportionately.
+
+.. figure:: figs/weak_scaling.png
+   :scale: 80%
+   :align: center
+
+   [from David E. Keyes, HiPC 2007]
+
+
+.. index:: parallel speedup, parallel efficiency
+
+For strong-scaling tests, we also compute the following performance
+measures: 
+
+.. math::
+
+   \mbox{Parallel speedup} &\ = \ \frac{\mbox{sequential execution time}}{\mbox{parallel execution time}} \\
+   \mbox{Parallel efficiency} &\ = \ \frac{\mbox{Parallel speedup}}{\mbox{processors used}}
+   \ = \ \frac{\mbox{sequential execution time}}{(\mbox{parallel execution time})(\mbox{processors used})}
+
+
+.. index:: Amdahl's law
+
+We typically compare these metrics against the theoretically
+"best-case scenario", as determined through *Amdahl's Law* (1967):
+
+* Let :math:`f` be the fraction of work that is not parallelizable;
+  and :math:`(1-f)` be the fraction of work that is perfectly
+  parallelizable.
+
+* Assume it takes time :math:`t` to complete the task on one
+  processor.
+
+* The theoretical time for :math:`p` processors to accomplish the same
+  task should be :math:`t \left(f + \frac{1-f}{p}\right)`.
+
+.. image:: figs/amdahl_speedups.png
+   :scale: 70%
+   :align: center
+
+
+.. index:: 
+   single: parallel computing resources
+   single: resources; parallel computing
+
+General parallel computing resources:
+
+* Class: `Math 6370, Introduction to Parallel Scientific Computing
+  <http://runge.math.smu.edu/Courses/Math6370_Spring13/>`_ 
+
+* Book: `Designing and Building Parallel Programs, by Ian Foster
+  <http://www.mcs.anl.gov/~itf/dbpp/>`_ 
+
+* Online tutorial: `Introduction to Parallel Computing
+  <https://computing.llnl.gov/tutorials/parallel_comp/>`_ 
+
+
+
+
+
+
+Parallel computing libraries: MPI and OpenMP
+=================================================================
+
+.. index:: 
+   pair: OpenMP; resources
+
+OpenMP is the primary approach for enabling shared-memory parallel
+computing.  It is implemented as an extension to compilers, and is
+enabled by adding so-called *directives* or *pragmas* to your source
+code, with suggestions on how to launch and share work among threads.
+
+  OpenMP resources:
+
+  * `OpenMP public site <http://openmp.org/wp/>`_
+
+  * `OpenMP specifications reference manual
+    <http://www.openmp.org/mp-documents/spec30.pdf>`_ 
+
+  * `In-Depth Interactive OpenMP Tutorial
+    <https://computing.llnl.gov/tutorials/openMP/>`_ 
+
+
+.. index:: 
+   pair: MPI; resources
+
+MPI is the primary approach for enabling distributed-memory parallel
+computing.  It is implemented as a library of functions and data
+types, that may be called within your source code to send messages
+among processes for coordination and data transfer.
+
+  MPI resources:
+
+  * `MPI public site <http://www.mpi-forum.org/>`_
+
+  * `MPI specifications reference manual
+    <http://www.mpi-forum.org/docs/mpi-3.0/mpi30-report.pdf>`_ 
+
+  * `In-Depth Interactive MPI Tutorial
+    <https://computing.llnl.gov/tutorials/mpi/>`_ 
+
+  * `Advanced MPI Tutorial
+    <https://computing.llnl.gov/tutorials/mpi_advanced/DavidCronkSlides.pdf>`_
+
+
+
+
+Free parallel solver software
+=================================================================
+
+
+Since it is a library, MPI has enabled the development of many
+powerful scientific computing solver libraries that build on top of
+MPI to enable efficient, scalable and robust packages for parallel
+scientific computing.
+
+Dense linear solvers and eigenvalue solvers:
+
+.. index:: ScaLAPACK
+
+* `ScaLAPACK <http://netlib.org/scalapack>`_ -- dense and banded linear
+  solvers and eigenvalue analysis [Fortran77] 
+
+.. index:: PLAPACK
+
+* `PLAPACK <http://www.cs.utexas.edu/~plapack>`_ -- dense matrix
+  operations [C] 
+
+Sparse/iterative linear/nonlinear solvers and eigenvalue solvers:
+
+.. index:: SuperLU
+
+* `SuperLU <http://crd.lbl.gov/~xiaoye/SuperLU>`_ -- direct solvers for
+  sparse linear systems [C++, C, Fortran]
+
+.. index:: HYPRE
+
+* `HYPRE <http://www.llnl.gov/CASC/linear_solvers>`_ -- iterative
+  solvers for sparse linear systems [C++, C, Fortran]
+
+.. index:: PARPACK
+
+* `PARPACK <http://www.caam.rice.edu/software/ARPACK>`_ -- large-scale
+  eigenvalue problems [Fortran77] 
+
+Other:
+
+.. index:: SUNDIALS
+
+* `SUNDIALS <http://www.llnl.gov/casc/sundials>`_ -- nonlinear, ODE,
+  DAE solvers w/ sensitivities [C++, C, Fortran, Matlab] 
+
+.. index:: FFTW
+
+* `FFTW <http://www.fftw.org>`_ -- multi-dimensional parallel discrete
+  Fourier transform [C++, C, Fortran] 
+
+.. index:: ParMETIS
+
+* `ParMETIS <http://www.cs.umn.edu/~metis>`_ -- graph partitioning
+  meshing, sparse-matrix orderings [C]
+
+.. index:: PHDF5
+
+* `PHDF5 <http://www.hdfgroup.org>`_ -- parallel data input/output
+  library [C++, C, Fortran] 
+
+.. index:: mpiP
+
+* `mpiP <http://mpip.sourceforge.net>`_ -- MPI profiling library [C++,
+  C, Fortran] 
+
+.. index:: LAMMPS
+
+* `LAMMPS <http://lammps.sandia.gov>`_ -- large-scale molecular
+  dynamics simulator [C++, C, Fortran, Python] 
+
+Larger parallel packages (that include or can call many of the above
+software):
+
+.. index:: PETSc
+
+* `PETSc <http://www.mcs.anl.gov/petsc>`_ -- data structures &
+  nonlinear/linear PDE solvers [C++, C, Fortran, Python] 
+
+.. index:: Trilinos
+
+* `Trilinos <http://trilinos.sandia.gov>`_ -- enabling technologies
+  for complex multi-physics problems [C++, Fortran, Python] 
 
 
 

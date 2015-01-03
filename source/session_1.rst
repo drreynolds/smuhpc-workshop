@@ -12,10 +12,10 @@ Session 1: Introduction to Linux
 *Assistant: Amit Kumar*
 
 
-`Session 1 & 2 lecture slides (PDF)
+`Session 1 lecture slides (PDF)
 <http://www.physics.smu.edu/coan/linux/intro_slides.pdf>`_ 
 
-`Session 1 & 2 tutorial slides, "Linux Driver's Ed" (HTML)
+`Session 1 tutorial slides, "Linux Driver's Ed" (HTML)
 <http://www.physics.smu.edu/coan/linux/index.html>`_
 
 

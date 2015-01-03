@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# SMU HPC Summer Workshop documentation build configuration file, created by
-# sphinx-quickstart on Fri May 17 10:43:48 2013.
+# SMU HPC Workshop documentation build configuration file
 #
 # This file is execfile()d with the current directory set to its containing dir.
 #
@@ -40,8 +39,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'SMU HPC Summer Workshop'
-copyright = u'2014, SMU Center for Scientific Computation (Daniel R. Reynolds)'
+project = u'SMU HPC Winter Workshop'
+copyright = u'2015, SMU Center for Scientific Computation (Daniel R. Reynolds)'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -132,7 +131,7 @@ html_theme_options = {
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-html_title = "2014 SMU HPC Summer Workshop"
+html_title = "2015 SMU HPC Winter Workshop"
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 #html_short_title = None
@@ -212,7 +211,7 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'SMUHPCWorkshop.tex', u'SMU HPC Summer Workshop',
+  ('index', 'SMUHPCWorkshop.tex', u'SMU HPC Winter Workshop',
    u'Daniel R. Reynolds, SMU Center for Scientific Computation', 'howto'),
 ]
 
@@ -242,7 +241,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'smuhpcworkshop', u'SMU HPC Summer Workshop',
+    ('index', 'smuhpcworkshop', u'SMU HPC Winter Workshop',
      [u'Daniel R. Reynolds'], 1)
 ]
 
@@ -256,7 +255,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'SMUHPCWorkshop', u'SMU HPC Summer Workshop',
+  ('index', 'SMUHPCWorkshop', u'SMU HPC Winter Workshop',
    u'Daniel R. Reynolds', 'SMUHPCWorkshop', 'One line description of project.',
    'Miscellaneous'),
 ]
