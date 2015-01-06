@@ -44,10 +44,10 @@ will be tuned to computing on the new SMU cluster, *ManeFrame*.
    Intro. Scripts & Programs (Mon. PM) <session_2>
    More Programming (Tue. AM) <session_3>
    Advanced Programming (Tue. PM) <session_4>
-   Using SMU HPC (Wed. AM) <session_5>
+   Using ManeFrame (Wed. AM) <session_5>
    Postprocessing (Wed. PM) <session_6>
    Intro. Parallel Computing (Thu. AM) <session_7>
-   Parallel Comp. on Maneframe (Thu. PM) <session_8>
+   Parallel Comp. on ManeFrame (Thu. PM) <session_8>
 
 
 

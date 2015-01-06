@@ -9,8 +9,6 @@ Session 3: More Programming
 
 
 
-
-
 .. index:: ! Makefile
 
 Makefiles
@@ -63,7 +61,7 @@ section.  Inside this directory you will see a number of files:
 
 Here, the main program is held in the file ``driver.cpp``, and
 supporting subroutines are held in the remaining files. To compile
-these on SMUHPC, it takes a number of steps. 
+these on ManeFrame, it takes a number of steps. 
 
 Let's first compile and assemble the auxiliary subroutine
 ``one_norm.cpp``:
@@ -156,8 +154,9 @@ A few rules about ``Makefiles``:
 * If you just type ``make`` at the command line, only the first
   *target* is run.
 
-As an example, examine the Makefile from session 3.  Here, all of the
-lines are either blank or are comment lines except for the four sets: 
+As an example, examine the Makefile from :ref:`session 2 <session2>`.
+Here, all of the lines are either blank or are comment lines except
+for the four sets: 
 
 .. code-block:: makefile
 
@@ -183,7 +182,7 @@ source code file listed to the right of the colon; here these are
 ``hello.cpp``, ``hello.c``, ``hello.f90`` and ``hello.f``, respectively.  
 
 The :index:`indented <pair: Makefile; build commands>` lines (each
-require a single [tab] character) under each target contain the
+require a single [Tab] character) under each target contain the
 instructions on how to build that executable.  For example, ``make``
 will build ``hello_cpp.exe`` by issuing the command ``g++ hello.cpp -o
 hello_cpp.exe``, which does the compilation, assembly and linking all
@@ -397,10 +396,10 @@ Makefile exercise
 ------------------------
 
 Create a ``Makefile`` to compile the executable ``driver.exe`` for
-session 3, out of the files ``driver.cpp``, ``one_norm.cpp``,
-``vector_difference.cpp``, ``vector_product.cpp`` and
-``vector_sum.cpp``.  This should encode all of the commands that we
-earlier needed to do by hand. Start out with the command 
+this workshop session, out of the files ``driver.cpp``,
+``one_norm.cpp``, ``vector_difference.cpp``, ``vector_product.cpp``
+and ``vector_sum.cpp``.  This should encode all of the commands that
+we earlier needed to do by hand. Start out with the command 
 
 .. code-block:: bash
 
@@ -410,12 +409,12 @@ to have ``gedit`` create the file ``Makefile`` in the background, so
 that while you edit the ``Makefile`` you can still use the terminal
 window to try out ``make`` as you add commands.
 
-As with the example from session 3, you can incorporate more than one
-target into your ``Makefile``.  The first target in the file will be
-executed by a ``make`` command without any arguments.  All other
-targets may be executed through the command ``make target``, where
-``target`` is the name you have specified for a target in the
-``Makefile``.  
+As with the example from :ref:`session 2 <session2>`, you can
+incorporate more than one target into your ``Makefile``.  The first
+target in the file will be executed by a ``make`` command without any
+arguments.  All other targets may be executed through the command
+``make target``, where ``target`` is the name you have specified for a
+target in the ``Makefile``.  
 
 .. index:: make clean
 
@@ -483,12 +482,12 @@ packages are or aren't already installed on a system.
 
    The *module* system is not installed by default on most Linux
    systems (i.e. it is likely not installed on a standard linux
-   desktop).  However, it is *incredibly* useful when using a new
+   laptop/desktop).  However, it is *incredibly* useful when using a new
    machine, most notably when things are installed in non-default
    locations.  As most clusters and supercomputers must use
    non-default installation options, modules are very popular on such
-   systems.  As such, it is installed both on our current and upcoming
-   SMU HPC clusters.
+   systems.  As such, it is installed both SMUHPC and ManeFrame (as
+   well as on all DOE and NSF supercomputers that I've used).
 
 
 The module system operates through the Linux executable, ``module``,
@@ -503,47 +502,43 @@ follows:
   .. code-block:: bash
 
      $ module avail
-     ---------------- /grid/software/modulefiles/applications -----------------
-        R/2.10.0                   matlab/R2013a                     (D)
-        R/2.15.3           (D)     meep/1.1.1
-        R/3.0.0                    meep/1.2                          (D)
-        R/3.0.2                    mercurial/2.6.1
-        ROOT/5.32                  namd/2.9/ethernet/multicore-CUDA
-        ROOT/5.34.14       (D)     namd/2.9/ethernet/multicore
-        abinit                     namd/2.9/ethernet/tcp
-        es/0.98                    namd/2.9/ethernet/udp             (D)
-        feram/0.22.01              namd/2.9/infiniband/non-smp
-        java/1.7                   namd/2.9/infiniband/smp           (D)
-        lammps/1Feb14              python/2.6.5
-        mathematica/8.0.1          python/2.7.5                      (D)
-        matlab/R2011b
+
+     ---------------------- /grid/software/module/files/applications -----------------------
+        R/2.15.3                                  gaussian/g09D+Linda
+        R/3.1.1                            (D)    gaussian/g09.D                 (D)
+        anaconda/2.1.0/python2.7.8                geant4/10.00/gcc-4.9.1
+        autodock-vina/1.1.2                       iozone/gcc
+        cfour/2.0beta/default                     ls-dyna/700
+        cfour/2.0beta/para/gcc-4.4.7              ls-dyna/711                    (D)
+        cfour/2.0beta/para/gcc-4.9.1       (D)    namd/2.9/ethernet/default      (D)
+        cfour/2.0beta/parallel                    namd/2.9/ethernet/multicore
+        cfour/2.0beta/serial/gcc-4.9.1            namd/2.9/infiniband/default    (D)
+        cplex/12.6                                namd/2.9/infiniband/smp
+        deMon/3.0.6/mvapich2-2.0/gcc-4.4.7        namd/sc/2.9/infiniband/default
+        deMon/3.0.6/optimized/gcc-4.4.7           python/2.7.8                   (D)
+        deMon/3.0.6/std/gcc-4.4.7                 python/3.4.1
+        fltk/1.3.2                                python/3.4.2
+        gaussian/g03.E
      
-     ------------------ /grid/software/modulefiles/compilers ------------------
-        g95/0.92/32bit          gcc/4.7.2          nag/5.2-64bit
-        g95/0.92/64bit  (D)     gcc/4.8.0          pgi/10.5-64bit
-        gcc/4.5.1               gcc/4.8.2  (D)     pgi/13.2-64bit  (D)
+     ------------------------ /grid/software/module/files/compilers ------------------------
+        gcc/4.4.7 (D)    gcc/4.9.1    pgi/13.2-64bit
      
-     ------------------ /grid/software/modulefiles/libraries ------------------
-        CFITSIO                 mpich2/1.1.1/gcc
-        LibYAML/0.1.4           mpich2/1.3.2/pgi
-        YAML-CPP/0.5.1          mpich2/1.4.1/gcc
-        boost/1.54.0            mpich3/3.1/gcc
-        boost/1.55.0    (D)     mvapich2/1.6/gcc-QL
-        fftw/3.2.2              mvapich2/1.6/gcc
-        fftw/3.3.3      (D)     mvapich2/1.6/pgi-QL
-        gsl/1.9                 mvapich2/1.6/pgi         (D)
-        gsl/1.15        (D)     mvapich2/1.9a2/gcc
-        hdf5/1.8.3              openmpi/1.6.5/gcc/4.8.0
-     
-     ------------------- /grid/software/modulefiles/physics -------------------
-        clhep/2.0.4.5       clhep/2.0.4.7       clhep/2.1.2.3  (D)
+     ------------------------ /grid/software/module/files/libraries ------------------------
+        atlas/3.10.2/gcc-4.9.1             mpich2/1.5/gcc-4.4.7
+        fftw/2.1.3/gcc-4.9.1/double        mvapich2/2.0rc2-gcc-4.4.7
+        fftw/2.1.3/gcc-4.9.1/single (D)    mvapich2/2.0-gcc-4.4.7    (D)
+        fftw/2.1.5/gcc-4.9.1/double        mvapich2/2.0-gcc-4.9.1
+        fftw/2.1.5/gcc-4.9.1/single (D)    mvapich2/2.0-pgi-13.2
+        fftw/3.3.4/gcc-4.9.1/double        openmpi/1.8.2/gcc-4.4.7   (D)
+        fftw/3.3.4/gcc-4.9.1/single (D)    openmpi/1.8.2/gcc-4.9.1
+        gsl/1.16/gcc-4.9.1                 openmpi/1.8.3/pgi-13.2
      
        Where:
         (D):  Default Module
      
-     Use "module spider" to find all possible modules. 
-     Use "module keyword key1 key2 ..." to search for all possible modules 
-     matching any of the "keys". 
+     Use "module spider" to find all possible modules.
+     Use "module keyword key1 key2 ..." to search for all possible modules matching any of
+     the "keys".
 
 
 .. index:: module; list
@@ -554,10 +549,7 @@ follows:
   .. code-block:: bash
 
      $ module list
-     Rebuilding cache file, please wait ... done.
-     
-     
-     Lmod Warning: No modules installed
+     No modules installed
 
 .. index:: 
    single: module; add
@@ -585,7 +577,6 @@ follows:
   .. code-block:: bash
 
      $ module list
-
      Currently Loaded Modules:
        1) pgi/13.2-64bit
 
@@ -599,14 +590,13 @@ follows:
 
   .. code-block:: bash
 
-     $ module load fftw
+     $ module load cplex
      $ module list
-
      Currently Loaded Modules:
-       1) pgi/13.2-64bit    2) fftw
-     $ module unload fftw
-     $ module list
+       1) pgi/13.2-64bit    2) cplex/12.6
 
+     $ module unload cplex
+     $ module list
      Currently Loaded Modules:
        1) pgi/13.2-64bit
 
@@ -620,14 +610,24 @@ follows:
 
   .. code-block:: bash
 
-     $ module load mvapich2/1.6/gcc
+     $ module load mvapich2/2.0-gcc-4.4.7
      $ module list
      Currently Loaded Modules:
-       1) pgi/13.2/64bit     2) mvapich2/1.6/gcc
-     $ module swap mvapich2/1.6/gcc mvapich2/1.6/gcc-QL
+       1) pgi/13.2-64bit   2) gcc/4.4.7   3) mvapich2/2.0-gcc-4.4.7
+
+     $ module swap mvapich2/2.0-gcc-4.4.7 mvapich2/2.0-pgi-13.2
      $ module list
      Currently Loaded Modules:
-       1) pgi/13.2/64bit        2) mvapich2/1.6/gcc-QL
+       1) pgi/13.2-64bit   2) mvapich2/2.0-pgi-13.2
+
+  .. note:: after loading the module ``mvapich2/2.0-gcc-4.4.7``, we
+	    went from having one module loaded to three.  This is
+	    because the module we loaded had a prerequisite of the
+	    module ``gcc/4.4.7``, which was loaded automatically.
+	    When we subsequently unload/rm/swap a module, any
+	    auto-loaded modules dependencies are then unloaded
+	    automatically.
+
 
 .. index:: 
    single: module; display
@@ -639,22 +639,24 @@ follows:
  
   .. code-block:: bash
 
-     $ module show R/3.0.0
+     $ module show R/3.1.1
      ------------------------------------------------------------
-        /grid/software/modulefiles/applications/R/3.0.0.lua:
+        /grid/software/module/files/applications/R/3.1.1.lua:
      ------------------------------------------------------------
      whatis("loads R executables in current environment")
-     setenv("R_HOME", "/grid/software/R-3.0.0")
-     prepend_path("PATH", "/grid/software/R-3.0.0/bin:/grid/software/gcc-4.8.0/bin")
-     prepend_path("MANPATH", "/grid/software/R-3.0.0/share/man")
-     prepend_path("LD_LIBRARY_PATH", "/grid/software/R-3.0.0/lib64:/grid/software/R-3.0.0/lib64:/grid/software/gcc-4.8.0/lib64:/grid/software/gcc-4.8.0/lib:/grid/software/gmp-5.1.1/lib:/grid/software/mpfr-3.1.2/lib:/grid/software/mpc-1.0.1/lib")
+     load("gcc/4.9.1")
+     prereq("gcc/4.9.1")
+     prepend_path("PATH","/grid/software/R/3.1.1/bin")
+     prepend_path("MANPATH","/grid/software/R/3.1.1/share/man")
+     prepend_path("LD_LIBRARY_PATH","/grid/software/R/3.1.1/lib64")
+
 
 .. index:: module; help
 
 * ``module help`` -- This displays a set of
   descriptive information about the module (what it does, the version
   number of the software, etc.).  This only applies to packages where
-  their "help" pages have been installed (none yet on SMU HPC).
+  their "help" pages have been installed (none yet on ManeFrame).
 
 
 
@@ -688,25 +690,6 @@ system.
 
 
 
-Module exercise
---------------------------------------------------
-
-Run Mathematica on SMUHPC, using it to integrate the function
-:math:`f(x) = \log(x^3-2)`.  
-
-Hints:
-
-* Find/load the appropriate module.
-
-* Use ``mathematica`` at the command-line.
-
-* Click "Notebook".
-
-* Once in Mathematica, use the "Help"->"Documentation Center" menu and
-  search for "Integration". 
-
-* At the Mathematica prompt, after entering a Mathematica command it
-  may be executed with [shift]-[enter]. 
 
 
 
@@ -1232,10 +1215,9 @@ Git resources:
 .. index:: hg
    seealso: mercurial; hg
 
-Mercurial
+Mercurial (my favorite)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-(my favorite)
 
 Like Git, `Mercurial
 <https://en.wikipedia.org/wiki/Mercurial_(software)>`_ was first
@@ -1320,11 +1302,7 @@ Mercurial example
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 We'll get a little experience with using Mercurial to "collaborate" on
-a shared project.  We'll first need to load the Mercurial module:
-
-.. code-block:: bash
-
-   $ module load mercurial/2.6.1
+a shared project.  
 
 The first step in using a version control system
 on an existing repository is to do the initial download of the code
@@ -1499,47 +1477,56 @@ changes from the shared repository, you ``push`` via
 
 
 
-Comparison with Dropbox/Google Drive/etc.
---------------------------------------------
+Comparison with Dropbox/Google Drive/OneDrive/etc.
+----------------------------------------------------
 
 With the advent of "the cloud", we are inundated with options for
 storing files and sharing them with others.  As a result, many of us
 have come up with preferred strategies for working with our files,
-such as with `Dropbox <http://dropbox.com>`_ or `Google Drive
-<http://drive.google.com>`_.  
+such as with `Dropbox <http://dropbox.com>`_, `Google Drive
+<http://drive.google.com>`_, `OneDrive <https://onedrive.live.com>`_,
+`Box <https://www.box.com/>`_, ...
 
 Unfortunately, while these cloud storage options are great solutions
-for sharing files with others, they are *terrible* choices for typical
+for sharing files with others, they are *poor* choices for typical
 software projects:
 
-1. Typically very difficult or impossible to retrieve prior versions
-   of a file, and even when possible, it may only be done based on
-   date/time, and does not include "checkin" messages describing the
-   differences between files.  VCS systems store specific "versions"
-   of each file, with checkins labeled using (hopefully descriptive)
-   messages.  Better yet, VCS systems allow you to "tag" a specific
-   state of the repository (e.g. to mark it for release as version
-   "2.0").  The repository may be "reverted" to its status at any tag
-   or after any checkin with only one (or a few) simple commands.
+1. It is typically very difficult (or impossible) to retrieve old
+   versions of a file, and even when possible, it may only be done
+   based on date/time, and does not include "checkin" messages
+   describing the differences between files.  
+
+   .. note:: VCS systems store specific "versions" of each file, with
+	     checkins labeled using (hopefully descriptive) messages.
+	     Better yet, VCS systems allow you to "tag" a specific
+	     state of the repository (e.g. to mark it for release as
+	     version "2.0").  The repository may be "reverted" to its
+	     status at any tag or after any checkin with only one (or
+	     a few) simple commands.
 
 2. Unless all authors *never* edit the same file, merging changes
-   between multiple authors becomes difficult, if not impossible.  VCS
-   systems allow multiple users to edit the same file, merging changes
-   automatically (if made to separate parts of the file), or
-   requesting the newest checkin to manually merge portions of the
-   code that overlap.
+   between multiple authors becomes difficult, if not impossible.  
+
+   .. note:: VCS systems allow multiple users to edit the same file,
+	     merging changes automatically (if made to separate parts
+	     of the file), or requesting the newest checkin to
+	     manually merge portions of the code that overlap. 
 
 3. No "sandboxing" of code -- the moment that you edit the file it is
    changed in the cloud, making it impossible for one user to compile
    while another is actively editing and saving files (since they
-   typically will not compile at every save).  VCS systems allow you
-   to save files to disk for compilation and testing, and only share
-   the changes with others *when you decide that the changes should
-   be shared*.
+   typically will not compile at every save).  
+
+   .. note:: VCS systems allow you to save files to disk for
+	     compilation and testing, and only share the changes with
+	     others *when you decide that the changes should be
+	     shared*. 
 
 4. No simple "diff" capabilities, to see *exactly* what has changed in
-   each file at any point in time.  VCS systems all supply some kind
-   of "diff" to allow quick comparison between versions of a code.
+   each file at any point in time.  
+
+   .. note:: VCS systems all supply some kind of "diff" to allow quick
+	     comparison between versions of a code.  
 
 All of that said, some people use a combination of a VCS and a cloud
 storage solution to get the benefits of both.  For example, many
@@ -1548,9 +1535,9 @@ or Mercurial) *inside* a Dropbox folder, that they can then share with
 other developers (for example, see `this blog post
 <http://rogerstringer.com/2012/04/16/using-dropbox-as-a-git-repository/>`_).
 In this way, you can benefit from using the cloud to share files with
-others (Dropbox or Google Drive), while also benefiting from a VCS
+others (Dropbox, Google Drive, etc.), while also benefiting from a VCS
 system for all of the options discussed above.  That said, in my
-experience it's just as free and more useful to use a professional
+experience it's just as free and more helpful to use a professional
 repository hosting service like `Bitbucket <http://bitbucket.org>`_.
 
 

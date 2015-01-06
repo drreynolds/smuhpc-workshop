@@ -4,228 +4,258 @@
 .. _session5:
 
 *****************************************************
-Session 5: Using SMU HPC
+Session 5: Using ManeFrame
 *****************************************************
 
 
 
-
-What is SMU HPC?
+What is ManeFrame?
 ================================================
 
-While we've technically been using the SMU HPC cluster throughout this
-workshop, in reality we've only been using standard Linux tools as if
-``smuhpc`` were a single computer.  The real value in the SMU HPC
-cluster is its ability to run large numbers of simultaneous jobs
-(a.k.a. *high throughput computing*) and/or its ability to run jobs
-that span multiple processors at once (a.k.a. *high performance
-computing* or *parallel computing*).
+While we've technically been using the ManeFrame cluster throughout
+this workshop, in reality we've only been using standard Linux tools
+as if ManeFrame were a single computer.  The real value in the
+ManeFrame cluster is its ability to run jobs that span multiple
+processors at once (a.k.a. *high performance computing* or *parallel
+computing*), and/or its ability to run large numbers of simultaneous
+jobs (a.k.a. *high throughput computing*).
 
-Originally purchased in 2009 through funding from the `SMU Provost's
-office <http://smu.edu/provost/#1>`_, and subsequently added onto
-through grants to the `Physics <http://www.smu.edu/physics>`_ and
-`Math <http://www.smu.edu/math>`_ departments, the SMU HPC cluster is
-a shared resource available to all SMU faculty and
-graduate/undergraduate students involved in scientific computing
-projects.  It is administered by the `SMU Office of Information
-Technology <http://www.smu.edu/BusinessFinance/OIT>`_, and managed by
-the `SMU Center for Scientific Computation
-<http://www.smu.edu/Academics/CSC>`_. 
+In fact, SMU has two shared large-scale computing resources, ManeFrame
+and SMUHPC; each is optimized for slightly different types of
+calculations: 
 
-Our newest member of HPC at SMU, `Maneframe
-<https://blog.smu.edu/forum/2014/03/26/smu-welcomes-its-new-supercomputer-maneframe/>`_,
-functions similarly to our smaller existing clusters (directory
-layout, user accounts, module system, compilers, etc.).  However, at
-the time of this workshop it is still under construction, so we will
-use the existing cluster for the workshop.  When applicable, in the
-remaining workshop sessions I'll point out the differences between the
-new and old clusters.
+* SMUHPC -- Originally purchased in 2009 through funding from the `SMU
+  Provost's office <http://smu.edu/provost/#1>`_, and subsequently
+  added onto through grants to the `Physics
+  <http://www.smu.edu/physics>`_ and `Mathematics
+  <http://www.smu.edu/math>`_ departments, the SMUHPC cluster is a
+  shared resource available to all SMU faculty and
+  graduate/undergraduate students involved in scientific computing
+  projects.  It is administered by the `SMU Office of Information
+  Technology <http://www.smu.edu/BusinessFinance/OIT>`_, and managed
+  by the `SMU Center for Scientific Computation
+  <http://www.smu.edu/Academics/CSC>`_.
+
+  While SMUHPC has components suited for both parallel computing and
+  high-throughput computing, the vast majority of SMUHPC was built
+  with a slower network, making it ideally suited for high-throughput
+  serial computing.  In addition, SMUHPC utilizes the `Condor
+  <http://research.cs.wisc.edu/htcondor/>`_ job scheduler, that was
+  originally designed and optimized for high-throughput computing.
+  While parallel computing is indeed possible in Condor, it is
+  typically much more difficult to use for this purpose than other
+  schedulers.
+
+* ManeFrame -- Our newest member of HPC at SMU, `Maneframe
+  <https://blog.smu.edu/forum/2014/03/26/smu-welcomes-its-new-supercomputer-maneframe/>`_, 
+  was acquired in 2014 through an award by the `US Department of
+  Defense HPC Modernization Program <http://www.hpc.mil/index.php>`_
+  to a group of faculty from across the SMU campus.
+
+  While ManeFrame may be used for both high-throughput and parallel
+  computing, it is built with a high-speed and low-latency
+  communication network that connects all computing nodes, making it
+  ideally suited for parallel computing.  As a result, ManeFrame
+  utilizes the `SLURM <https://computing.llnl.gov/linux/slurm/>`_ job
+  scheduler, that was designed from scratch for large-scale parallel
+  computing (and is used by many of the most powerful supercomputers
+  in the world).
+
+As this workshop focuses on ManeFrame, we will not discuss how to use
+SMUHPC.  For further information on using SMUHPC, see the tutorials
+from our `2014 SMU HPC Summer Workshop
+<http://runge.math.smu.edu/SMUHPC_workshop_Summer14/>`_.
 
 
 
 
-.. index:: SMU HPC; hardware
+.. index:: ManeFrame; hardware
 
-SMU HPC hardware (old cluster)
---------------------------------------------------
+ManeFrame hardware
+-----------------------------------
 
 First, let's familiarize ourselves with the hardware that comprises
-the SMU HPC cluster.  We can group the portions of SMU HPC into a few
-simple categories: *login nodes*, *batch worker nodes*, *parallel
-nodes*, *interactive nodes* and *disk nodes*.
+the ManeFrame cluster.  We can group the portions of ManeFrame into a few
+simple categories: *login nodes*, *worker nodes* and *disk nodes*.
 
 
 Login nodes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* ``smuhpc.smu.edu`` -- main login node, used for compiling source code,
-  setting up job submission files, input files, transferring data
-  to/from ``smuhpc``, etc..  This node *should not* be used for running
-  intensive calculations.
-* ``smuhpc2.smu.edu`` -- clone of ``smuhpc.smu.edu``, with identical usage.
-* ``smuhpc3.smu.edu`` -- interactive login node, used for interactive
-  computations, such as using Matlab, Mathematica, Python or R.
-* ``smuhpc4.smu.edu`` -- clone of ``smuhpc.smu.edu``, primarily used for
-  interacting with the parallel nodes.
+Typically, users only directly interact with the "login" nodes on
+ManeFrame.  These are the nodes that users log into when accessing
+ManeFrame, and are where users request other resources for running
+jobs. 
+
+* The main login nodes are ``mflogin01.hpc.smu.edu`` and
+  ``mflogin02.hpc.smu.edu``.  These are used for compiling source
+  code, setting up job submission files, input files, transferring
+  data to/from ManeFrame, etc..  These nodes **should not** be used
+  for running computationally intensive calculations. 
+* Additionally, ``mflogin03.hpc.smu.edu`` and
+  ``mflogin04.hpc.smu.edu`` are not currently available, but will be
+  provisioned in the near future. 
 
 
-Batch worker nodes
+Worker nodes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* 107 nodes have 8 cores each (for 856 in total).  Each node has 48 GB
-  of RAM and and 250 GB of local disk space.  [``wnode1-27``, ``cnode1-80``]
+The worker, or compute, nodes are where jobs should be run on the
+ManeFrame cluster:
 
-* 56 nodes have 12 cores each (for 672 in total).  Each node has 72 GB
-  of RAM and and 500 GB of local disk space.  [``cwnode1-56``]
+* The worker nodes are ``mfc0001.hpc.smu.edu`` through ``mfc1104.hpc.smu.edu``:
 
-* all batch nodes are connected with a gigabit ethernet network.
+  * 20 of these are "high memory" nodes, with 192 GB of RAM each.
+    Access to these nodes is obtained through requesting a specific
+    queue type as described later in this tutorial session.
 
+  * 1084 of these are "normal" nodes, with 24 GB of RAM each.  Access
+    to these nodes is obtained through request to a specific queue
+    type.
 
-Parallel nodes
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+* All nodes have 8-core Intel(R) Xeon(R) CPU X5560 @ 2.80GHz 107
+  processors. 
 
-* 16 nodes have 8 cores each (for 128 in total).  Each node has 48 GB
-  of RAM and 500 GB of local disk space.  These are connected via a
-  `Quadrics <http://en.wikipedia.org/wiki/Quadrics>`_ infiniband
-  network.  [``inode1-16``]
+* All nodes are connected by a 20Gbps DDR InfiniBand connection to the
+  core backbone InfiniBand network.
 
-* 32 nodes have 12 cores each (for 384 in total).  Each node has 72 GB 
-  of RAM and 500 GB of local disk space.  These are connected via a 
-  `QLogic <http://qlogic.com/pages/default.aspx>`_ infiniband
-  network.  [``iwnode1-32``]
+* Unless reserved for an interactive job, users *cannot directly log
+  in* to the worker nodes.
 
+.. note:: Of the 1104 compute nodes, not all are currently running in
+	  production.  Administration efforts are under way to fix the
+	  remaining hardware issues and bring them online as
+	  available.
 
-Interactive nodes
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-* 2 high-memory data analysis and shared-memory parallel nodes.  Both
-  have 8 cores each, 144 GB of RAM and 3 TB of local disk space.
-  [``highmem1`` and ``highmem2``]
-
-* 2 GPU computing nodes:
-
-  * ``gpu1``: 8 CPU cores, 6 GB of RAM and 2 NVIDIA GTX 295 cards.
-    Each of these GPU cards has 960 GPU cores and 3585 MB of RAM. 
-
-  * ``gpu2``: 16 CPU cores, 128 GB of RAM and 2 NVIDIA Tesla 2090 cards.
-    Each of these GPU cards has 512 GPU cores and 6 GB of RAM.
 
 
 Disk nodes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* One 437 TB parallel Lustre file system is attached to all nodes, and
-  is managed by 12 Object Storage Servers and a metadata server.  In
-  the next few weeks an additional 96 TB will be added to the existing
-  Lustre file system.
+All ManeFrame compute and login nodes may access a set of network
+filesystems, these filesystems reside on a set of separate dedicated
+disk nodes. 
 
-* An additional 14 TB usable NFS file system is attached to all nodes
-  for non-parallel use.
+* **HOME**: Home directories on ManeFrame reside on a NFS file system,
+  located in ``/users`` (e.g. ``/users/dreynolds``).  When you log in
+  to ManeFrame your home directory is where you will land in by default.
+
+  This space should be used to write, edit, compile, and browse your
+  programs and job submission scripts.  You can use programs in your
+  HOME to test them interactively on an interactive node obtained from
+  the job scheduler, as described below.
+
+  .. note:: ``$HOME`` space is restricted by quotas, because of
+	    limited space (2.5 TB total).  Due to these storage
+	    constraints, this space is intended to preserve your
+	    important programs and job submission scripts.  You
+	    **should not** use this space to store large data/input
+	    files that can be reproduced or dowloaded again.  *Please
+	    refrain from moving large data files to/from your home
+	    directory*, instead move them to ``/scratch``. 
+
+* **SCRATCH**: The largest pool of storage on ManeFrame is located in
+  ``/scratch/users/``; all users have a dedicated directory there
+  (e.g. ``/scratch/users/dreynolds``).  ManeFrame has approximately
+  1.2 PB of scratch space, that uses a high performance parallel
+  *Lustre* file system.  
+
+  This space should serve as your default location for storage of
+  large files or for large numbers of files used in computation.  
+
+  Additionally, all users have a directory named
+  ``/scratch/users/<username>/_small``.  This directory corresponds
+  with a smaller (~250 TB) high-speed scratch filesystem.
+  Performance-wise, the SATA disks comprising
+  ``/scratch/users/<username>`` operate at 400 MB/s, whereas the SAS
+  disks comprising ``/scratch/users/<username>/_small`` operate at 450
+  MB/s.
+
+  As a high-performance parallel filesystem, Lustre will not perform
+  well if misused.  Further information on interacting with Lustre
+  will be discussed later in this tutorial.
+
+  .. note:: SCRATCH is a *volatile* file system, meaning we do not
+	    guarantee that any of the files stored in SCRATCH can be
+	    retrieved or restored in the event of an accidental
+	    delete, loss or failure of the filesystem.  Users are
+	    therefore encouraged to save their programs, job
+	    submission scripts and other non-reproducible files in
+	    $HOME or any other secondary storage system.
+
+* **NFSSCRATCH**: ManeFrame additionally has a set of "fast" storage,
+  located in ``/nfsscratch/users/``.  These SSD drives have
+  approximately ~2.2 TB of storage, and use a high performance NFS
+  file system.  Use of this storage space requires an approval from
+  the Director of the Center for Scientific Computation, Dr. Thomas
+  Hagstrom.  
+
+  .. note:: due to size and the premium nature of this file system,
+	    users are required to automatically clean up the storage
+	    space after every job has finished running by bundling and
+	    moving the resulting files as part of the 'epilog' process
+	    of the job.
+
+* **LOCAL_TEMP**: ManeFrame's worker nodes may also access a relative
+  large amount of *local* temporary space for use during the executing
+  of a job, located in ``/local_temp/users/``.  For example, when
+  running the *Gaussian* application, files of size 100-400 GB are
+  periodically dumped during the execution of a job.
+
+* **SOFTWARE**: All ManeFrame nodes may access a shared NFS disk that
+  holds software, located in ``/grid/software``.  A typical user will
+  never need to browse this directly, as the *module* system modifies
+  environment variables to point at these installations automatically.
+
+ 
+Users are encouraged to contact smuhpc-admins@smu.edu with
+questions regarding selecting the appropriate storage for their jobs.
+
+
+
+.. index:: LUSTRE
+
+Using the LUSTRE filesystem
+--------------------------------------------------
+
+[Amit]
 
 
 
 
 
-.. index:: SMU HPC; general information
+
+.. index:: ManeFrame; general information
 
 General information
 --------------------------------------------------
 
-* OS: Scientific Linux 5.5 (64 bit -- old cluster only)
+* OS: Scientific Linux 6 (64 bit)
 
-* Scheduler: Condor (old cluster only)
+* Scheduler: SLURM
 
-* The software stack for the full cluster includes a variety of high
-  performance mathematics and software libraries, as well as the GNU,
-  NAG and PGI compiler suites, as well as Matlab, Mathematica, R and
-  Python for batch scripting and interactive data analysis.
+* The software stack on ManeFrame includes a variety of high
+  performance mathematics and software libraries, as well as the GNU 
+  and PGI compiler suites.  A full listing is always available with
+  the ``module avail`` command.
 
-* To log into any of ``gpu1``, ``gpu2``, ``highmem1`` or ``highmem2``,
-  you must first log into one of the login nodes (``smuhpc``,
-  ``smuhpc2``, ``smuhpc3`` or ``smuhpc4``) and then SSH from there to
-  the relevant machine, e.g.
-
-  .. code-block:: bash
-
-     $ ssh -CX highmem2
-
-* Users may not log directly into any of the worker or disk nodes.
-
-* The SMU HPC `wiki page
-  <https://wiki.smu.edu/display/smuhpc/SMUHPC>`_ (requires SMU login)
+* The ManeFrame `wiki page
+  <https://wiki.smu.edu/display/smuhpc/ManeFrame>`_ (requires SMU login)
   has more detailed information on the hardware and software
   configuration of the cluster.
 
 
-.. _session5_condor:
 
-Getting started (old cluster only)
+.. index:: SLURM, job scheduler
+
+The SLURM job scheduler
 ================================================
 
-We will perform this session of the workshop on the ``smuhpc2`` login
-node, so log in there to begin.
+In this tutorial we'll focus on running serial jobs (both batch and
+interactive) on ManeFrame (we'll discuss parallel jobs in later
+tutorial sessions).
 
-In order to use any of the commands for this session, we must first
-set up our account to use the condor job scheduler.  This is
-accomplished by "sourcing" the appropriate initialization script.
-Determine which shell you are using with the command
-
-.. code-block:: bash
-
-   $ echo $SHELL
-
-* BASH users: add the following line to your ``~/.bashrc`` file:
-
-  .. code-block:: bash
-
-     source /grid/condor/condor.sh
-
-  and reload your BASH initialization script with the command
-
-  .. code-block:: bash
-
-     $ source ~/.bashrc
-
-* TCSH users: add the following line to your ``~/.tcshrc`` file:
-
-  .. code-block:: tcsh
-
-     source /grid/condor/condor.csh
-
-  and reload your TCSH initialization script with the command
-
-  .. code-block:: tcsh
-
-     $ source ~/.tcshrc
-
-* It is unlikely that you are using a shell other than BASH or TCSH,
-  but if so:
- 
-  * SH or KSH users: emulate the BASH instructions for your login script.
-
-  * CSH users: emulate the TCSH instructions for your login script.
-
-Note: now that this has been added to your initialization script, you
-should never need to do this step again.
-
-
-
-.. index:: condor, job scheduler
-
-The condor job scheduler
-================================================
-
-In this session we'll focus on the *high throughput* portion of the
-SMU HPC cluster, i.e. the portion of the cluster that should be used
-for serial (non-parallel) jobs.  This portion of the cluster is
-managed by the `Condor <http://research.cs.wisc.edu/htcondor/>`_
-job scheduler, which is a piece of software designed "to develop,
-implement, deploy, and evaluate mechanisms and policies that support
-High Throughput Computing (HTC) on large collections of distributively
-owned computing resources" [from `http://research.cs.wisc.edu/htcondor
-<http://research.cs.wisc.edu/htcondor>`_]. 
-
-More generally, a *job scheduler* is a program that manages unattended
+In general, a *job scheduler* is a program that manages unattended
 background program execution (a.k.a. *batch processing*).  The basic
 features of any job scheduler include:
 
@@ -252,7 +282,7 @@ Some widely used cluster batch systems are:
    seealso: SLURM; job scheduler
 
 * `Simple Linux Utility for Resource Management (SLURM)
-  <http://slurm.schedmd.com/>`_ -- this will be used on the new cluster
+  <http://slurm.schedmd.com/>`_ -- this is used on ManeFrame
 
 .. index:: 
    seealso: Moab; job scheduler
@@ -273,7 +303,7 @@ Some widely used cluster batch systems are:
    seealso: condor; job scheduler
 
 * `Condor <http://research.cs.wisc.edu/htcondor/>`_ -- this is used on
-  the old cluster
+  the older SMUHPC cluster
 
 .. index:: 
    seealso: Oracle grid engine; job scheduler
@@ -293,99 +323,228 @@ Some widely used cluster batch systems are:
 
 .. note::
 
-   While the remainder of this session will focus on using Condor
-   for batch computing, the ideas represented here apply to nearly all
-   of the scheduling systems listed above.  As a result, even if you
-   never plan to use Condor in your research, the rest of this lesson
-   will lay a strong foundation for transitioning to other more
-   standard schedulers. 
+   While the remainder of this session will focus on using SLURM
+   for batch and interactive computing, the ideas represented here
+   apply to nearly all of the scheduling systems listed above.  As a
+   result, even if you never plan to use SLURM in your research, the
+   rest of this lesson will lay a strong foundation for transitioning
+   to schedulers on other HPC systems. 
 
 
+.. index:: SLURM, partitions
 
-Condor commands
+ManeFrame's SLURM partitions/queues
 --------------------------------------------------
 
-While there are a `multitude of condor commands
-<http://research.cs.wisc.edu/htcondor/manual/v7.6/9_Command_Reference.html>`_,
-only some are of value to a new user:
+There are currently 3 types of partitions (or queues) set up on
+ManeFrame.  As more users move to ManeFrame, we plan to redefine or
+create new ones as needed to optimize usage.
 
-.. index:: condor; condor_submit
+1. **interactive**:  This is the *default queue* if none specified.
+   Currently 7 compute nodes are defined for interactive use.  Based
+   on the usage of the interactive queue and load on the system, more
+   resources can be added for interactive use dynamically.  
 
-* ``condor_submit`` -- this is the main interface between a user and
-  the condor scheduler, that queues jobs for execution.  The usage
-  command (with the most-helpful optional arguments on SMU HPC in
-  brackets) is 
+2. **highmem**: This queue currently has the 20 "high memory" nodes
+   (with 192 GB RAM each).
+
+3. **parallel**:  All of the remaining nodes belong to this queue.
+   Do not let the name confuse you -- this queue is capable of runnin
+   single processor core jobs, multi-core jobs and even
+   multi-node-multi-core parallel jobs.
+
+
+
+
+SLURM commands
+--------------------------------------------------
+
+While there are a `multitude of SLURM commands
+<https://computing.llnl.gov/linux/slurm/documentation.html>`_,
+here we'll focus on those applicable to running batch and interactive jobs:
+
+.. index:: SLURM; sinfo
+
+* ``sinfo`` -- displays information about SLURM nodes and partitions
+  (queue types).  A full list of options is available `here
+  <https://computing.llnl.gov/linux/slurm/sinfo.html>`_.  The usage
+  command (with the most-helpful optional arguments in brackets) is
 
   .. code-block:: bash
 
-     $ condor_submit [-verbose] [-debug] [-append command ... ] [job file]
+     $ sinfo [-a] [-l] [-n <nodes>] [-p <partition>] [-s] [-a] [-a] [-a]
 
   where these options are:
 
-  * ``-verbose`` -- Verbose output about the created job
+  * ``-a`` or ``--all`` -- Display information about all partitions
 
-  * ``-debug`` -- Cause debugging information to be sent to
-    ``stderr``, based on the value of the configuration variable
-    ``TOOL_DEBUG``.  
+  * ``-l`` or ``--long`` -- Displays more detailed information
 
-  * ``-append command`` -- Augment the commands in the submit
-    description file with the given command. This command will be
-    considered to immediately precede the ``Queue`` command within the
-    job file, and come after all other previous commands.
+  * ``-n <nodes>`` or ``--nodes <nodes>`` -- Displays information only
+    about the specified node(s).  Multiple nodes may be comma
+    separated or expressed using a node range expression. For example
+    ``mfc[1005-1007].hpc.smu.edu`` would indicate three nodes,
+    ``mfc1005.hpc.smu.edu`` through ``mfc1007.hpc.smu.edu``.
 
-    Multiple commands may be specified by using the ``-append`` option
-    multiple times. 
+  * ``-p <partition>`` or ``--partition <partition>`` -- Displays
+    information only about the specified partition
 
-    Commands with spaces in them must be enclosed in double quote marks. 
-
-  * job file -- The pathname to the condor job submission file
-    (described in the next section). If this optional argument is
-    missing or equal to ``-``, then the commands are taken from
-    standard input.
-
-.. index:: condor; condor_q
-
-* ``condor_q`` -- displays information about jobs in the condor
-  queue.  The usage command with the most helpful arguments is
+  * ``-s`` or ``--summarize`` -- List only a partition state summary
+    with no node state details. 
+    
+  Examples:
 
   .. code-block:: bash
 
-     $ condor_q [-help] [-run] [-hold] [-long] [{processID | username} ]
+     $ sinfo --long -p highmem  # long output for all nodes allocated to the "highmem" partition
+     $ sinfo -s                 # summarizes output on all nodes on all partitions
 
-  where the options are:
 
-  * ``-help`` -- returns a brief description of the supported options 
+.. index:: SLURM; squeue
 
-  * ``-run`` -- returns information about running jobs. 
-
-  * ``-hold`` -- returns information about jobs in the hold
-    state. Also displays the time the job was placed into the hold
-    state and the reason why the job was placed in the hold state.  
-
-  * ``-long`` -- displays job information in long format 
-
-  * ``processID`` -- limits output to only the condor process ID for a specific job
-
-  * ``username`` -- limits output to only jobs submitted by a specific
-    user
-
-.. index:: condor; condor_rm
-
-* ``condor_rm`` -- removes jobs from the condor queue.  The usage
-  command with the most typical arguments is
+* ``squeue`` -- views information about jobs located in the SLURM
+  scheduling queue.  A full list of options is available `here
+  <https://computing.llnl.gov/linux/slurm/squeue.html>`_.  The usage
+  command (with the most-helpful optional arguments in brackets) is
 
   .. code-block:: bash
 
-     condor_rm [-help] {processID | username}
+     $ squeue [-a] [-j] [-l] [-p] [--start] [-u]
 
-  where the options are:
+  where these options are:
 
-  * ``-help`` -- displays usage information 
+  * ``-a`` or ``--all`` -- Display information about jobs and job
+    steps in all partions.
 
-  * ``processID`` -- removes a job with a specific process ID
+  * ``-j <job_id_list>`` or ``--jobs <job_id_list>`` -- Requests a
+    comma separated list of job ids to display. Defaults to all jobs.  
 
-  * ``username`` -- removes all jobs launched by a user (you can only
-    remove your own)
+  * ``-l`` or ``--long`` -- Reports more of the available information
+    for the selected jobs or job steps, subject to any constraints
+    specified.
+
+  * ``-p <part_list>`` or ``--partition <part_list>`` -- Specifies the
+    partitions of the jobs or steps to view. Accepts a comma separated
+    list of partition names.
+
+  * ``--start`` -- Reports the *expected* start time of pending jobs,
+    in order of increasing start time.
+
+  * ``-u <user_list>`` or ``--user <user_list>`` -- Requests jobs or
+    job steps from a comma separated list of users. The list can
+    consist of user names or user id numbers.  
+
+  Examples:
+
+  .. code-block:: bash
+
+     $ squeue                            # all jobs
+     $ squeue -u dreynolds --start       # anticipated start time of dreynolds' jobs
+     $ squeue --jobs 12345,12346,12348   # information on only jobs 12345, 12346 and 12348
+
+
+
+.. index:: SLURM; sbatch
+
+* ``sbatch`` -- submits a batch script to SLURM.  A full list of options is available `here
+  <https://computing.llnl.gov/linux/slurm/sbatch.html>`_.  The usage
+  command is
+
+  .. code-block:: bash
+
+     $ sbatch [options] <script> [args]
+
+  where ``<script>`` is a *batch submission script*, and ``[args]``
+  are any optional arguments that should be supplied to ``<script>``.
+  The ``sbatch`` command accepts a multitude of options; these options
+  may be supplied either at the command-line or inside the batch
+  submission script (see the next section).  
+
+  It is recommended that all options be specified *inside* the batch
+  submission file, to ensure reproducibility of results (i.e. so that
+  the same options are specified on each run, and no options are
+  accidentally left out).
+
+  Examples:
+
+  .. code-block:: bash
+
+     $ sbatch ./myscript.sh    # submits the batch submission file "myscript.sh" to SLURM
+
+
+.. index:: SLURM; srun
+
+* ``srun`` -- runs a parallel or interactive job on the worker nodes.
+  A full list of options is available `here
+  <https://computing.llnl.gov/linux/slurm/srun.html>`_.  The usage
+  command (with the most-helpful optional arguments in brackets) is 
+
+  .. code-block:: bash
+
+     $ srun []
+
+  where these options are:
+
+  * ``-a`` or ``--all`` -- Display information about all partitions
+
+  Examples:
+
+  .. code-block:: bash
+
+     $ srun -p parallel /bin/program  # runs the executable /bin/program on the "parallel" partition
+     $ srun -p highmem /usr/bin/foo  # runs /usr/bin/foo on the "highmem" partition
+     $ srun -N2 -n4  /bin/bar  # runs /bin/bar using 2 nodes 
+     $ srun -N2 -n4 --ntasks-per-node=2  /bin/hostname
+     $ srun --x11=first --pty emacs
+
+
+.. index:: SLURM; salloc
+
+* ``salloc`` -- obtains a SLURM job allocation (a set of nodes),
+  executes a command, and then releases the allocation when the
+  command is finished.  A full list of options is available `here
+  <https://computing.llnl.gov/linux/slurm/salloc.html>`_.  The usage
+  command (with the most-helpful optional arguments in brackets) is
+
+  .. code-block:: bash
+
+     $ salloc []
+
+  where these options are:
+
+  * ``-a`` or ``--all`` -- Display information about all partitions
+
+  Examples:
+
+  .. code-block:: bash
+
+     $ sinfo --long -p highmem  # long output for all nodes allocated to the "highmem" partition
+
+
+.. index:: SLURM; scancel
+
+* ``scancel`` -- kills jobs or job steps that are under the control of
+  SLURM (and listed by ``squeue``.  A full list of options is available `here
+  <https://computing.llnl.gov/linux/slurm/scancel.html>`_.  The usage
+  command (with the most-helpful optional arguments in brackets) is
+
+  .. code-block:: bash
+
+     $ scancel []
+
+  where these options are:
+
+  * ``-a`` or ``--all`` -- Display information about all partitions
+
+  Examples:
+
+  .. code-block:: bash
+
+     $ sinfo --long -p highmem  # long output for all nodes allocated to the "highmem" partition
+
+
+
+
 
 
 

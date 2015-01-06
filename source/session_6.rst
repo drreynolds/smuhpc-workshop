@@ -638,7 +638,7 @@ You should then see a set of ``.png`` images in the directory:
 
 
 
-You can view these plots on SMUHPC with the command, e.g.
+You can view these plots on ManeFrame with the command, e.g.
 
 .. code-block:: bash
 
@@ -674,9 +674,9 @@ visualization include:
 
 As a result, there are a variety of high-quality visualization
 packages that are designed for interactive 3D visualization, as
-discussed below.  None of these are installed on SMUHPC at present,
+discussed below.  None of these are installed on ManeFrame at present,
 though all are freely-available and open-source, so if you need/want
-one you should make a request to the SMUHPC system administrators.
+one you should make a request to the ManeFrame system administrators.
 
 
 .. index:: Mayavi

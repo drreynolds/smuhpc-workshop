@@ -20,8 +20,8 @@ Choose your preferred language of the three and download the files to
 be used in this session by either clicking one of the following three
 links: :download:`C version <code/session4_c.tgz>`, :download:`C++
 version <code/session4_cxx.tgz>`, :download:`F90 version
-<code/session4_f90.tgz>`, or by copying the relevant files on SMU HPC
-with one of the following 3 commands: 
+<code/session4_f90.tgz>`, or by copying the relevant files on
+ManeFrame with one of the following 3 commands: 
 
 .. code-block:: bash
 
@@ -128,9 +128,9 @@ use ``grep`` to find which file contains the routine:
 
 .. code-block:: bash
 
-   $ grep -i routine_name *
+   $ grep -i <routine_name> *
 
-where ``routine_name`` is the function that you identified from
+where ``<routine_name>`` is the function that you identified from
 the previous step.  
 
 
@@ -161,7 +161,7 @@ file was ``file.cpp``, you would run
 
 .. code-block:: bash
 
-   $ gcov file1.cpp
+   $ gcov file.cpp
 
 This will output some information to the screen, including the name of
 a ``.gcov`` file that it creates with information on the program.
@@ -276,16 +276,21 @@ workshop session, but here are some standard techniques.
       faster than the first.
 
    4. Is the code doing unnecessary data copies?  In many programming
-      languages, a function can be written to use either call-by-value
-      or call-by-reference.  In call-by-value, all arguments to a
-      function are copied from the calling routine into a new set of
-      variables that are local to the called function.  This 
-      allows the called function to modify the input variables without
-      concern about corrupting data in the calling routine.  In
-      call-by-reference, the called function only receives memory
+      languages, a function can be written to use either *call-by-value*
+      or *call-by-reference*.  
+
+      In call-by-value, all arguments to a function are copied from
+      the calling routine into a new set of variables that are local
+      to the called function.  This allows the called function to
+      modify the input variables without concern about corrupting data
+      in the calling routine.  
+
+      In call-by-reference, the called function only receives memory
       references to the actual data held by the calling routine.  This
       allows the called function to directly modify the data held by the
-      calling routine.  While call-by-reference is obviously more
+      calling routine.  
+
+      While call-by-reference is obviously more
       "dangerous," it avoids unnecessary (and costly) memory
       allocation/copying/deallocation in the executing code.  As such,
       highly efficient code typically uses call-by-reference, with the
@@ -294,8 +299,11 @@ workshop session, but here are some standard techniques.
       that the functions themselves are constructed to avoid modifying the
       underlying data.
 
-      In C and C++, call-by-value is the
-      [unfortunate] default, whereas Fortran uses call-by-reference.  
+      In C and C++, call-by-value is the default, whereas Fortran uses
+      call-by-reference.  However in C, pointers may be passed through
+      function calls to emulate call-by-reference.  In C++, either
+      pointers can be sent through function calls, or arguments may be
+      specified as being passed by reference (using the ``&`` symbol).
 
 Find what you can fix, so long as you do not change the
 mathematical result.  Delete and re-compile the executable,
@@ -382,9 +390,10 @@ How does this perform in comparison to the other three runs?
 
    The ``-O#`` options allow specification of optimization levels 0,
    1, 2 and 3, each one applies additional optimizations to the
-   previous level.  However, there are additional optimizations that
-   can be performed by the compiler, as will be discussed in the man
-   page. 
+   previous level.  Typically, compilers also implement a basic ``-O``
+   flag that defaults to ``-O2``.  However, there are additional
+   optimizations that can be performed by the compiler, as will be
+   discussed in the compiler's man page or online documentation. 
 
 
 
@@ -432,9 +441,8 @@ that of using a tool to track down the bug for us.
 
 The tool we will use is the GNU debugger, which can be accessed
 through running the faulty executable program from within the
-debugging program itself.  On ``smuhpc3``, you must first load the
-``gcc`` module before accessing ``gdb`` (on the other login nodes this
-step is not required):
+debugging program itself.  You must first load the ``gcc`` module
+before accessing ``gdb``:
 
 .. code-block:: bash
  
@@ -555,7 +563,7 @@ hood.  Some of the more popular of these debuggers include:  `ddd
 <http://www.eclipse.org/eclipse/debug/>`_, `zerobugs
 <https://zerobugs.codeplex.com/>`_, `edb
 <http://www.woodmann.com/collaborative/tools/index.php/EDB_Linux_Debugger>`_.
-However, of this set the SMU HPC cluster currently only has ``gdb``
+However, of this set the ManeFrame cluster currently only has ``gdb``
 installed (ask your system administrators for others you want/need). 
 
 Additionally, there are some highly advanced non-free
@@ -566,8 +574,8 @@ including `TotalView
 <http://software.intel.com/en-us/articles/idb-linux>`_ (only works
 with the Intel compilers), and PGI's `pgdbg
 <http://www.pgroup.com/products/pgdbg.htm>`_ (graphical) and `pgdebug`
-(text version).  Of these, the SMU HPC cluster has both ``pgdebug`` and
-``pgdbg``.  
+(text version).  Of these, the ManeFrame cluster has both ``pgdbg``
+and ``pgdebug``.  
 
 The usage of most of the above debuggers is similar to ``gdb``, except
 that in graphical debuggers it can be easier to view the
@@ -595,16 +603,16 @@ mouse to interact with the debugger as needed.
 
 .. note::
 
-   SMU only pays for a five-seat PGI license, meaning that only five
+   SMU pays for a five-seat PGI license, meaning that only five
    distinct compilation/debugging processes with the PGI tools may be
-   run simultaneously.  Typically, five is more than sufficient for a
-   campus of our size, since users spend most of their time writing
-   code, preparing input parameters and scripts for running a
-   simulation, or post-processing simulation data; the time spent
-   actually compiling and using a debugger is minimal.  However, if I
-   had everyone in the workshop try this simultaneously, we would
+   run simultaneously.  Typically, five is much more than sufficient
+   for a campus of our size, since users spend most of their time
+   writing code, preparing input parameters and scripts for running
+   simulations, or post-processing simulation data; the time spent 
+   actually compiling and using a debugger is minimal.  However, if
+   everyone in the workshop tries this simultaneously, we would
    obviously exceed the five "seats," which is why this is left as a
-   personal exercise. 
+   personal exercise.
 
 
 

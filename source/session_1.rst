@@ -8,9 +8,9 @@ Session 1: Introduction to Linux
 *****************************************************
 
 The internet is `full of useful Linux tutorials
-<http://lmgtfy.com/?q=linux+tutorial>`_.  Today we'll strive to learn
-the basics of using Linux insofar as we will need to maneuver the
-filesystem and run executables.
+<http://lmgtfy.com/?q=linux+tutorial>`_; this is just one more, but
+hopefully it will be brief yet thorough enough to learn the basics of
+using Linux insofar as will be needed for the remainder of this workshop.
 
 
 .. sidebar:: Accessing Linux from Windows or OS X
@@ -73,8 +73,9 @@ The UNIX operating system
 The UNIX operating system is made up of three parts; the kernel, the
 shell and the programs. 
 
-The kernel
-"""""""""""
+
+The :index:`kernel`
+"""""""""""""""""""""""
 
 The kernel of UNIX is the hub of the operating system: it allocates
 time and memory to programs and handles the filestore and
@@ -95,8 +96,8 @@ running, the shell then returns the UNIX prompt ``$`` to the user,
 indicating that it is waiting for further commands.  
 
 
-The shell
-""""""""""""""
+The :index:`shell`
+""""""""""""""""""""
 
 The shell acts as an interface between the user and the kernel. When a
 user logs in, the login program checks the username and password, and
@@ -107,9 +108,9 @@ programs: when they terminate, the shell gives the user another
 prompt. 
 
 The adept user can customize his/her own shell, and users can use
-different shells on the same machine. Users may have the ``tcsh`` shell or
-``bash`` shell by default (BASH is typically the default on modern
-Linux distributions). 
+different shells on the same machine. Users will typically have the
+:index:`TCSH` shell or :index:`BASH` shell by default (BASH is
+typically the default on modern Linux distributions). 
 
 These shells have certain features to help the user inputting
 commands: 
@@ -169,8 +170,6 @@ The full path to the file ``report.doc`` is ``/home/its/ug1/ee51vn/report.doc``.
 
 
 
-
-
 .. _unix_tutorial_1:
 
 Moving Around the Filesystem
@@ -180,8 +179,8 @@ Moving Around the Filesystem
 Listing files and directories
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-ls (list)
-"""""""""""""""""
+:index:`ls (list)`
+"""""""""""""""""""""
 
 When you first login, your current working directory is your home
 directory. Your home directory has the same name as your user-name,
@@ -243,8 +242,8 @@ behaviour of the command. (See later in this tutorial).
 Making Directories
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-mkdir (make directory)
-"""""""""""""""""""""""""""""
+:index:`mkdir (make directory)`
+"""""""""""""""""""""""""""""""""
 
 We will now make a subdirectory in your home directory to hold the
 files you will be creating and using in the course of this
@@ -271,8 +270,8 @@ Or to see what is inside of the directory ``unixstuff``, type
 Changing to a different directory 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-cd (change directory)
-"""""""""""""""""""""""""""""
+:index:`cd (change directory)`
+"""""""""""""""""""""""""""""""
 
 The command ``cd directory`` means change the current working
 directory to ``directory``. The current working directory may be
@@ -309,8 +308,8 @@ As you can see, in the ``unixstuff`` directory (and in all other
 directories), there are two special directories called ``.`` and
 ``..``
 
-. (the current directory)
-"""""""""""""""""""""""""""""
+:index:`. <. (the current directory)>`
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 In UNIX, ``.`` means the current directory, so typing
 
@@ -327,8 +326,8 @@ the current directory will save a lot of typing, as we shall see later
 in the tutorial. 
 
 
-\.. (the parent directory)
-"""""""""""""""""""""""""""""
+:index:`.. (the parent directory)`
+""""""""""""""""""""""""""""""""""""
 
 The other "special" directory in UNIX, ``..``, refers to the parent of the
 current directory, so typing 
@@ -348,8 +347,8 @@ will take you one directory up the hierarchy (back to your home directory). Try 
 Pathnames
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-pwd (print working directory)
-""""""""""""""""""""""""""""""""""
+:index:`pwd (print working directory)`
+""""""""""""""""""""""""""""""""""""""""
 
 Pathnames enable you to work out where you are in relation to the
 whole file-system. For example, to find out the absolute pathname of
@@ -429,8 +428,8 @@ made earlier, you must instead type
 
  
 
-~ (your home directory)
-""""""""""""""""""""""""""""""
+:index:`~ (your home directory)`
+"""""""""""""""""""""""""""""""""""
 
 Home directories can also be referred to by the tilde character,
 ``~``. It can be used to specify paths starting at your home
@@ -490,7 +489,7 @@ Manipulating Files and Directories
 Copying Files
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-cp (copy)
+:index:`cp (copy)`
 """""""""""""""""""""""""""""
 
 
@@ -541,7 +540,7 @@ Create a backup of your ``types.h`` file by copying it to a file called ``types.
 Moving files
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-mv (move)
+:index:`mv (move)`
 """""""""""""""""""""""""""""
 
 To move a file from one place to another, use the ``mv`` command. This
@@ -571,8 +570,8 @@ file to the same directory, but giving it a different filename.
 Removing files and directories
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-rm (remove), rmdir (remove directory)
-""""""""""""""""""""""""""""""""""""""""""
+:index:`rm (remove)`, :index:`rmdir (remove directory)`
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 To delete (remove) a file, use the ``rm`` command. As an example, we are going to create a copy of the ``types.h`` file then delete it.
 
@@ -612,7 +611,7 @@ it using the ``rmdir`` command.
 Displaying the contents of a file on the screen
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-clear (clear screen)
+:index:`clear (clear screen)`
 """"""""""""""""""""""""""""""""""""""""""
 
 Before you start the next section, you may want to clear the terminal
@@ -630,7 +629,7 @@ top of the window.
 
  
 
-cat (concatenate)
+:index:`cat (concatenate)`
 """"""""""""""""""""""""""""""""""""""""""
 
 The command ``cat`` can be used to display the contents of a file to
@@ -646,7 +645,7 @@ beginning.
 
  
 
-less
+:index:`less (view file contents)`
 """"""""""""""""""""""""""""""""""""""""""
 
 The command less writes the contents of a file onto the screen one
@@ -664,7 +663,7 @@ than ``cat``.
 
  
 
-head
+:index:`head (view top of file)`
 """"""""""""""""""""""""""""""""""""""""""
 
 The ``head`` command writes the first ten lines of a file to the screen.
@@ -685,7 +684,7 @@ What difference did the -3 do to the ``head`` command?
 
  
 
-tail
+:index:`tail (view bottom of file)`
 """"""""""""""""""""""""""""""""""""""""""
 
 The ``tail`` command writes the last ten lines of a file to the screen.
@@ -728,8 +727,8 @@ search.
 
  
 
-grep (don't ask why it is called grep)
-""""""""""""""""""""""""""""""""""""""""""
+:index:`grep <grep (file search)>` (don't ask why it is called grep)
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 ``grep`` is one of many standard UNIX utilities. It searches files for
 specified words or patterns. First clear the screen, then type 
@@ -785,7 +784,7 @@ the number of lines without the words ``long`` or ``LONG`` is
 
  
 
-wc (word count)
+:index:`wc (word count)`
 """"""""""""""""""""""""""""""""""""""""""
 
 A handy little utility is the ``wc`` command, short for *word
@@ -865,8 +864,8 @@ standard output (*stdout*) of commands.
 
 
 
-Redirecting the Output  
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+:index:`Redirecting the Output <> (redirecting output)>`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 We use the ``>`` symbol to redirect the output of a command. For
 example, to create a file called ``list1`` containing a list of fruit,
@@ -900,8 +899,8 @@ the contents of the new file, ``list2``.
 
  
 
-Appending to a file
-"""""""""""""""""""""""""""""
+:index:`Appending to a file <>> (appending output)>`
+""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 The double greater-than symbol ``>>`` appends standard output to a
 file. So to add more items to the existing file ``list1``, type 
@@ -946,8 +945,8 @@ To read the contents of this new file, type
 
 
 
-Redirecting the Input  
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+:index:`Redirecting the Input << (redirecting input)>`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 We use the ``<`` symbol to redirect the input of a command.
 
@@ -995,7 +994,7 @@ Use ``cat`` to read the contents of the newly-created file ``slist``.
 
 
 
-Pipes
+:index:`Pipes <| (pipes)>`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To see who is logged into the system along with you, type
@@ -1045,8 +1044,8 @@ the letter "p", and sort the result.
 Wildcards
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The * wildcard
-""""""""""""""""""
+The :index:`* <* (wildcard)>` wildcard
+""""""""""""""""""""""""""""""""""""""""
 
 The character ``*`` is called a *wildcard*, and will match against
 none or more character(s) in a file (or directory) name. For example,
@@ -1067,8 +1066,8 @@ Try typing
 This will list all files in the current directory ending with "list"
 
 
-The ? wildcard
-""""""""""""""""""
+The :index:`? <? (wildcard)>` wildcard
+"""""""""""""""""""""""""""""""""""""""
 
 The character ``?`` will match exactly one character, So ``?ouse``
 will match files like ``house`` and ``mouse``, but not ``grouse``. 
@@ -1120,10 +1119,10 @@ On-line Manuals
 """""""""""""""""""
 
 There are built-in manuals which give information about most
-commands. The manual pages tell you which options a particular command
-can take, and how each option modifies the behaviour of the
-command. Type "man *command*" to read the manual page for a particular
-*command*. 
+commands. The :index:`manual pages <man (manual)>` tell you which options a
+particular command can take, and how each option modifies the
+behaviour of the command. Type "man *command*" to read the manual page
+for a particular *command*. 
 
 For example, to find out more about the ``wc`` (word count) command, type
 
@@ -1137,11 +1136,12 @@ Alternatively
 
    $ whatis wc
 
-gives a one-line description of the command, but omits any information about options etc.
+gives a :index:`one-line description <whatis (brief manual)>` of the
+command, but omits any information about options etc. 
 
 
-Apropos
-""""""""""""""""
+:index:`Apropos <apropos (command search)>`
+"""""""""""""""""""""""""""""""""""""""""""""""
 
 When you are not sure of the exact name of a command, "apropos
 *keyword*" will give you the commands with *keyword* in their manual
@@ -1153,7 +1153,7 @@ page header. For example, try typing
 
 
 Redirection, pipes, wildcards and help -- summary
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ========================     =======================================================
 Command                      Meaning
@@ -1273,8 +1273,8 @@ Permissions     Meaning
 Changing access rights
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-chmod (changing a file mode)
-"""""""""""""""""""""""""""""""""
+:index:`chmod (change permissions)`
+""""""""""""""""""""""""""""""""""""""""
 
 Only the owner of a file can use ``chmod`` to change the permissions
 of a file. The options of ``chmod`` are as follows 

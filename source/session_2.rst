@@ -274,12 +274,12 @@ test new algorithms in scripting languages, and then translate them to
 more efficient compiled code prior to large simulations.
 
 There are a variety of Linux shells, but the two most popular shells
-are currently BASH and TCSH.  As most new accounts on SMUHPC are set
+are currently BASH and TCSH.  As most new accounts on ManeFrame are set
 up to use BASH, we'll provide examples for that type of shell here.
 Alternately, there are also a variety of specially-designed scripting
 languages used throughout scientific computing, such as Python,
-Perl and Ruby.  As we'll be using Python in session 7, we'll provide
-some examples of Python scripts here as well.
+Perl and Ruby.  As we'll be using Python in a later session, we'll
+provide some examples of Python scripts here as well.
 
 
 
@@ -397,8 +397,7 @@ Basics of BASH shell scripting:
      The number is 4
      The number is 5
 
-  or over a range with a user-supplied increment (version 4.0+, not
-  installed on SMUHPC):
+  or over a range with a user-supplied increment (version 4.0+):
 
   .. code-block:: bash
 
@@ -479,6 +478,7 @@ Basics of BASH shell scripting:
   * Also similarly to C and C++, ``continue`` stops executing the
     statements within that iteration of the smallest enclosing loop
     and jumps to the next loop iteration.
+
 
 * :index:`If-elif-else <pair: BASH; if-elif-else>` statements may be
   performed via the syntax 
@@ -928,10 +928,13 @@ BASH resources:
 * `Advanced BASH-Scripting Guide <http://tldp.org/LDP/abs/html/>`_
 
 
+
 .. index::
    pair: Python; resources
 
 Python resources:
+
+* `Codecademy <http://www.codecademy.com/learn>`_
 
 * `Python short course
   <http://faculty.washington.edu/rjl/classes/am583s2013/notes/index.html#python>`_
@@ -945,36 +948,37 @@ Python resources:
 
 
 
-.. index:: Sieve of Eratosthenes
-
 
 Scripting exercise
 =============================
 
-Construct your own BASH or Python script that uses the 
-`Sieve of Eratosthenes
-<https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes>`_ 
-to find all of the prime numbers between 2 and 1000:
+Construct your own BASH or Python script that determines all of the
+prime numbers between 2 and 1000:
 
-1. Create an array of candidate primes of length 1001, where all
-   entries are initialized to the value 1.
+1. Create a function called ``is_prime`` that takes a number ``x`` as
+   input:
 
-2. Eliminate 0 and 1 from the list of primes by setting the 0th and 1st
-   entries of the array to 0.
+   a. For each number ``n`` from 2 to ``x-1``, test whether ``x``
+      is evenly divisible by ``n`` (actually, you could stop iterating
+      at the largest integer less than or equal to :math:`\sqrt{x}`,
+      where ``sqrt()`` is available from the `NumPy <www.numpy.org>`_
+      package by adding the Python command ``from numpy import *`` to
+      the top of your script).
 
-3. Initialize a variable ``p`` to 2.
+   b. If ``x`` is evenly divisible by ``n``, then ``return False``.
 
-4. Starting from ``p``, eliminate all multiples of ``p`` from the list
-   by setting the values at those points to 0.
+   c. If the loop finishes without returning ``False``, then ``return True``.
 
-5. Find the first number greater than ``p`` in the list that has not
-   been eliminated.  If there is no such number, stop.  Otherwise, let
-   ``p`` now equal that number (which is the next prime), and repeat
-   from step 4.
+2. Loop over the values 2 through 1000.  For each number, call your
+   new function ``is_prime`` to determine whether the number is prime
+   or not.
 
-6. When the algorithm terminates, all entries that have not been
-   eliminated are prime; output that list to the screen.
+3. If the number is prime, then print it to the screen, otherwise do
+   not print.
 
+For a little extra work, keep track of how many primes there are in
+this range and print this out at the end of your script (you should
+get 168).
 
 
 
@@ -1025,11 +1029,11 @@ and Fortran90).
 Compiling programs
 --------------------------------------------------
 
-In the ``session3`` directory, you will notice a number of files:
+In the ``session2`` directory, you will notice a number of files:
 
 .. code-block:: bash
 
-   $ cd session3
+   $ cd session2
    $ ls
    Makefile         hello.c    hello.f    python_example.py
    bash_example.sh  hello.cpp  hello.f90
@@ -1122,8 +1126,8 @@ code.  As a result, the `SMU Center for Scientific Computation
 
 In my experience, with some applications a program compiled with the
 PGI compilers can run 50% faster than the same code compiled with the
-GNU compilers.  We'll discuss how to use the PGI compiler on SMUHPC in
-session 4 later today.
+GNU compilers.  We'll discuss how to use the PGI compiler on ManeFrame
+in :ref:`session 3 <session3>` later on.
 
 .. index:: command-line compilation
 
@@ -1172,7 +1176,7 @@ just like any other Linux program, via
 
       $ ls -l hello.exe
       -rwxr-xr-x 1 dreynolds math 8166 May 29 12:26 hello.exe
- 
+
    The three "x" characters in the string at the left of
    the line states state that the program may be executed by the owner
    (dreynolds), the group (math), and others (anyone on the system),
@@ -1180,6 +1184,16 @@ just like any other Linux program, via
    ``bash_example.sh`` and ``python_example.py``, you used ``chmod``
    to set these same "x"es manually; the compiler automatically does
    this for you in the compilation stage.
+
+   Alternately, you can inquire about any file's properties with the
+   ``file`` :index:`command <file>`:
+
+   .. code-block:: bash
+
+      $ file hello.exe
+      hello.exe: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked (uses shared libs), for GNU/Linux 2.6.18, not stripped
+
+   Note the 'executable' property listed above.
 
 
 For those who would like additional information on learning computing
@@ -1215,6 +1229,8 @@ Fortran resources:
    pair: C++; resources
 
 C++ resources:
+
+* `C++ By Example: A Hands-On Course in C++ <http://www.programmr.com/practice/>`_
 
 * `C++ Language Tutorial <http://www.cplusplus.com/doc/tutorial/>`_ 
 
@@ -1341,8 +1357,8 @@ called "tarballs"), these two commands may be combined together via
    it together zipped the files themselves instead of a folder of
    files.  As a result, when we unzipped the files, they "exploded"
    into the current directory, hiding or even overwriting our existing
-   files.  This is colloquially referred to as a "tarbomb".  *Do not
-   do this*.  When making a zip file or tar file, be considerate of
+   files.  This is colloquially referred to as a "tarbomb".  **Do not
+   do this**.  When making a zip file or tar file, be considerate of
    others and always put your files in a folder, then zip that new
    folder so that when unpacked, all contents are contained nicely in
    the sub-folder.
