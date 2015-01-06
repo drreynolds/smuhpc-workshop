@@ -7,7 +7,10 @@
 Welcome to the main site for the tutorials and hands-on
 exercises associated with the 2015 SMU HPC Winter workshop, sponsored
 by the `SMU Center for Scientific Computation
-<http://www.smu.edu/academics/csc>`_. 
+<http://www.smu.edu/academics/csc>`_.  While this workshop will focus
+on high-performance computing as in previous workshops, these topics
+will be tuned to computing on the new SMU cluster, *ManeFrame*.
+
 
 **Location**:  Fondren Library, room 103c
 
@@ -19,15 +22,13 @@ by the `SMU Center for Scientific Computation
 
 * Afternoon sessions: 1-4
 
-**Instructors**: 
+**Instructor**: 
 
-* Tom Coan (Monday AM)
-
-* Dan Reynolds (Monday PM through Thursday)
+* Dan Reynolds (reynolds at smu dot edu)
 
 **Assistant**: 
 
-* Amit Kumar
+* Amit Kumar (ahkumar at smu dot edu)
 
 
 ..
@@ -46,9 +47,11 @@ by the `SMU Center for Scientific Computation
    Using SMU HPC (Wed. AM) <session_5>
    Postprocessing (Wed. PM) <session_6>
    Intro. Parallel Computing (Thu. AM) <session_7>
-   Parallel Comp. on SMU HPC (Thu. PM) <session_8>
+   Parallel Comp. on Maneframe (Thu. PM) <session_8>
 
 
+
+Last year's `2014 SMU HPC Summer Workshop Pages <http://runge.math.smu.edu/SMUHPC_workshop_Summer14/>`_
 
 
 
