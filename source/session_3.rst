@@ -7,12 +7,8 @@
 Session 3: More Programming
 *****************************************************
 
-*Instructor: Dan Reynolds*
 
 
-
-We will perform this session of the workshop on the ``smuhpc3`` login
-node, so log in there to begin.
 
 
 .. index:: ! Makefile

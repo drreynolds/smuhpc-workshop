@@ -7,13 +7,7 @@
 Session 8: Parallel Computing on SMU HPC (old cluster)
 *******************************************************
 
-*Instructor: Dan Reynolds*
 
-
-
-We will perform this session of the workshop using ``smuhpc2``,
-``smuhpc3`` and ``smuhpc4`` login nodes, so open three windows, one on
-each server.
 
 
 

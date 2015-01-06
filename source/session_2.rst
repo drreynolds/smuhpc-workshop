@@ -8,15 +8,11 @@ Session 2: Introduction to Scripts and Programs
 *****************************************************
 
 
-*Instructor: Dan Reynolds*
 
 
 
 Getting started
 =================================
-
-We will perform this session of the workshop on the ``smuhpc3`` login
-node, so log in there to begin.
 
 Retrieve the set of files for this session either through
 :download:`clicking here <code/session2.tgz>` or by copying the

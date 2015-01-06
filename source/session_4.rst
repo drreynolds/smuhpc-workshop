@@ -7,7 +7,6 @@
 Session 4: Advanced Programming
 *****************************************************
 
-*Instructor: Dan Reynolds*
 
 
 
@@ -15,9 +14,6 @@ Session 4: Advanced Programming
 
 Getting started
 ======================================================
-
-We will perform this session of the workshop on the ``smuhpc3`` login
-node, so log in there to begin.
 
 In this session, we will use examples in either C, C++ or Fortran90.
 Choose your preferred language of the three and download the files to

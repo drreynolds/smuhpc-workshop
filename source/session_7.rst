@@ -7,7 +7,6 @@
 Session 7: Introduction to Parallel Computing
 *****************************************************
 
-*Instructor: Dan Reynolds*
 
 
 

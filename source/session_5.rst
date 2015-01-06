@@ -7,7 +7,6 @@
 Session 5: Using SMU HPC
 *****************************************************
 
-*Instructor: Dan Reynolds*
 
 
 
