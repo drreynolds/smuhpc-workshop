@@ -28,6 +28,9 @@ int main(int argc, char* argv[]) {
   double *x, *y, *z, a, b, runtime;
   double stime, ftime;
 
+  // output the number of threads in use                                               
+  printf(" Running with %i threads\n", omp_get_max_threads());
+
   // set problem parameters
   n = 10000000;
 
