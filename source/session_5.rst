@@ -7,6 +7,27 @@
 Session 5: Using ManeFrame
 *****************************************************
 
+Before beginning this session, first retrieve the corresponding set of
+files either through :download:`clicking here <code/session5.tgz>` or
+by copying the relevant files at the command line:
+
+.. code-block:: bash
+
+   $ cp ~dreynolds/SMUHPC_tutorial/session5.tgz .
+
+Unzip this file, and enter the resulting subdirectory
+
+.. code-block:: bash
+
+   $ tar -zxf session5.tgz
+   $ cd session5
+
+Additionally, we need to set up our environment correctly:
+
+.. code-block:: bash
+
+   $ module load python
+
 
 
 What is ManeFrame?
@@ -213,18 +234,6 @@ questions regarding selecting the appropriate storage for their jobs.
 
 
 
-.. index:: LUSTRE
-
-Using the LUSTRE filesystem
---------------------------------------------------
-
-[Amit]
-
-
-
-
-
-
 .. index:: ManeFrame; general information
 
 General information
@@ -243,6 +252,19 @@ General information
   <https://wiki.smu.edu/display/smuhpc/ManeFrame>`_ (requires SMU login)
   has more detailed information on the hardware and software
   configuration of the cluster.
+
+
+
+.. index:: LUSTRE
+
+Getting along with LUSTRE
+===========================
+
+[Amit]
+
+
+
+
 
 
 
@@ -458,12 +480,17 @@ here we'll focus on those applicable to running batch and interactive jobs:
   are any optional arguments that should be supplied to ``<script>``.
   The ``sbatch`` command accepts a multitude of options; these options
   may be supplied either at the command-line or inside the batch
-  submission script (see the next section).  
+  submission script.  
 
   It is recommended that all options be specified *inside* the batch
   submission file, to ensure reproducibility of results (i.e. so that
   the same options are specified on each run, and no options are
-  accidentally left out).
+  accidentally left out).  Any command-line ``sbatch`` option may
+  equivalently be specified within this script (at the top, before any
+  executable commands), preceded by the text ``#SBATCH``.
+
+  These options are discussed in the following section,
+  :ref:`batch_file`. 
 
   Examples:
 
@@ -481,21 +508,48 @@ here we'll focus on those applicable to running batch and interactive jobs:
 
   .. code-block:: bash
 
-     $ srun []
+     $ srun [-D <path>] [-e <errf>] [--epilog=<executable>] [-o <outf>] [-p <part>] [--pty] [--x11] <executable>
 
   where these options are:
 
-  * ``-a`` or ``--all`` -- Display information about all partitions
+  * ``-D <path>`` or ``--chdir=<path>`` -- have the remote processes
+    change directories ``<path>`` before beginning execution. The default is to
+    change to the current working directory of the ``srun`` process.  
+
+  * ``-e <errf>`` or ``--error=<errf>`` -- redirects stderr to the file ``<errf>``
+
+  * ``--epilog=<executable>`` -- run ``executable`` just after the job
+    completes.  The command line arguments for ``executable`` will be
+    the command and arguments of the job itself.  If ``executable`` is
+    "none", then no epilog will be run. 
+
+  * ``-I`` or ``--immediate[=secs]`` -- exit if requested resources
+    not available in "secs" seconds (useful for interactive jobs).
+
+  * ``-o <outf>`` or ``--output=<outf>`` -- redirects stdout to the file ``<outf>``
+
+  * ``-p <part>`` or ``--partition=<part>`` -- requests that the job
+    be run on the requested partition.
+
+  * ``--pty`` -- requests that the task be run in a pseudo-terminal
+
+  * ``-t <min>`` or ``--time=<min>`` -- sets a limit on the total run
+    time of the job. The default/maximum time limit is defined on a
+    per-partition basis.
+
+  * ``--x11=[batch|first|last|all]`` -- exports the X11 display from
+    the first|last|all allocated node(s), so that graphics displayed
+    by this process can be forwarded to your screen.
+
+  * ``<executable>`` -- the actual program to run.
 
   Examples:
 
   .. code-block:: bash
 
-     $ srun -p parallel /bin/program  # runs the executable /bin/program on the "parallel" partition
-     $ srun -p highmem /usr/bin/foo  # runs /usr/bin/foo on the "highmem" partition
-     $ srun -N2 -n4  /bin/bar  # runs /bin/bar using 2 nodes 
-     $ srun -N2 -n4 --ntasks-per-node=2  /bin/hostname
-     $ srun --x11=first --pty emacs
+     $ srun -p parallel /bin/program  # runs executable /bin/program on "parallel" partition
+     $ srun --x11=first --pty emacs  # runs "emacs" and forwards graphics
+     $ srun --x11=first --pty $SHELL # runs a the user's current shell and forwards graphics
 
 
 .. index:: SLURM; salloc
@@ -504,21 +558,33 @@ here we'll focus on those applicable to running batch and interactive jobs:
   executes a command, and then releases the allocation when the
   command is finished.  A full list of options is available `here
   <https://computing.llnl.gov/linux/slurm/salloc.html>`_.  The usage
-  command (with the most-helpful optional arguments in brackets) is
+  command is
 
   .. code-block:: bash
 
-     $ salloc []
+     $ salloc [options] <command> [command args]
 
-  where these options are:
+  where ``<command> [command args]`` specifies the command (and any
+  arguments) to run.  Available options are almost identical to
+  ``srun``, including:
 
-  * ``-a`` or ``--all`` -- Display information about all partitions
+  * ``-D <path>`` or ``--chdir=<path>`` -- change directory to
+    ``<path>`` before beginning execution.
 
-  Examples:
+  * ``-I`` or ``--immediate[=secs]`` -- exit if requested resources
+    not available in "secs" seconds (useful for interactive jobs).
 
-  .. code-block:: bash
+  * ``-p <part>`` or ``--partition=<part>`` -- requests that the job
+    be run on the requested partition.
 
-     $ sinfo --long -p highmem  # long output for all nodes allocated to the "highmem" partition
+  * ``-t <min>`` or ``--time=<min>`` -- sets a limit on the total run
+    time of the job. The default/maximum time limit is defined on a
+    per-partition basis.
+
+  * ``--x11=[batch|first|last|all]`` -- exports the X11 display from
+    the first|last|all allocated node(s), so that graphics displayed
+    by this process can be forwarded to your screen.
+
 
 
 .. index:: SLURM; scancel
@@ -530,459 +596,49 @@ here we'll focus on those applicable to running batch and interactive jobs:
 
   .. code-block:: bash
 
-     $ scancel []
+     $ scancel [-i] [-n <job_name>] [-p <part>] [-t <state>] [-u <uname>] [jobid]
 
   where these options are:
 
-  * ``-a`` or ``--all`` -- Display information about all partitions
+  * ``-i`` or ``--interactive`` -- require response from user for each
+    job (used when cancelling multiple jobs at once)
+
+  * ``-n <job_name>`` or ``--name=<job_name>`` -- cancel only on jobs
+    with the specified name.
+
+  * ``-p <part>`` or ``--partition=<part>`` -- cancel only on jobs in
+    the specified partition.
+
+  * ``-t <state>`` or ``--state=<state>`` -- cancel only on jobs in
+    the specified state.  Valid job states are ``PENDING``,
+    ``RUNNING`` and ``SUSPENDED``
+
+  * ``-u <uname>`` or ``--user=<uname>`` -- cancel only on jobs of
+    the specified user (note: normal users can only cancel their own
+    jobs).
+
+  * ``jobid`` is the numeric job identifier (as shown by ``squeue``)
+    of the job to cancel.
 
   Examples:
 
   .. code-block:: bash
 
-     $ sinfo --long -p highmem  # long output for all nodes allocated to the "highmem" partition
+     $ scancel 1234  # cancel job number 1234
+     $ scancel -u dreynolds  # cancel all jobs owned by user "dreynolds"
+     $ scancel -t PENDING -u joe  # cancel all pending jobs owned by user "joe"
 
 
 
 
 
+Example: running interactive jobs
+======================================
 
-
-
-.. index:: condor job submission file
-
-Job submission file
---------------------------------------------------
-
-The way that a user interacts with Condor is through creating a *job
-submission file* that describes the job you want to run:
-
-.. index:: condor job submission file; line continuation
-
-* For lengthy lines within the submit description file, ``\`` may be
-  used as a line continuation character.  Placing the backslash at
-  the end of a line causes the current line's command to be continued
-  with the next line of the file. 
-
-.. index:: 
-   pair: condor job submission file; comment
-
-* Submit file description files may contain comments, characterized as any
-  line beginning with a ``#`` character. 
-
-.. index:: condor job submission file; case-independence
-
-* These submission file options are case-independent (i.e. "Universe" ==
-  "uNivErSE"), although any file or path names are not.  
-
-
-The main condor job submission file options on SMU HPC are as follows: 
-
-.. index:: condor job submission file; arguments 
-
-* **arguments** --  List of arguments to be supplied to the executable
-  as part of the command line.  For example, 
-
-  .. code-block:: text
-
-     arguments = "arg1 arg2 arg3"
-
-  Argument rules:
-
-  1. The entire string representing the command line arguments is
-     surrounded by double quote marks. This permits the white space
-     characters of spaces and tabs to potentially be embedded within a
-     single argument. Putting the double quote mark within the
-     arguments is accomplished by escaping it with another double
-     quote mark. 
-
-  2. The white space characters of spaces or tabs delimit arguments.
-
-  3. To embed white space characters of spaces or tabs within a single
-     argument, surround the entire argument with single quote marks. 
-
-  4. To insert a literal single quote mark, escape it within an
-     argument already delimited by single quote marks by adding
-     another single quote mark. 
-
-.. index:: condor job submission file; environment 
-
-* **environment** -- List of additional environment variables to
-  supply to the executable.  For example,
-
-  .. code-block:: text
-
-     environment = "OMP_NUM_THREADS=4 LD_LIBRARY_PATH=/users/dreynolds/sw"
-
-  Environment rules:
-
-  1. Put double quote marks around the entire argument string. This
-     distinguishes the new syntax from the old. The old syntax does
-     not have double quote marks around it. Any literal double quote
-     marks within the string must be escaped by repeating the double
-     quote mark. 
-
-  2. Each environment entry has the form ``<name>=<value>``
-
-  3. Use white space (space or tab characters) to separate environment
-     entries. 
-
-  4. To put any white space in an environment entry, surround the
-     space and as much of the surrounding entry as desired with single
-     quote marks. 
-
-  5. To insert a literal single quote mark, repeat the single quote
-     mark anywhere inside of a section surrounded by single quote
-     marks. 
-
-.. index:: condor job submission file; error file
-
-* **error** --  Path and file name indicating where Condor should put
-  the standard error (``stderr``) from running your job.  For example, 
-
-  .. code-block:: text
-
-     error = myjob.err
-
-  * If the file does not begin with a ``/``, the name indicates a
-    relative path; otherwise it is an absolute path.  
-
-  * You must have appropriate permissions to write to the supplied file.
-
-  * The default is ``/dev/null``, corresponding to ignoring all error
-    messages. 
-
-.. index:: condor job submission file; executable
-
-* **executable** -- The path and file name of your executable
-  program. For example,
-
-  .. code-block:: text
-
-     executable  = myjob.sh
-
-  * If the file does not begin with a ``/``, the name indicates a
-    relative path; otherwise it is an absolute path.  
-
-  * You must have appropriate permissions to read/execute the supplied file.
-
-.. index:: condor job submission file; getenv
-
-* **getenv** {True, False} -- Propagates the environment variables
-  present in your shell upon submitting the job to the job when it
-  runs. For example, 
-
-  .. code-block:: text
-
-     getenv = true
-
-  If both **getenv** and **environment** are used, the values supplied
-  by **environment** take precedence.
-
-.. index:: condor job submission file; input
-
-* **input** -- File containing any keyboard input values
-  (i.e. standard input, ``stdin``) that your program requires.  For
-  example,
-
-  .. code-block:: text
-
-     input = 100
-
-  * If not specified, the default value of ``/dev/null`` (i.e. no input)
-    is used.
-
-  * You must have appropriate permissions to read from the supplied file.
-
-  * Note that this command does not refer to the command-line arguments
-    of the program, which are supplied by the **arguments** command.
-
-.. index:: condor job submission file; log
-
-* **log** --  File name indicating where Condor will record
-  information about your job's execution.  While it is not required,
-  it's usually a good idea to have Condor keep a log in case things go
-  wrong.  For example,
-
-  .. code-block:: text
-
-     log = myjob.log
-
-  * If the file does not begin with a ``/``, the name indicates a
-    relative path; otherwise it is an absolute path.  
-
-  * You must have appropriate permissions to write to the supplied file.
-
-  * The default is ``/dev/null``, corresponding to ignoring all log
-    messages. 
-
-.. index:: condor job submission file; notification
-
-* **notification** {Always, Complete, Error, Never} -- The set of
-  job-related events for which the job owner is sent an email.  The
-  default is "Complete", indicating notification when the job
-  finishes.  "Error" indicates to notify if the job terminated
-  abnormally. For example,
-
-  .. code-block:: text
-
-     notification = Always
-
-.. index:: condor job submission file; notify_user
-
-* **notify_user** -- The email address to which condor will send
-  **notification** messages.  For example,
-
-  .. code-block:: text
-
-     notify_user = username@smu.edu
-
-  If left unspecified, condor will send a message to
-  ``job-owner@submit-machine-name`` (which ends up going to the system
-  administrators, who probably don't really appreciate it).
-
-.. index:: condor job submission file; output
-
-* **output** --  File name indicating where Condor should put the
-  standard output (``stdout``) from running your job.  For example,
-
-  .. code-block:: text
-
-     output = myjob.out
-
-  * If the file does not begin with a ``/``, the name indicates a
-    relative path; otherwise it is an absolute path.  
-
-  * You must have appropriate permissions to write to the supplied file.
-
-  * The default is ``/dev/null``, corresponding to ignoring all output
-    messages. 
-
-.. index:: condor job submission file; universe
-
-* **universe** {vanilla, parallel} -- These specify what
-  type of computation you plan to run.  For example,
-
-  .. code-block:: text
-
-     universe  = vanilla
-
-  * The "vanilla" universes corresponds to single-node batch
-    processing, in which condor will run your job on the first
-    available node to completion.  
-
-  * The "parallel" universe corresponds to MPI-based parallel jobs
-    that require multiple compute nodes to run.
-
-.. index:: condor job submission file; machine_count
-
-* **machine_count** -- Only applicable with the "parallel" universe,
-  this option tells Condor how many nodes should be allocated to the
-  parallel job.  For example,
-
-  .. code-block:: text
-
-     machine_count = 2
-
-.. index:: condor job submission file; requirements
-
-* **requirements** -- Option allowing you to provide additional
-  requirements that must be satisfied before launching your job.  This
-  typically refers to the type of node you wish to run on.  For
-  example, to request that you job run on a 12-core batch node, you
-  could use 
-
-  .. code-block:: text
-
-     requirements = regexp("cwnode", Machine)
-
-  or to request that it run on the 8-core-per-node parallel portion of
-  the cluster,
-
-  .. code-block:: text
-
-     requirements = regexp("inode", Machine)
-
-  or to run on the 12-core-per-node parallel portion of the cluster,
-
-  .. code-block:: text
-
-     requirements = regexp("iwnode", Machine)
-
-.. index:: condor job submission file; queue
-
-* **queue** -- This places your job into the queue, and should follow
-  all arguments that specify how to run the job.  For example,
-
-  .. code-block:: text
-
-     queue
-
-  One condor job file may contain multiple **queue** commands, each
-  with different argument lists, allowing for submission of many
-  condor jobs at once using the same submission file.
-
-
-
-.. index:: condor job submission file; macros
-
-In setting up this file, you have may insert parameterless macros, of
-the form ``$(macro_name)``, anywhere in your job submission file.
-Custom macros may be defined via the syntax
-
-.. code-block:: text
-
-   <macro_name> = <string>
-
-There are three default macros:
-
-.. index:: condor job submission file; Cluster
-
-* **Cluster** -- the value of the ``ClusterID`` on which the job has
-  is queued.
-
-.. index:: condor job submission file; Process
-
-* **Process** -- the Condor process ID number for this job.  For
-  example,
-
-  .. code-block:: text
-
-     output = myjob.$(Process).out
-
-.. index:: condor job submission file; Node
-
-* **Node** -- only defined for jobs in the "Parallel" universe, this
-  holds the name of the node on which the process is running (useful
-  if each node reports different information, e.g. for debugging).
-  For example, 
-
-  .. code-block:: text
-
-     output = myjob.out.$(Node)
-
-
-
-.. index:: condor; whole node vs shared node
-
-Whole vs shared node (old cluster only)
---------------------------------------------------
-
-When running batch jobs on the cluster, you may request to use a whole
-node for your job (the default is to share the node with other users).
-Reasons why you may wish to request an entire node for your job
-include: 
-
-* Need for reliable timing information.
-
-* Need for all of the memory on the node.
-
-* Use of threads (e.g. OpenMP, Pthreads, Intel Threading Building
-  Blocks, MPI, etc.) that will spawn additional processes on top of
-  the one that is launched.
-
-* Poor inter-personal skills.
-
-
-If you wish for your job to use an entire node, you only need to add
-two lines to your Condor job submission file.  These lines are
-[inappropriately] named "whole machine", even they only refer to a
-single node of the larger machine: 
-
-.. code-block:: text
-
-   Requirements = CAN_RUN_WHOLE_MACHINE
-   +RequiresWholeMachine = True
-
-If you wish to "require" both a specific node type and a whole node,
-you would combine **Requirements** statements, e.g.
-
-.. code-block:: text
-
-   Requirements = CAN_RUN_WHOLE_MACHINE && regexp("iwnode", Machine)
-
-
-.. index:: condor; ssh to job
-
-Condor SSH to job
---------------------------------------------------
-
-In some instances, you may wish to request a worker node from the
-Condor pool for dedicated **interactive** use only.  Since a typical
-user is not allowed to SSH directly to a worker node, Condor supplies
-a modified SSH executable that will allow users to log into a worker
-node that has been dedicated to that user.  This behavior is called
-*SSH to job*, and is only allowed when a job has been submitted in
-"whole machine" mode as described above.
-
-Once your job is running, you can log into it via the commands
-
-.. code-block:: bash
-
-   $ source /grid/condor/condor.sh
-   $ condor_ssh_to_job <processID>
-
-where here ``<processID>`` is the integer ID number for your running job.
-
-
-
-
-.. index:: 
-   pair: condor; resources
-
-Condor resources:
---------------------------------------------------
-
-* :download:`SMU HPC Condor tutorial <files/condor.pdf>`
-
-* `Condor manual (version 7.6.10, HTML)
-  <http://research.cs.wisc.edu/htcondor/manual/v7.6/index.html>`_ 
-
-* `Condor manual (version 7.6.10, PDF)
-  <http://research.cs.wisc.edu/htcondor/manual/v7.6/condor-V7_6_10-Manual.pdf>`_ 
-
-
-
-
-Condor Examples
-================================================
-
-In the following, we have a few example Condor usage scenarios to
-familiarize you with how to interact with the high-throughput portion
-of the SMU HPC cluster.
-
-To do these examples, first retrieve the corresponding set of files
-either through :download:`clicking here <code/session5.tgz>` or by copying the
-relevant files at the command line:
-
-.. code-block:: bash
-
-   $ cp ~dreynolds/SMUHPC_tutorial/session5.tgz .
-
-Unzip this file, and enter the resulting subdirectory
-
-.. code-block:: bash
-
-   $ tar -zxf session5.tgz
-   $ cd session5
-
-Before we can use this example, we need to set up our environment
-correctly:
-
-.. code-block:: bash
-
-   $ module load gcc
-   $ module load python
-
-
-.. index:: condor examples; single shared node job
-
-Running a job
---------------------------------------------------
-
-In this example, we'll run the Python scrpit ``myjob.py``, that
-performs a simple algorithm for approximating :math:`\pi` using a
-composite trapezoidal numerical integration formula to approximate 
+In this example, we'll interactively run the Python scrpit
+``myjob.py``, that performs a simple algorithm for approximating
+:math:`\pi` using a composite trapezoidal numerical integration
+formula to approximate 
 
 .. math::
 
@@ -1004,12 +660,206 @@ approximation it can take longer to run, so as "good citizens" we
 should instead run it on dedicated compute nodes instead of the shared
 login nodes.  
 
-Before submitting this script to condor, we need to ensure that
+Before running this script on a compute node, we need to ensure that
 ``myjob.py`` has "executable" permissions:
 
 .. code-block:: bash
 
    $ chmod +x ./myjob.py 
+
+We'll use ``srun`` to run this script interactively for interval
+values of {50,500,5000,50000}.  For each run, we'll direct the output
+to a separate file:
+
+.. code-block:: bash
+
+   $ srun -o run_50.txt ./myjob.py 50
+   $ srun -o run_500.txt ./myjob.py 500
+   $ srun -o run_5000.txt ./myjob.py 5000
+   $ srun -o run_50000.txt ./myjob.py 50000
+
+Upon completion you should have the files ``run_50.txt``,
+``run_500.txt``, ``run_5000.txt`` and ``run_50000.txt`` in your
+directory.  View the results to ensure that things ran properly:
+
+.. code-block:: bash
+
+   $ cat run_*
+
+.. note:: in the above commands we do not need to directly specify to
+	  run on the "interactive" SLURM partition, since that is the
+	  default partition.
+
+
+
+
+
+.. index:: SLURM job submission file
+
+.. _batch_file:
+
+Batch job submission file
+===============================
+
+The standard way that a user submits batch jobs to run on SLURM is
+through creating a *job submission file* that describes (and executes)
+the job you want to run.  This is the ``<script>`` file specified to
+the ``sbatch`` command.
+
+A batch submission script is just that, a shell script.  You are
+welcome to use your preferred shell scripting language; in this
+tutorial we'll use BASH (as we used in :ref:`tutorial session 2
+<session2>`).  As a result, the script typically starts with the line
+
+.. code-block:: bash
+
+   #!/bin/bash
+
+The following lines (before any executable commands) contain the
+options to be supplied to the ``sbatch`` command.  Each of these
+options must be prepended with the text ``#SBATCH``, e.g.
+
+.. code-block:: bash
+
+   #!/bin/bash
+   #SBATCH -J my_program       # job name to display in squeue
+   #SBATCH -o output-%j.txt    # standard output file
+   #SBATCH -e error-%j.txt     # standard error file
+   #SBATCH -p parallel         # requested partition
+   #SBATCH -t 180              # maximum runtime in minutes
+
+Since each of these ``sbatch`` options begins with the character
+``#``, they are treated as comments by the BASH shell; however
+``sbatch`` parses the file to find these and supply them as options
+for the job.
+
+After all of the requested options have been specified, you can supply
+any number of executable lines, variable definitions, and even
+functions, as with any other BASH script.
+
+Unlike general BASH scripts, there are a few SLURM replacement symbols
+(variables) that may be used within your script:
+
+* ``%A`` -- the master job allocation number (only meaningful for job
+  arrays (advanced usage))
+* ``%a`` -- the job array ID (index) number (also only meaningful for job arrays)
+* ``%j`` -- the job allocation number (the number listed by ``squeue``)
+* ``%N`` -- the node name. If running a job on multiple nodes, this will 
+  map to only the first node on the job (i.e. the node that actually runs the
+  script).
+* ``%u`` -- your username
+
+The available options to ``sbatch`` are `numerous
+<https://computing.llnl.gov/linux/slurm/sbatch.html>`_.  Here we list
+the most useful options for running serial batch jobs.
+
+* ``-D <dir>`` or ``--workdir=<dir>`` -- sets the working directory
+  where the batch script should be run, e.g. 
+
+  .. code-block:: bash
+
+     #SBATCH -D /scratch/users/ezekiel/test_run
+ 
+* ``-J <name>`` or ``--job-name=<name>`` -- sets the job name as
+  output by the ``squeue`` command, e.g.  
+
+  .. code-block:: bash
+
+     #SBATCH -J test_job
+ 
+* ``-o <fname>`` -- sets the output file name for stdout and stderr
+  (if stderr is left unspecified).  The default standard output is
+  directed to a file of the name ``slurm-%j.out``, where ``%j``
+  corresponds to the job ID number.  You can do something similar,
+  e.g. 
+
+  .. code-block:: bash
+
+     #SBATCH -o output-%j.txt
+
+* ``-e <fname>`` -- sets the output file name for stderr only.  The
+  default is to combine this with stdout.  An example similar to
+  ``-o`` above would be
+
+  .. code-block:: bash
+
+     #SBATCH -e error-%j.txt
+
+* ``-i <fname>`` or ``--input=<fname>`` -- sets the standard input
+  stream for the running job.  For example, if an executable program
+  will prompt the user for text input, these inputs may be placed in a
+  file ``inputs.txt`` and specified to the script via
+
+  .. code-block:: bash
+
+     #SBATCH -i inputs.txt
+
+* ``-p <part>`` -- tells SLURM on which partition it should submit the
+  job.  The options are "interactive", "highmem" or "parallel".  For
+  example, so submit a batch job to a high-memory node you would use
+
+  .. code-block:: bash
+
+     #SBATCH -p parallel
+
+* ``-t <num>`` -- tells SLURM the maximum runtime to be allowed for
+  the job (in minutes).  For example, to allow a job to run for up to
+  3 hours you would use
+
+  .. code-block:: bash
+
+     #SBATCH -t 180
+
+* ``--exclusive`` -- tells SLURM that the job can not share nodes with
+  other running jobs.
+
+* ``-s`` or ``--share`` -- tells SLURM that the job can share nodes
+  with other running jobs. This is the opposite of ``--exclusive``,
+  whichever option is seen last on the command line will be used.
+  This option may result the allocation being granted sooner than if
+  the ``--share`` option was not set and allow higher system
+  utilization, but application performance will likely suffer due to
+  competition for resources within a node.
+
+* ``--mail-user <email address>`` -- tells SLURM your email address if 
+  you'd like to receive job-related email notifications, e.g.
+
+  .. code-block:: bash
+
+     #SBATCH --mail-user peruna@smu.edu
+
+* ``--mail-type=<flag>`` -- tells SLURM which types of email
+  notification messages you wish to receive.  Options include:
+
+  * ``BEGIN`` -- send a message when the run starts
+  * ``END`` -- send a message when the run ends
+  * ``FAIL`` -- send a message if the run failed for some reason
+  * ``REQUEUE`` -- send a message if and when the job is requeued
+  * ``ALL`` -- send a message for all of the above
+
+  For example,
+  
+  .. code-block:: bash
+
+     #SBATCH --mail-type=all
+
+
+
+
+
+
+Example: running batch jobs
+======================================
+
+In this example we'll use the second script provided in the
+``session5`` directory, ``myjob.sh``.  This is a BASH script that uses
+the same basic approach that you used in :ref:`session 2 <session2>`
+to determine prime numbers.  The script requires a single command-line
+argument, specifying how many prime numbers we wish to find before
+exiting the program.
+
+
+[resume changes here]
 
 
 Create a new job submission file, ``test1.job`` using the editor of
