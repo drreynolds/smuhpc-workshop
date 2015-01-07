@@ -33,7 +33,7 @@ relevant files at the command line:
 
 .. code-block:: bash
 
-   $ cp ~dreynolds/SMUHPC_tutorial/session6.tgz .
+   $ cp ~dreynolds/ManeFrame_tutorial/session6.tgz .
 
 Unzip this file, enter the resulting directory, and build the
 executable with ``make``.

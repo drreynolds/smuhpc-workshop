@@ -111,7 +111,7 @@ or by copying them on ManeFrame at the command line:
 
 .. code-block:: bash
 
-   $ cp ~dreynolds/SMUHPC_tutorial/session8_OpenMP.tgz .
+   $ cp ~dreynolds/ManeFrame_tutorial/session8_OpenMP.tgz .
 
 Similarly, retrieve the files for the MPI portion by clicking
 :download:`this link <code/session8_MPI.tgz>` or by copying them
@@ -119,7 +119,7 @@ on ManeFrame at the command line:
 
 .. code-block:: bash
 
-   $ cp ~dreynolds/SMUHPC_tutorial/session8_MPI.tgz .
+   $ cp ~dreynolds/ManeFrame_tutorial/session8_MPI.tgz .
 
 
 

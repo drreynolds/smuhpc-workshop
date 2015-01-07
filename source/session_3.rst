@@ -40,7 +40,7 @@ relevant files at the command line:
 
 .. code-block:: bash
 
-   $ cp ~dreynolds/SMUHPC_tutorial/session3.tgz .
+   $ cp ~dreynolds/ManeFrame_tutorial/session3.tgz .
 
 
 Unzip/untar this file with the command

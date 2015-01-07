@@ -40,6 +40,7 @@ will be tuned to computing on the new SMU cluster, *ManeFrame*.
 .. toctree::
    :maxdepth: 1
 
+   Accessing ManeFrame (General) <accessing_maneframe>
    Introduction to Linux (Mon. AM) <session_1>
    Intro. Scripts & Programs (Mon. PM) <session_2>
    More Programming (Tue. AM) <session_3>

@@ -25,9 +25,9 @@ ManeFrame with one of the following 3 commands:
 
 .. code-block:: bash
 
-   $ cp ~dreynolds/SMUHPC_tutorial/session4_c.tgz .
-   $ cp ~dreynolds/SMUHPC_tutorial/session4_cxx.tgz .
-   $ cp ~dreynolds/SMUHPC_tutorial/session4_f90.tgz .
+   $ cp ~dreynolds/ManeFrame_tutorial/session4_c.tgz .
+   $ cp ~dreynolds/ManeFrame_tutorial/session4_cxx.tgz .
+   $ cp ~dreynolds/ManeFrame_tutorial/session4_f90.tgz .
 
 Unpack your tarball and enter the resulting directory.
 

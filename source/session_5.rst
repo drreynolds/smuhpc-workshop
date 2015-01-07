@@ -13,7 +13,7 @@ by copying the relevant files at the command line:
 
 .. code-block:: bash
 
-   $ cp ~dreynolds/SMUHPC_tutorial/session5.tgz .
+   $ cp ~dreynolds/ManeFrame_tutorial/session5.tgz .
 
 Unzip this file, and enter the resulting subdirectory
 
