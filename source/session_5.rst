@@ -848,7 +848,7 @@ the most useful options for running serial batch jobs.
 
 
 
-Example: running batch jobs
+Running batch jobs
 ======================================
 
 In this example we'll use the second script provided in the
@@ -858,211 +858,205 @@ to determine prime numbers.  The script requires a single command-line
 argument, specifying how many prime numbers we wish to find before
 exiting the program.
 
+We'll run this in three ways:
 
-[resume changes here]
+1. first, we run ``myjob.sh`` one time, potentially sharing computing
+   resources on the worker node,
+2. second, we run ``myjob.sh`` multiple times from a single job
+   submission, requesting that the node not be shared with others,
+3. third, we set up a suite of jobs to run and submit the set to run
+   simultaneously on the worker nodes.
 
 
-Create a new job submission file, ``test1.job`` using the editor of
-your choice (e.g. ``gedit`` or ``emacs``), and fill in the arguments
+Example: running a single job (shared node)
+----------------------------------------------
 
-.. code-block:: text
-
-   universe     = vanilla
-   getenv       = true
-   log          = test1.log
-   error        = test1.err
-   output       = test1.out
-   notification = always
-   notify_user  = username@smu.edu
-   executable   = myjob.py
-   arguments    = 5000000
-   queue
-
-Submit this to the condor scheduler with the command
+In the ``session5`` subdirectory, create a new job submission file,
+``test1.job`` using the text editor of your choice (e.g. ``gedit`` or
+``emacs``), and fill it in similarly to the following:
 
 .. code-block:: bash
 
-   $ condor_submit test1.job
+   #!/bin/bash
+   #SBATCH -J myjob          # job name
+   #SBATCH -o test1.txt      # output/error file
+   #SBATCH -p parallel       # requested queue
+   #SBATCH -t 1              # maximum runtime in minutes
 
-View your jobs in the queue by supplying your username to
-``condor_q``, e.g.
-
-.. code-block:: bash
-
-   $ condor_q dreynolds
-
-(if nothing shows up, it's because the job already finished)
-
-When the job finishes, you should see the files ``test1.log``,
-``test1.err`` and ``test1.out`` in your directory.  Open these files
-and view their contents.  If everything ran correctly, the error file
-should be empty, the log file should have some general condor-related
-information, and the output file should have our desired results.
+   # run for first 100 primes
+   ./myjob.sh 100
 
 
-
-.. index:: condor examples; multiple shared node jobs
-
-.. _running_multiple_condor_jobs:
-
-Running many jobs
---------------------------------------------------
-
-Suppose now that we wanted to run this script multiple times with
-different arguments, in order to experimentally measure how rapidly
-the approximation to :math:`\pi` converges as we change the number of
-subintervals.  
-
-To this end, we have a few options:
-
-1. Write separate job files for each command line argument (here, the
-   number of subintervals), and submit each to condor separately.
-   This has the benefit of creating a reproducible set of tests, where
-   the inputs for each test are quite clear, but can take quite some
-   time to set up.  
-
-2. Reuse our existing job file, but when calling ``condor_submit`` we can
-   use the ``-append`` option to modify the command line argument and
-   output/log/error file names.  
-
-   The problems with this approach are that (a) we may forget the
-   command-line arguments we had to use for the different calls,
-   making our results more difficult to reproduce, and (b) all results
-   would be written to the same output files, obliterating results
-   from all but the last run.  
-
-   However, this could be automated by creating a BASH
-   script that calls ``condor_submit`` for us multiple times, with the
-   customized calls hard-coded into the script.  This would again
-   allow for reproducibility.  Additionally, the **output** condor
-   argument could use the **Process** macro to create separate output
-   files for each run.
-
-3. We could write a single job file that has separate blocks of
-   options, each separated by a different **queue** command, allowing
-   us to run multiple tests with a single submission file.  
-
-All of the above approaches are equally valid, but we'll choose option
-3 since it requires the least typing.  
-
-Create a new condor job submission file, ``test2.job`` with the contents
-
-.. code-block:: text
-
-   universe     = vanilla
-   getenv       = true
-   log          = test2a.log
-   error        = test2a.err
-   output       = test2a.out
-   notification = always
-   notify_user  = username@smu.edu
-   executable   = myjob.py
-   arguments    = 500
-   queue
-
-   log        = test2b.log
-   error      = test2b.err
-   output     = test2b.out
-   arguments  = 5000
-   queue
-
-   log        = test2c.log
-   error      = test2c.err
-   output     = test2c.out
-   arguments  = 50000
-   queue
-
-   log        = test2d.log
-   error      = test2d.err
-   output     = test2d.out
-   arguments  = 500000
-   queue
-
-   log        = test2e.log
-   error      = test2e.err
-   output     = test2e.out
-   arguments  = 5000000
-   queue
-
-Note that only the first block specifies the **universe**, **getenv**
-**executable**, **notification** and **notify_user**; since these will
-be reused for all of our runs we do not need to change them for each
-subsequent job.
-
-Launch these jobs as before, with the command
+Submit this job to SLURM using the ``sbatch`` command:
 
 .. code-block:: bash
 
-   $ condor_submit test2.job
+   $ sbatch ./test1.job
 
-To view our results in a single command, use
-
-.. code-block:: bash
-
-   $ cat test2*.out
-
-
-
-.. index:: condor examples; single whole node job
-
-Running on a whole node 
---------------------------------------------------
-
-All of our above tests were performed on nodes where other users' jobs
-could also be running.  As previously discussed, sometimes our
-computational experiments cannot be run on shared resources, e.g. if
-we need reliable timings, if we need to use more than 2 GB of
-RAM, or if our job will spawn additional threads as it runs to fill up
-all the cores on a given node.  In such situations, we wish to request
-that our job run on a node that is dedicated to our one job.
-
-This is accomplished by adding a small number of additional arguments
-to our earlier job submission file.  Let's run one of these, wherein
-we will now run the executable ``myjob.sh`` on a dedicated node.  This
-script also requires a command-line argument, e.g. ``n``, and it then
-computes the first ``n`` prime numbers using a simplistic version of
-the *trial division* algorithm.
-
-Before submitting this script to condor, we need to ensure that
-``myjob.sh`` has "executable" permissions:
+After this returns, you can monitor the progress of your job in the
+queue via the ``squeue`` command, e.g.
 
 .. code-block:: bash
 
-   $ chmod +x ./myjob.sh
+   $ squeue -u $USER
 
-Create a new condor job submission file, ``test3.job`` with the contents
+.. note:: in the above command, the environment variable ``USER`` is
+	  evaluated in the command, limiting output to only your own
+	  jobs).
 
-.. code-block:: text
-
-   universe              = vanilla
-   getenv                = true
-   log                   = test3.log
-   error                 = test3.err
-   output                = test3.out
-   executable            = myjob.sh
-   arguments             = 5000
-   Requirements          = CAN_RUN_WHOLE_MACHINE
-   +RequiresWholeMachine = True
-   queue
-
-and launch it as usual,
+When your job completes, you should have a new file, ``test1.txt`` in
+your directory, containing the output from running the job.  To verify
+that it computed the first 100 primes, you can check the length of the
+file, e.g.
 
 .. code-block:: bash
 
-   $ condor_submit test3.job
+   $ wc -l test1.txt
+
+Of course, you could also go through the file line-by-line ensuring
+that each value is indeed a prime number.
 
 
-.. index:: sed
+Example: running a suite of tests in a single job (non-shared node)
+---------------------------------------------------------------------
 
-After the run finishes, find the 4324th prime number (on line 4326 of
-``test3.out`` because of the two extra lines that condor adds to the
-top of the output file) with the command
+Suppose instead that you wish to run many short-running tests, and
+want to run these back-to-back after only waiting once to have your
+job make it through the queue.  Since the SLURM submission file is
+just a shell script, you can run many tests inside the same
+submission.
+
+Again in the ``session5`` subdirectory, create a new job submission file,
+``test2.job`` with the following contents:
 
 .. code-block:: bash
 
-   $ sed -n 4326p test3.out
+   #!/bin/bash
+   #SBATCH -J myjob2         # job name
+   #SBATCH -o test2.txt      # output/error file name
+   #SBATCH -p parallel       # requested queue
+   #SBATCH --exclusive       # do not share the compute node
+   #SBATCH -t 10             # maximum runtime in minutes
+   
+   # first run for 200 primes, placing output in run_200.txt, and timing run
+   echo "  "
+   echo "running for 200 primes"
+   time -p ./myjob.sh 200 > run_200.txt
+   
+   # run again for 2000 primes, 
+   echo "  "
+   echo "running for 2000 primes"
+   time -p ./myjob.sh 2000 > run_2000.txt
+   
+   # run again for 20000 primes, 
+   echo "  "
+   echo "running for 20000 primes"
+   time -p ./myjob.sh 20000 > run_20000.txt
 
 
+Again, submit this job to SLURM using the ``sbatch`` command:
+
+.. code-block:: bash
+
+   $ sbatch ./test2.job
+
+After this returns, you can monitor the progress of your job in the
+queue via the ``squeue`` command, e.g.
+
+.. code-block:: bash
+
+   $ squeue -u $USER
+
+This job will take significantly longer to complete, since we are not
+only running ``myjob.sh`` three times, but each one runs for
+significantly further.  
+
+When your job completes, you should have four new files, ``test2.txt``
+that contains the run timing information for each test,
+``run_200.txt`` that contains the first 200 primes, ``run_2000.txt``
+that contains the first 2000 primes, and ``run_20000.txt`` that
+contains the first 20000 prime numbers.  You can check the length of
+these files again using ``wc``, e.g.
+
+.. code-block:: bash
+
+   $ wc -l run*.txt
+
+.. note:: Investigate the timings output in your file
+	  ``multitest.txt``.  Note that as the requested number of
+	  primes increases by a factor of 10, the required run time
+	  increases by significantly more than a factor of 10.  These
+	  results help measure the *complexity* of this algorithm.
+
+
+
+
+Example: running a suite of tests simultaneously
+-------------------------------------------------
+
+Now suppose again that you wish to run a large number of tests, but
+that these tests may take somewhat longer, and you want these to run
+simultanously on separate worker nodes.  To do this in SLURM, one
+approach would be to write many submission files and submit each job
+separately.  While the process of creating multiple files that differ
+only in minimal ways can be tedious to do by hand, a shell script can
+do this with ease. 
+
+Again in the ``session5`` subdirectory, let's create a BASH script
+that itself will set up and submit a suite of tests.  In your text
+editor of choice, create a new BASH script, ``runtests.sh`` with the
+following contents: 
+
+.. code-block:: bash
+
+   #!/bin/bash
+
+   # set up array of test sizes to run
+   NPRIMES=(150 1500 15000)
+
+   # iterate over this array, setting up and submitting 
+   # separate job files for each test
+   for n in "${NPRIMES[@]}"
+   do
+
+      JOBFILE=test_$n.job                 # set job file name
+      echo "#!/bin/bash" > $JOBFILE       # create job file
+
+      # append sbatch options into file header
+      echo "#SBATCH -J job_$n" >> $JOBFILE
+      echo "#SBATCH -o test_$n.txt" >> $JOBFILE
+      echo "#SBATCH -p parallel" >> $JOBFILE
+      echo "#SBATCH -t 10" >> $JOBFILE
+   
+      # append test execution commands into job file
+      echo "time -p ./myjob.sh $n > run_$n.txt" >> $JOBFILE
+
+      # submit job to queue
+      sbatch $JOBFILE
+
+   done
+
+   # check the queue to see that all jobs were submitted
+   squeue -u $USER
+
+
+In order to run this shell script we need to give it "execute" permissions,
+
+.. code-block:: bash
+
+   $ chmod +x ./runtests.sh
+
+With this in place, we need only run this one shell script to set up
+and launch our jobs:
+
+.. code-block:: bash
+
+   $ ./runtests.sh
+
+
+Upon running this script, your new jobs are in the SLURM queue and can
+execute concurrently.  Moreover, you have reusable batch submission
+scripts for each run in case something goes awry with one of the runs.
 
 
 
