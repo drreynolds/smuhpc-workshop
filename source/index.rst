@@ -46,10 +46,16 @@ will be tuned to computing on the new SMU cluster, *ManeFrame*.
    More Programming (Tue. AM) <session_3>
    Advanced Programming (Tue. PM) <session_4>
    Using ManeFrame (Wed. AM) <session_5>
-   Intro. Parallel Computing (Thu. AM) <session_6>
-   Parallel Comp. on ManeFrame (Thu. PM) <session_7>
-   Postprocessing (Wed. PM) <session_8>
+   Intro. Parallel Computing (Wed. PM) <session_6>
+   Parallel Comp. on ManeFrame (Thu. AM) <session_7>
+   Postprocessing (Thu. PM) <session_8>
 
+.. note:: The Thursday afternoon session is for open interaction with
+	  the workshop organizers.  For attendees who have their own
+	  research codes, you are encouraged to use those on
+	  ManeFrame; for attendees without current research projects
+	  you may instead follow the :ref:`Postprocessing <session_8>`
+	  tutorial. 
 
 
 Last year's `2014 SMU HPC Summer Workshop Pages <http://runge.math.smu.edu/SMUHPC_workshop_Summer14/>`_
