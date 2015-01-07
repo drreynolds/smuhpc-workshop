@@ -14,10 +14,8 @@ To log into ManeFrame, you must SSH into one of the login nodes:
 * *(mflogin03.hpc.smu.edu to be added soon)*
 * *(mflogin04.hpc.smu.edu to be added soon)*
 
-Your ManeFrame username will be associated with your account, and will
-be given to you upon account creation.
-
-Your ManeFrame password will be the same as your SMU email password.
+Your ManeFrame username and password will be associated with your
+account, and will be given to you upon account creation.
 
 
 SSH client programs

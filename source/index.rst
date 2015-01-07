@@ -46,9 +46,9 @@ will be tuned to computing on the new SMU cluster, *ManeFrame*.
    More Programming (Tue. AM) <session_3>
    Advanced Programming (Tue. PM) <session_4>
    Using ManeFrame (Wed. AM) <session_5>
-   Postprocessing (Wed. PM) <session_6>
-   Intro. Parallel Computing (Thu. AM) <session_7>
-   Parallel Comp. on ManeFrame (Thu. PM) <session_8>
+   Intro. Parallel Computing (Thu. AM) <session_6>
+   Parallel Comp. on ManeFrame (Thu. PM) <session_7>
+   Postprocessing (Wed. PM) <session_8>
 
 
 

@@ -3,1425 +3,797 @@
 
 .. _session8:
 
-*******************************************************
-Session 8: Parallel Computing on SMU HPC (old cluster)
-*******************************************************
-
-
-
-
-
-SMU HPC network
-=================================================================
-
-
-.. figure:: figs/AllofHPC_Simplified.jpg
-   :scale: 65%
-   :align: center
-
-   Schematic of the SMU HPC cluster
-
-
-* Gigabit ethernet network connecting disks, login nodes and batch
-  workers.
-
-* Quadrics infiniband network for older parallel nodes.
-
-* QLogic infiniband network for newer parallel nodes.
-
-
-
-
-General information
-=================================================================
-
-.. index:: SMU HPC clusters
-
-As seen in :ref:`session6`, the older SMU HPC cluster is actually
-comprised of four separate computing clusters: two batch processing
-clusters for high-throughput computing, and two smaller parallel
-computing clusters.  For future reference throughout the remainder of
-this tutorial, we'll name these:
-
-* *batch1* -- the 107 node, 8 core/node cluster,
-
-* *batch2* -- the 56 node, 12 core/node cluster,
-
-* *parallel1* -- the 16 node, 8 core/node cluster, and 
-
-* *parallel2* -- the 32 node, 12 core/node cluster. 
-
-Each of these components of the cluster is capable of running
-parallel programs, albeit of different types and sizes.  As will be
-elaborated on below, we differentiate between shared-memory parallel
-(SMP) programs, typically enabled by OpenMP, and distributed-memory
-parallel (DMP) programs, typically enabled by MPI.
-
-Additionally, we have the choice between GNU and PGI compilers when
-compiling our codes for these different execution environments.  In
-the tutorial below, we differentiate between different
-compiler/cluster/parallelism approaches, providing separate
-instructions for each approach.  You need not use all of these
-approaches, but they are provided for future reference.
-
-
-
-Notes on job sizes
-------------------------------------
-
-.. index:: running large jobs
-
-Large jobs
-^^^^^^^^^^^^^^
-
-  Although the condor job scheduler does not enforce maximum wall
-  clock limits on user jobs, we *strongly* request that no single
-  user monopolize the entire *parallel1* or *parallel2* cluster for an
-  excessive amount of time (i.e. over 24 hours).  These are *shared
-  resources*, not your own personal cluster.
-
-
-.. index:: running small jobs
-
-Small jobs
-^^^^^^^^^^^^^^
-
-  We *strongly* request that all jobs not using MPI and running on
-  only one node (or less) of the cluster be run on the *batch1* or
-  *batch2* portions of SMU HPC.  Since the *parallel1* and *parallel2*
-  portions of the cluster are quite small, non-MPI jobs just "get
-  in the way" of users who wish to actually use the infiniband
-  network.
+*****************************************************
+Session 8: Postprocessing
+*****************************************************
 
 
 
 
 Getting started
-------------------------------------
+================================================
 
-If you have not already set up your login script to initialize condor,
-follow the instructions from tutorial :ref:`session 6
-<session6_condor>` to do so.
-
-
-Second, you will need to retrieve sets of files for both the OpenMP
-and MPI portions of this session.  Retrieve the files for the OpenMP
-portion by clicking :download:`this link <code/session8_OpenMP.tgz>`
-or by copying them on ManeFrame at the command line:
-
-.. code-block:: bash
-
-   $ cp ~dreynolds/ManeFrame_tutorial/session8_OpenMP.tgz .
-
-Similarly, retrieve the files for the MPI portion by clicking
-:download:`this link <code/session8_MPI.tgz>` or by copying them
-on ManeFrame at the command line:
-
-.. code-block:: bash
-
-   $ cp ~dreynolds/ManeFrame_tutorial/session8_MPI.tgz .
+Scientific simulation is worthless unless the results of those
+simulations can be analyzed and understood.  Unfortunately, most
+classes on scientific computing focus almost exclusively on how to
+create the methods for performing the simulations, with little time
+(if any) dedicated to the analysis of those results.  While one
+session of a workshop is insufficient to fully rectify this situation,
+we'll try to get get you started down the right path, by first
+focusing on how to input simulation data into more interactive
+computing environments, and then how to postprocess and visualize that
+data.  While there are many available interactive computing
+environments that can be used for these purposes, we'll focus on two
+of the most popular options, Matlab and Python.
 
 
-
-
-
-Shared-memory programs
-=================================================================
-
-Since SMP programs do not communicate between nodes via the network,
-and hence cannot make use of the high-speed (and high-cost) infiniband
-network on the *parallel1* and *parallel2* clusters, it is *strongly*
-recommended that these be run on the *batch1* and *batch2* clusters:
-
-* *batch1* -- capable of running SMP programs using up to 8 cores.
-
-* *batch2* -- capable of running SMP programs using up to 12 cores.
-
-
-The following links will take you directly to the subsections that
-detail each compilation/execution approach for SMP computing:
-
-* :ref:`Compiling with GNU <session8-compiling_OpenMP_GNU>`
-
-* :ref:`Compiling with PGI <session8-compiling_OpenMP_PGI>`
-
-* :ref:`Running at the command line <session8-running_OpenMP_commandline>`
-
-* :ref:`Running on batch1 <session8-running_OpenMP_batch1>`
-
-* :ref:`Running on batch2 <session8-running_OpenMP_batch2>`
-
-..
-   * :ref:`Running on parallel1 <session8-running_OpenMP_parallel1>`
-
-   * :ref:`Running on parallel2 <session8-running_OpenMP_parallel2>`
-
-
-
-
-Enabling OpenMP
-------------------------------------
-
-
-.. index:: OpenMP; compiler flags
-
-OpenMP is implemented as an extension to existing programming
-languages, and is available for programs written in C, C++, Fortran77
-and Fortran90.  These OpenMP extensions are enabled at the compiler
-level, with most compilers supporting OpenMP and others not.  In all
-cases of which I am aware, OpenMP is enabled through supplying a flag
-to the relevant compiler denoting that you wish for it to allow the
-OpenMP extensions to the existing language.  The various compiler
-flags for well-known compilers include:
-
-* GNU: ``-fopenmp``
-
-* PGI: ``-mp``
-
-* Intel: ``-openmp``
-
-* IBM: ``-qsmp``
-
-* Oracle: ``-xopenmp``
-
-* Absoft: ``-openmp``
-
-* Cray: (on by default)
-
-* NAG: ``-openmp``
-
-
-
-
-Compiling with OpenMP
-------------------------------------
-
-Before proceeding to the following subsections, unpack the OpenMP
-portion of this tutorial using the usual commands:
+Retrieve the set of files for this session either through
+:download:`clicking here <code/session8.tgz>` or by copying the
+relevant files at the command line:
 
 .. code-block:: bash
 
-   $ tar -zxf session8_OpenMP.tgz
+   $ cp ~dreynolds/ManeFrame_tutorial/session8.tgz .
 
-In the resulting directory, you will find a number of files, including
-``Makefile``, ``driver.cpp`` and ``vectors.cpp``.  
+Unzip this file, enter the resulting directory, and build the
+executable with ``make``.
 
-
-
-.. index:: OpenMP example; compiling with GNU
-
-.. _session8-compiling_OpenMP_GNU:
-
-Compiling OpenMP code with the GNU compilers
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-You can compile the executable ``driver.exe`` with the GNU compiler and
-OpenMP using the command 
+Run the executable at the command-line.
 
 .. code-block:: bash
 
-   $ g++ -fopenmp driver.cpp vectors.cpp -lm -o driver.exe
+   $ ./advection.exe
 
-The compiler option ``-fopenmp`` is the same, no matter which GNU
-compiler you are using (``gcc``, ``gfortran``, etc.)
-
-
-.. index:: OpenMP example; compiling with PGI
-
-.. _session8-compiling_OpenMP_PGI:
-
-Compiling OpenMP code with the PGI compilers
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Assuming that you have already loaded the PGI module, you can compile
-the executable ``driver.exe`` with the PGI compiler and OpenMP using
-the command  
-
-.. code-block:: bash
-
-   $ pgc++ -mp driver.cpp vectors.cpp -lm -o driver.exe
-
-The compiler option ``-mp`` is the same, no matter which PGI
-compiler you are using (``pgcc``, ``pgfortran``, etc.)
-
-
-
-
-
-Running with OpenMP 
-------------------------------------
-
-.. index:: OpenMP; running at the command line
-
-.. _session8-running_OpenMP_commandline:
-
-Running OpenMP programs at the command line
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Run the executable ``driver.exe`` from the command line:
-
-.. code-block:: bash
-
-   $ ./driver.exe
-
-In fact, this executable did not run using more than one thread, since
-the default behavior of OpenMP programs on SMU HPC is to only use a
-single thread.
-
-.. index:: OpenMP; OMP_NUM_THREADS
-
-To change the number of threads used by our program, we must adjust
-the ``OMP_NUM_THREADS`` environment variable. First, verify that this is
-set to the default value of 1 (or it may be blank): 
-
-.. code-block:: bash
-
-   $ echo $OMP_NUM_THREADS
-
-Recalling from session 2 of the workshop, the method for re-setting
-this environment variable will depend on our login shell.  For CSH/TCSH
-users, 
-
-.. code-block:: tcsh
-
-   $ setenv OMP_NUM_THREADS 2
-
-will adjust this variable to 2; the same may be accomplished in
-BASH/SH/KSH users with the command 
-
-.. code-block:: bash
-
-   $ export OMP_NUM_THREADS=2
-
-Re-run ``driver.exe`` first using 1 and then using 2 OpenMP
-threads.  Notice the speedup when running with multiple threads.  Also
-notice that although the result, ``Final rms norm`` is essentially the
-same in both runs, the results differ slightly after around the 11th
-digit.  The reasoning is a bit beyond the scope of this session, but
-in short this is due to a combination of floating-point roundoff
-errors and differences in the order of arithmetic operations.  The
-punch line being that bitwise identicality between runs is difficult
-to achieve in parallel computations, and in any case fact may not be
-entirely necessary in the first place.
-
-
-
-.. index:: OpenMP example; running on batch1
-
-.. _session8-running_OpenMP_batch1:
-
-Running OpenMP jobs on *batch1*
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-To run OpenMP-enabled code on the *batch1* cluster, the steps are identical
-to those required for requesting an entire compute node, except that
-now we must additionally specify the environment variable
-``OMP_NUM_THREADS``.  It is recommended that this variable be supplied
-as one of the entries in the **environment** option to condor.  
-
-Additionally, we should request that we wish to run on a "wnode" or
-"cnode", since those comprise the *batch1* portion of the SMU HPC cluster.
-
-For example, if we set our condor job submission file to either
+You should see a set of output, ending with lines similar to:
 
 .. code-block:: text
 
-   universe              = vanilla
-   getenv                = true
-   log                   = OMPtest.log
-   error                 = OMPtest.err
-   output                = OMPtest.out
-   executable            = driver.exe
-   environment           = OMP_NUM_THREADS=7
-   Requirements          = CAN_RUN_WHOLE_MACHINE && regexp("wnode", Machine)
-   +RequiresWholeMachine = True
-   queue
+   writing output file 24, step = 2399, t = 0.48
+   writing output file 25, step = 2499, t = 0.5
+   total runtime = 3.1000000000000000e-01
 
-or to
-  
+List the files in the subdirectory; you should see a new set of files
+with the names ``u_sol.###.txt``.  These files contain solution data from
+the simulation that you just ran, which models the propagation of an
+acoustic wave over a periodic, two-dimensional surface, using a coarse
+:math:`50\times 50` spatial grid.
+
+In the following sections, we will work on importing these data files
+into either a Matlab or Python environment, and then performing some
+simple data analysis.  For the remainder of this session, both Matlab
+and Python will be presented, though you may choose to specialize in
+only your preferred interactive environment.
+
+
+
+
+Importing/exporting data
+================================================
+
+Before we can understand how to load data into Matlab or Python, we
+must understand how it was written from the program.  Here is the C++
+function used to output the two-dimensional data array ``u``:
+
+.. code-block:: c++
+
+   // Daniel R. Reynolds
+   // SMU HPC Workshop
+   // 20 May 2013
+
+   // Inclusions
+   #include <stdio.h>
+   #include <string.h>
+   #include "advection.h"
+
+   // Writes current solution to disk
+   int output(double *u, double t, int nx, int ny, int noutput) {
+
+     // set output file name
+     char outname[100];
+     sprintf(outname, "u_sol.%03i.txt", noutput);
+
+     // open output file
+     FILE *FID = fopen(outname,"w");
+     if (FID == NULL) {
+       fprintf(stderr, "output: error opening output file %s\n", outname);
+       return 1;
+     }
+
+     // output the solution values 
+     for (int j=0; j<ny; j++) 
+       for (int i=0; i<nx; i++) 
+         fprintf(FID, "%.16e\n",u[idx(i,j,nx)]);
+
+     // write current solution time and close the data set
+     fprintf(FID, "%.16e\n", t);
+     fclose(FID);
+    
+     // now output a metadata file, containing general run information
+     FID = fopen("u_sol_meta.txt","w");
+     fprintf(FID, "%i\n", nx);
+     fprintf(FID, "%i\n", ny);
+     fprintf(FID, "%i\n", noutput);
+     fclose(FID);
+
+     return 0;
+   } // end output
+
+
+A few contextual notes about this code to better understand what is
+happening (we'll discuss in greater detail during class):
+
+* ``u`` holds a two-dimensional array of size ``nx`` by ``ny``, stored
+  in a one-dimensional index space of length ``nx*ny``.  The mapping
+  between the 2D physical space and 1D index space is handled by the
+  ``idx()`` macro, defined in ``advection.h``, of the form
+
+  .. code-block:: c++
+
+     // simple macro to map a 2D index to a 1D address space
+     #define idx(i,j,nx)  ((j)*(nx)+(i))
+
+* This function is called once every output time; these outputs are
+  indexed by the integer ``noutput``, and correspond to the solution
+  at the physical time ``t``.
+
+* At each output time, this routine writes two files: 
+
+  * The first file is the solution file (``u_sol.###.txt``), that
+    holds the 2D data array, printed as one long array with the
+    :math:`x` coordinate the faster index.  In this same file, after
+    ``u`` is stored, the physical time of the output, ``t`` is
+    also stored. 
+
+  * The second file is a metadata file (``u_sol_meta.txt``), that
+    contains the problem size and the total number of outputs that
+    have been written so far in the simulation. 
+
+
+We will first build Matlab and Python functions that can read in the
+metadata file.  First. let's view the contents of the metadata file:
+
 .. code-block:: text
 
-   universe              = vanilla
-   getenv                = true
-   log                   = OMPtest.log
-   error                 = OMPtest.err
-   output                = OMPtest.out
-   executable            = driver.exe
-   environment           = OMP_NUM_THREADS=7
-   Requirements          = CAN_RUN_WHOLE_MACHINE && regexp("cnode", Machine)
-   +RequiresWholeMachine = True
-   queue
-  
-it will signify to condor that we wish to launch ``driver.exe`` on a
-single dedicated node, and that once the job is launched, we will use
-7 of the hardware threads on that node (recall, *batch1* has 8 cores per
-node, so this would entail one core remaining idle).
-
-
-
-
-.. index:: OpenMP example; running on batch2
-
-.. _session8-running_OpenMP_batch2:
-
-Running OpenMP jobs on *batch2*
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-To run OpenMP-enabled code on the *batch2* cluster, the steps are identical
-to those required for requesting an entire compute node, except that
-now we must additionally specify the environment variable
-``OMP_NUM_THREADS``.  It is recommended that this variable be supplied
-as one of the entries in the **environment** option to condor.  
-
-Additionally, we should request that we wish to run on a "cwnode",
-since those comprise the *batch2* portion of the SMU HPC cluster. 
-
-For example, if we set our condor job submission file to
-
-.. code-block:: text
-
-   universe              = vanilla
-   getenv                = true
-   log                   = OMPtest.log
-   error                 = OMPtest.err
-   output                = OMPtest.out
-   executable            = driver.exe
-   environment           = OMP_NUM_THREADS=11
-   Requirements          = CAN_RUN_WHOLE_MACHINE && regexp("cwnode", Machine)
-   +RequiresWholeMachine = True
-   queue
-
-it will signify to condor that we wish to launch ``driver.exe`` on a
-single dedicated node, and that once the job is launched, we will use
-11 of the hardware threads on that node (recall, *batch2* has 12 cores per
-node, so this would entail one core remaining idle).
-
-
-
-
-OpenMP exercise
-------------------------------------
-
-Compile the program ``driver.exe`` using the PGI compiler with OpenMP
-enabled.
-
-Create a single condor submission script that will run the program
-``driver.exe`` using 1, 2, 3, ..., 12 OpenMP threads on the *batch2*
-portion of the cluster.  Recall from session 6
-(:ref:`running_multiple_condor_jobs`), that a single script may launch
-multiple jobs by including multiple **queue** statements.
-
-Launch these jobs, and when they have completed, determine the *strong
-scaling performance* of this code (defined in session 8,
-:ref:`parallel_computing_metrics`).  How well does the program
-perform?  Is there a maximum number of threads where, beyond which,
-additional resources no longer improve the speed?
-
-
-
-
-
-
-
-
-Distributed-memory programs
-=================================================================
-
-Since DMP programs require communication between nodes via the
-network, and it is unlikely that users will wish to run such programs
-using only a single node at a time, SMU HPC is configured to only
-allow multi-node DMP programs using the *parallel1* and *parallel2*
-clusters: 
-
-* *parallel1* -- capable of running DMP programs using up to 128 cores.
-
-* *parallel2* -- capable of running DMP programs using up to 384 cores.
-
-Alternatively, you may run a single-node DMP program interactively
-(e.g. for debugging purposes, parallel data analysis, parallel
-visualization) on the login nodes.
-
-The following links will take you directly to the subsections that
-detail each compilation/execution approach for DMP computing:
-
-* :ref:`MPI compiler wrappers <session8-compiling_MPI_programs>`
-
-* :ref:`Compiling/running MPI interactively <session8-running_MPI_command_line>`
-
-..
-   * The batch1 and batch2 clusters:
-
-     * :ref:`Compiling with GNU <session8-compiling_MPI_GNU_batch>`
-
-     * :ref:`Running with GNU <session8-running_MPI_GNU_batch>`
-
-     * :ref:`Compiling with PGI <session8-compiling_MPI_PGI_batch>`
-
-     * :ref:`Running with PGI <session8-running_MPI_PGI_batch>`
- 
-* The *parallel1* cluster:
-
-  * :ref:`Compiling with GNU <session8-compiling_MPI_GNU_parallel1>`
-
-  * :ref:`Running with GNU <session8-running_MPI_GNU_parallel1>`
-
-  * :ref:`Compiling with PGI <session8-compiling_MPI_PGI_parallel1>`
-
-  * :ref:`Running with PGI <session8-running_MPI_PGI_parallel1>`
-
-* The *parallel2* cluster:
-
-  * :ref:`Compiling with GNU <session8-compiling_MPI_GNU_parallel2>`
-
-  * :ref:`Running with GNU <session8-running_MPI_GNU_parallel2>`
-
-  * :ref:`Compiling with PGI <session8-compiling_MPI_PGI_parallel2>`
-
-  * :ref:`Running with PGI <session8-running_MPI_PGI_parallel2>`
-
-
-
-MPI overview
-------------------------------------
-
-Unpack the source files for the MPI portion of this tutorial as usual,
-
-.. code-block:: bash
-
-   $ tar -zxf session8_MPI.tgz
-
-
-Unlike OpenMP, MPI is implemented as a standalone library that may be
-called by programs wishing to perform message passing to perform a
-distributed memory parallel computation.  Typically written in C (for
-maximum portability), MPI libraries typically include interfaces for
-programs written in C, C++, Fortran77, Fortran90 and Python.
-
-Moreover, since MPI is a library, it does not require any specific
-compiler extensions to construct a MPI-enabled parallel program,
-although it is typical for highly optimized versions of the MPI
-library that you use the same compiler for your program that was used
-to construct the library.
-
-
-
-
-Compiling MPI code
-------------------------------------
-
-
-
-.. index:: MPI wrapper scripts
-
-.. _session8-compiling_MPI_programs:
-
-MPI wrapper scripts
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Typically, in order to compile a program to use a library, a few key
-items must be known about how the library was installed on the
-system:
-
-* Does the library provide header files (C, C++) or modules (F90),
-  and where are these located?  This location is important
-  because when compiling our own codes, we must typically tell the
-  compiler where to look for these "include files" using the ``-I``
-  argument.
-
-* If the library was installed in a non-default location, where is
-  the resulting ".a" file (static library) or ".so" file (shared
-  library) located?  Again, this location is important
-  because when linking our own codes, we must typically tell the
-  compiler where to look for these library files using the ``-L``
-  and ``-l`` arguments.
-
-For example, the PGI-compiled MPI library, MPICH2 version 1.3.2, is
-installed on SMU HPC in the directory ``/grid/software/mpich2-1.3.2``,
-with header files located in ``/grid/software/mpich2-1.3.2/include``
-and library files located in  ``/grid/software/mpich2-1.3.2/lib``.
-Finally, because I'm familiar with this package, I know that to
-compile an executable I must link against the files ``libmpich.a`` and
-``libmpl.a`` in this library directory location.  
-
-As a result, we could compile the executable ``driver.exe`` with the
-commands 
-
-  .. code-block:: bash
-
-     $ module load pgi
-     $ pgc++ driver.cpp -I/grid/software/mpich2-1.3.2/include \
-       -L/grid/software/mpich2-1.3.2/lib -lmpich -lmpl -lm -o driver.exe
-
-
-Clearly, specifying the specific instructions for including and
-linking to an MPI library can be nontrivial: 
-
-* You must know where all of the relevant libraries are installed on
-  each computer. 
-
-* You must know which specific library files are required for
-  compiling a given program. 
-
-* Sometimes, you must even know which order you need to specify these
-  specific library files in the linking line. 
-
-Thankfully, MPI library writers typically include MPI *wrapper scripts*
-to do most of this work for you. Such scripts are written to encode
-all of the above information that is required to use MPI with a given
-compiler on a specific system. 
+   $ cat u_sol_meta.txt 
+   50
+   50
+   25
+
+Here the first "50" corresponds to ``nx``, the second "50" corresponds
+to ``ny``, and the "25" corresponds to the total number of solutions
+that have been output (i.e. the final value for ``noutput``).  
+
+Due to this file's simple structure, we we only need to read three
+numbers in a single column and store them appropriately.  The relevant
+Matlab code is in the file ``load_info.m``, and relies on the built-in
+Matlab function ``load``:
 
 .. index:: 
-   single: MPI wrapper scripts; mpicxx
-   single: MPI wrapper scripts; mpiCC
-   single: MPI wrapper scripts; mpic++
-   single: MPI wrapper scripts; openmpicxx
-   single: MPI wrapper scripts; mpicc
-   single: MPI wrapper scripts; openmpicc
-   single: MPI wrapper scripts; mpif90
-   single: MPI wrapper scripts; openmpif90
-   single: MPI wrapper scripts; mpif77
-   single: MPI wrapper scripts; openmpif77
-
-Depending on your programming language and the specific MPI
-implementation, these wrapper scripts can have different names. The
-typical names for these MPI wrapper scripts are below: 
-
-* C++: ``mpicxx``, ``mpiCC``, ``mpic++`` or ``openmpicxx``
-
-* C: ``mpicc`` or ``openmpicc``
-
-* Fortran 90/95: ``mpif90`` or ``openmpif90``
-
-* Fortran 77: ``mpif77`` or ``openmpif77`` (typically, the Fortran
-  90/95 wrapper will also work for these)
-
-In order to use these wrapper scripts on SMU HPC, we must first load
-the correct module environment.  We'll discuss each of these in the
-appropriate context within the following subsections, that focus on
-the myriad compilers and clusters we wish to use.
-
-
-
-
-.. index:: MPI example; compiling with GNU for parallel1
-
-.. _session8-compiling_MPI_GNU_parallel1:
-
-Compiling MPI code with the GNU compilers for *parallel1*
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-First, load the ``mvapich2/1.6/gcc`` module,
-
-.. code-block:: bash
-
-   $ module load mvapich2/1.6/gcc
-
-Second, compile your executable using one of the MPI wrapper scripts:
-``mpicc``, ``mpicxx``, ``mpif90`` or ``mpif77``.  For example, we may
-compile the example executable as
-
-.. code-block:: bash
-
-   $ mpicxx driver.cpp -lm -o driver_GNU_parallel1.exe
-
-Note: since the MPI libraries vary based on where we wish to run and
-on which compilers we use, I recommend naming the executable
-appropriately to distinguish it from other compilation approaches.  Of
-course, this is not required.
-
-
-
-.. index:: MPI example; compiling with PGI for parallel1
-
-.. _session8-compiling_MPI_PGI_parallel1:
-
-Compiling MPI code with the PGI compilers for *parallel1*
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-First, load the ``mvapich2/1.6/pgi`` module,
-
-.. code-block:: bash
-
-   $ module load pgi mvapich2/1.6/pgi 
-
-Second, compile your executable using one of the MPI wrapper scripts:
-``mpicc``, ``mpicxx``, ``mpif90`` or ``mpif77``.  For example, we may
-compile the example executable as
-
-.. code-block:: bash
-
-   $ mpicxx driver.cpp -lm -o driver_PGI_parallel1.exe
-
-Note: since the MPI libraries vary based on where we wish to run and
-on which compilers we use, I recommend naming the executable
-appropriately to distinguish it from other compilation approaches.  Of
-course, this is not required.
-
-
-
-
-.. index:: MPI example; compiling with GNU for parallel2
-
-.. _session8-compiling_MPI_GNU_parallel2:
-
-Compiling MPI code with the GNU compilers for *parallel2*
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-First, load the ``mvapich2/1.6/gcc-QL`` module,
-
-.. code-block:: bash
-
-   $ module load mvapich2/1.6/gcc-QL
-
-Second, compile your executable using one of the MPI wrapper scripts:
-``mpicc``, ``mpicxx``, ``mpif90`` or ``mpif77``.  For example, we may
-compile the example executable as
-
-.. code-block:: bash
-
-   $ mpicxx driver.cpp -lm -o driver_GNU_parallel2.exe
-
-Note: since the MPI libraries vary based on where we wish to run and
-on which compilers we use, I recommend naming the executable
-appropriately to distinguish it from other compilation approaches.  Of
-course, this is not required.
-
-
-
-
-.. index:: MPI example; compiling with PGI for parallel2
-
-.. _session8-compiling_MPI_PGI_parallel2:
-
-Compiling MPI code with the PGI compilers for *parallel2*
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-First, load the ``mvapich2/1.6/pgi-QL`` module,
-
-.. code-block:: bash
-
-   $ module load pgi/10.5-64bit mvapich2/1.6/pgi-QL
-
-Second, compile your executable using one of the MPI wrapper scripts:
-``mpicc``, ``mpicxx``, ``mpif90`` or ``mpif77``.  For example, we may
-compile the example executable as
-
-.. code-block:: bash
-
-   $ mpicxx driver.cpp -lm -o driver_PGI_parallel2.exe
-
-Note: since the MPI libraries vary based on where we wish to run and
-on which compilers we use, I recommend naming the executable
-appropriately to distinguish it from other compilation approaches.  Of
-course, this is not required.
-
-
-
-
-
-..
-   .. index:: MPI example; compiling with GNU for batch1 and batch2
-
-   .. _session8-compiling_MPI_GNU_batch:
-
-   Compiling MPI code with the GNU compilers for *batch1* and *batch2*
-   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-   Compilation can occur on any SMU HPC login node.
-
-   First, load the ``mpich2/1.1.1/gcc`` module,
-
-   .. code-block:: bash
-
-      $ module load mpich2/1.1.1/gcc
-
-   Second, compile your executable using one of the MPI wrapper scripts:
-   ``mpicc``, ``mpicxx``, ``mpif90`` or ``mpif77``.  For example, we may
-   compile the example executable as
-
-   .. code-block:: bash
-
-      $ mpicxx driver.cpp -lm -o driver_GNU_batch.exe
-
-   Note: since the MPI libraries vary based on where we wish to run and
-   on which compilers we use, I recommend naming the executable
-   appropriately to distinguish it from other compilation approaches.  Of
-   course, this is not required.
-
-
-
-   .. index:: MPI example; compiling with PGI for batch1 and batch2
-
-   .. _session8-compiling_MPI_PGI_batch:
-
-   Compiling MPI code with the PGI compilers for *batch1* and *batch2*
-   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-   Compilation can occur on any SMU HPC login node.
-
-   First, load the ``pgi`` and ``mpich2/1.3.2/pgi`` modules,
-
-   .. code-block:: bash
-
-      $ module load pgi mpich2/1.3.2/pgi
-
-   Second, compile your executable using one of the MPI wrapper scripts:
-   ``mpicc``, ``mpicxx``, ``mpif90`` or ``mpif77``.  For example, we may
-   compile the example executable as
-
-   .. code-block:: bash
-
-      $ mpicxx driver.cpp -lm -o driver_PGI_batch.exe
-
-   Note: since the MPI libraries vary based on where we wish to run and
-   on which compilers we use, I recommend naming the executable
-   appropriately to distinguish it from other compilation approaches.  Of
-   course, this is not required.
-
-
-
-
-
-Running MPI code
-------------------------------------
-
-
-.. index:: MPI example; running interactively
-
-.. _session8-running_MPI_command_line:
-
-Running MPI code interactively
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-When running jobs on a dedicated parallel cluster (or a single workstation),
-parallel jobs and processes are not regulated through a queueing
-system. This has some immediate benefits: 
-
-* You never have to wait to start running a program.
-
-* It is easy to set up and run parallel jobs.
-
-* You have complete control over which processors are used in a parallel computation.
-
-However, dedicated clusters also have some serious deficiencies:
-
-* A single user can monopolize all of the available resources.
-
-* More than one job can be running on a processor at a time, so
-  different processes must fight for system resources (giving
-  unreliable timings or memory availability). 
-
-* The more users there are, the worse these problems become.
-
-However, running parallel programs on such a system can be very
-simple, though the way that you run these jobs will depend on which
-MPI implementation you are using. 
-
-On SMU HPC, we should only run interactive programs on ``smuhpc3``,
-``highmem1``, ``highmem2``, ``gpu1`` or ``gpu2``.  
-
-To run locally on this node, we need to use the ``mpich2/1.4.1/gcc`` module,
-
-.. code-block:: bash
-
-   $ module load mpich2/1.4.1/gcc
-
-We then must compile using one of the MPI wrapper scripts:
-``mpicc``, ``mpicxx``, ``mpif90`` or ``mpif77``; here we use
-
-.. code-block:: bash
-
-   $ mpicxx driver.cpp -lm -o driver_GNU_interactive.exe
+   pair: load_info(); Matlab
+
+.. code-block:: matlab
+
+   function [nx,ny,nt] = load_info()
+   % Usage: [nx,ny,nt] = load_info()
+   %
+   % Outputs: nx,ny are the grid size, and nt is the total number of
+   % time steps that have been output to disk.
+   %
+   % Daniel R. Reynolds
+   % SMU HPC Workshop
+   % 20 May 2013
+
+   % input general problem information
+   load u_sol_meta.txt;   % reads values from disk, storing in a vector
+   nx = u_sol_meta(1);    % unpack vector to name each output
+   ny = u_sol_meta(2);
+   nt = u_sol_meta(3);
+   
+   return
+   % end of function
+
+The corresponding Python code is in the file ``load_info.py``, which
+similarly relies on the built-in Numpy function ``loadtxt``:
+
+.. index:: 
+   pair: load_info(); Python
+
+.. code-block:: python
+
+   # Defines the function load_info().
+   #
+   # Daniel R. Reynolds
+   # SMU HPC Workshop
+   # 20 May 2013
+
+   # import requisite modules
+   import numpy as np
+
+   def load_info():
+       """Returns the mesh size and total number of output times 
+          from the input file 'u_sol_meta.txt'.  Has calling syntax:
+             nx,ny,nt = load_info(). """
+       
+       # reads integer values from disk, storing in a vector
+       data = np.loadtxt("u_sol_meta.txt", dtype=int)
+       return data     # return entire vector
+
+   # end of file
+
+In both of these scripts, the data in the file ``u_sol_meta.txt`` is
+input and converted to a one-dimensional array of numbers.  In the
+Matlab code we name these and return each separately.  In the Python
+code we merely return the array, leaving unpacking and naming to the
+calling routine. 
 
 .. note::
 
-   Interactive use of MPI is allowed on SMU HPC for testing/debugging
-   purposes only, since larger/longer runs should be run on the
-   compute nodes through the queueing system.  MPICH includes multiple
-   libraries to aid in this debugging process, that can be enabled by
-   adding the flags ``-llmpe -lmpe`` to the compile line above.  When
-   requesting debugging help from SMU HPC staff, please include these
-   libraries when compiling your code, e.g.
+   In the R package for interactive statistical data analysis, the
+   corresponding command to Matlab's ``load`` and Python/Numpy's
+   ``loadtxt`` is the R function ``read.table``, e.g. 
 
-   .. code-block:: bash
+   .. code-block:: text
 
-      $ mpicxx driver.cpp -lm -llmpe -lmpe -o driver_GNU_interactive.exe
+      > read.table("u_sol_meta.txt")
+        V1
+      1 50
+      2 50
+      3 25
 
-   For further information on MPE, see the pages `MPE
-   <http://www.mcs.anl.gov/research/projects/perfvis/software/MPE/>`_
-   and `MPE by example
-   <https://wiki.mpich.org/mpich/index.php/MPE_by_example>`_. 
+   However, since I do not know how to use R all of the following
+   examples will only be in Matlab or Python.  Of course, if you are
+   more familiar with R, you are welcome to attempt the remainder of
+   this session with that instead of Matlab or Python.
 
-Since the ManeFrame nodes have 8 physical CPU cores, we are limited to
-using at most 8 MPI processes when running interactively.  The
-command-line program that launches our interactive job is ``mpiexec``,
-to which we supply both the number of desired MPI processes and the
-executable we just compiled.  The calling syntax of ``mpiexec`` is 
+Now that we've seen a simple approach for loading an array into Matlab
+and Python, we can move on to functions for reading the larger
+``u_sol.###.txt`` files.  As with the above functions, since the data
+is output in a single (but very long) column of numbers, we may use
+``load`` or ``loadtxt`` to input the data.  Once this data has been
+read in, however, we will then split it into the solution component,
+``u``, and the current time, ``t``.  Since ``u`` holds a
+two-dimensional array, but is stored in a flattened one-dimensional
+format, we can use ``reshape`` (the same command in both Matlab and
+Python) to convert it from the one-dimensional to the two-dimensional
+representation.
 
-.. code-block:: text
+First, the Matlab code, ``load_data_2d.m``:
 
-   mpiexec [mpiexec_options] program_name [program_options]
+.. index:: 
+   pair: load_data_2d(); Matlab
 
-The primary ``mpiexec`` option that we use is ``-n #``, where ``#`` is
-the desired number of MPI processes to use in running the parallel job.
+.. code-block:: matlab
 
-First, run the program using 1 process: 
+   function [t,u] = load_data_2d(tstep)
+   % Usage: [t,u] = load_data_2d(tstep)
+   %
+   % Input: tstep is an integer denoting which time step output to load
+   % 
+   % Outputs: t is the physical time, and u is the 2D array containing
+   % the result at the requested time step 
+   %
+   % Daniel R. Reynolds
+   % SMU HPC Workshop
+   % 20 May 2013
+   
+   % input general problem information
+   [nx,ny,nt] = load_info();
+   
+   % ensure that tstep is allowable
+   if (tstep < 0 || tstep > nt) 
+      error('load_data_2d error: illegal tstep')
+   end
+   
+   % set filename string and load as a long 1-dimensional array
+   infile = sprintf('u_sol.%03i.txt',tstep);
+   data = load(infile);
+         
+   % separate data array from current time, and reshape data into 2D
+   u1D = data(1:end-1);
+   t = data(end);
+   u = reshape(u1D, [nx, ny]);      
+  
+   return
+
+and here is the corresponding Python code, ``load_data_2d.py``:
+
+.. index:: 
+   pair: load_data_2d(); Python
+
+.. code-block:: python
+
+   # Defines the function load_data_2d().
+   #
+   # Daniel R. Reynolds
+   # SMU HPC Workshop
+   # 20 May 2013
+   
+   # import requisite modules
+   import numpy as np
+   from load_info import load_info
+   
+   def load_data_2d(tstep):
+       """Returns the solution over the mesh for a given time snapshot.  
+          Has calling syntax:
+             t,u = load_data_2d(tstep)
+          Input: tstep is an integer denoting which time step output to load.
+          Outputs: t is the physical time, and u is the 2D array containing 
+                   the result at the requested time step."""
+   
+       # load the parallelism information
+       nx,ny,nt = load_info()
+   
+       # check that tstep is allowed
+       if (tstep < 0 or tstep > nt):
+           print 'load_data_2d error: illegal tstep!'
+           return
+   
+       # determine data file name and load as a long 1-dimensional array
+       infile = 'u_sol.' + repr(tstep).zfill(3) + '.txt' 
+       data = np.loadtxt(infile, dtype=np.double)
+   
+       # separate data array from current time and reshape data into 2D
+       u1D = data[:len(data)-1]
+       t = data[-1];
+       u = np.reshape(u1D, (nx,ny), order='F')
+   
+       return [t,u]
+
+
+How these work:
+
+* These routines take as input an integer, ``tstep``, that corresponds
+  to the desired time step output file (the ``###`` in the file
+  name). 
+
+* They then call the corresponding ``load_info`` function to find out
+  the two-dimensional domain size and the total number of time steps
+  written to disk, and perform a quick check to see whether ``tstep``
+  is an allowable time step index.
+  
+  * *Matlab:* The function namespace for Matlab corresponds to all
+    ".m" files in the current folder, followed by all built-in
+    functions.  So as long as both of the scripts  ``load_info.m`` and
+    ``load_data_2d.m`` are in the same folder, the ``load_data_2d``
+    function can call the ``load_info`` function automatically.
+
+  * *Python:* Since Python protects the namespace by default, any
+    non-built-in Python functions from other files must be loaded before
+    they may be executed.  As a result, ``load_data_2d.py`` must import
+    the ``load_info`` function from the ``load_data.py`` file before it
+    may be used (*note: the ".py" extension for the ``load_data.py``
+    file is assumed, and should not be added to the "from" portion of
+    the ``import`` command).
+
+* The routine then combines the time step index into a string that
+  represents the correct file name (e.g. ``u_sol.006.txt``), and calls
+  the relevant ``load`` or ``loadtxt`` routine to input the data.
+
+* The routine then splits the data into the one-dimensional version of
+  ``u`` (called ``u1D``) and ``t``, before reshaping ``u1D`` into a
+  two-dimensional version of the solution, before returning the values.
+
+.. note:: 
+
+   .. index:: C vs Fortran ordering
+
+   In the Python version, we must specify that the data is
+   ordered in "Fortran" style, i.e. that the first index is the fastest
+   (as opposed to "C" style, where it is the slowest).  Fortran
+   ordering is the default in Matlab, whereas C ordering is the default
+   in Python.
+
+These data input routines can be used by Matlab or Python scripts to
+first read in the data, before either performing analysis or plotting.
+
+A few general comments on the above approach:
+
+* By storing the values as raw text, these files are larger than
+  necessary.  In this example the files are not too large (~58 KB
+  each), but in more realistic simulations it would be preferred to
+  store data in a more compressed format.  Two approaches for this are
+  to:
+
+  a. Zip each file after it is written to disk, through using library
+     routines (e.g. ``libz``, ``libzip``, ``libgzip``), and the
+     uncompress them when reading.  If the file is compressed with
+     ``gzip``, Numpy's ``loadtxt`` routine will automatically unzip as
+     it reads.
+
+  b. Write the data to disk in binary format.
+
+* Performance-wise, it is best to write out data in the
+  order in which it is stored in memory during the simulation.  In
+  this example, the data is stored with the ``x`` index being the
+  fastest, hence the "Fortran" ordering of the data file.
+
+.. index:: HDF5, netCDF
+
+High-quality alternatives to such manual I/O approaches abound.  Two
+popular I/O libraries in high-performance computing are `HDF5
+<http://www.hdfgroup.org/HDF5/>`_ and `netCDF
+<http://www.unidata.ucar.edu/software/netcdf/>`_.  Both of these
+libraries have the following benefits over doing things manually:
+
+* Natively output in binary format for smaller file sizes.
+
+* Allow you to output descriptive information in addition to just the
+  data (e.g. units of each field, version of the code).
+
+* Allow you to output multiple items to the same file (e.g. density,
+  momentum, energy).
+
+* Support parallel computing, allowing many MPI tasks to write to the
+  same file.
+
+* Professional visualization utilities typically have readers built-in
+  for these file types.
+
+* Have data input utilities in both Matlab and Python:
+
+  * Matlab/HDF5: ``h5create``, ``h5disp``, ``h5info``, ``h5read``,
+    ``h5readatt``, ``h5write``, ``h5writeatt``.  All are built into
+    Matlab (see `this Matlab help page
+    <http://www.mathworks.com/help/matlab/high-level-functions.html>`_
+    for information).
+
+  * Matlab/netCDF: although not built into Matlab, there are
+    contributed versions of netCDF readers on `Matlab Central
+    <http://www.mathworks.com/matlabcentral/fileexchange/15177-netcdf-reader>`_. 
+
+  * Python/HDF5: the Python module ``h5py`` contains a full Pythonic
+    interface to the HDF5 data format (`click here for more
+    information on h5py <https://code.google.com/p/h5py/>`_).
+
+  * Python/netCDF: the Python module ``netcdf4-python`` contains
+    interfaces to the majority of netCDF (`click here for more
+    information on netcdf4-python
+    <https://code.google.com/p/netcdf4-python/>`_). 
+
+* Last but not least: someone else writes and debugs the code,
+  allowing you to focus on your work instead of spending your time
+  fiddling with I/O.
+
+
+
+Post-processing 
+================================================
+
+We will now use the above data input routines to do some
+post-processing of these simulated results.  For this example, we'll
+create surface plots of the field ``u``, one for each time step, and
+write them to the disk.  Of course, once the data is available in our
+preferred scripting environment (Matlab, Python, etc.), we can easily
+perform additional data analysis, as will be included in the hands-on
+exercise at the end of this session.
+
+As we did earlier, we'll first show the code and then go through the
+steps.  You may focus on your preferred computing environment, since
+both scripts are functionally equivalent.
+
+First the Matlab code, ``plot_solution.m``:
+
+.. index:: 
+   pair: plot_solution(); Matlab
+
+.. code-block:: matlab
+
+   % Plotting script for 2D acoustic wave propagation example
+   % simulation.  This script inputs the file u_sol_meta.txt to determine
+   % simulation information (grid size and total number of time steps).
+   % It then calls load_data_2d() to read the solution data from each
+   % time step, plotting the results (and saving them to disk).
+   %
+   % Daniel R. Reynolds
+   % SMU HPC Workshop
+   % 20 May 2013
+   clear
+   
+   % input general problem information
+   [nx,ny,nt] = load_info();
+   
+   % loop over time steps
+   for tstep = 0:nt
+   
+      % load time step data
+      [t,u] = load_data_2d(tstep);
+   
+      % plot current solution (and save to disk)
+      xvals = linspace(0,1,nx);
+      yvals = linspace(0,1,ny);
+      h = surf(yvals,xvals,u);
+      shading flat
+      view([50 44])
+      axis([0, 1, 0, 1, -1, 1])
+      xlabel('x','FontSize',14), ylabel('y','FontSize',14)
+      title(sprintf('u(x,y) at t = %g, mesh = %ix%i',t,nx,ny),'FontSize',14)
+      pfile = sprintf('u_surf.%03i.png',tstep);
+      saveas(h,pfile);
+      
+      %disp('pausing: hit enter to continue')
+      %pause
+   end
+
+and then the Python code, ``plot_solution.py``:
+
+.. index:: 
+   pair: plot_solution(); Python
+
+.. code-block:: python
+
+   # Plotting script for 2D acoustic wave propagation example
+   # simulation.  This script calls load_info() to determine
+   # simulation information (grid size and total number of time steps).
+   # It then calls load_data_2d() to read the solution data from each
+   # time step, plotting the results (and saving them to disk).
+   #
+   # Daniel R. Reynolds
+   # SMU HPC Workshop
+   # 20 May 2013
+   
+   # import the requisite modules
+   from pylab import *
+   import numpy as np
+   from mpl_toolkits.mplot3d import Axes3D
+   from matplotlib import cm
+   import matplotlib.pyplot as plt
+   from load_info import load_info
+   from load_data_2d import load_data_2d
+   
+   # input general problem information
+   nx,ny,nt = load_info()
+   
+   # iterate over time steps
+   for tstep in range(nt+1):
+   
+       # input solution at this time
+       t,u = load_data_2d(tstep)
+   
+       # set string constants for output plots, current time, mesh size
+       pname = 'u_surf.' + repr(tstep).zfill(3) + '.png'
+       tstr = repr(round(t,4))
+       nxstr = repr(nx)
+       nystr = repr(ny)
+   
+       # set x and y meshgrid objects
+       xspan = np.linspace(0.0, 1.0, nx)
+       yspan = np.linspace(0.0, 1.0, ny)
+       X,Y = np.meshgrid(xspan,yspan)
+   
+       # plot current solution as a surface, and save to disk
+       fig = plt.figure(1)
+       ax = fig.add_subplot(111, projection='3d')
+       ax.plot_surface(X, Y, u, rstride=1, cstride=1, cmap=cm.jet,
+                       linewidth=0, antialiased=True, shade=True)
+       ax.set_xlabel('y')
+       ax.set_ylabel('x')
+       title('u(x,y) at t = ' + tstr + ', mesh = ' + nxstr + 'x' + nystr)
+       savefig(pname)
+   
+       #ion()
+       #plt.show()
+       #ioff()
+       #raw_input('pausing: hit enter to continue')
+
+       plt.close()
+   
+   # end of script
+
+
+How these work:
+
+* These first call ``load_info`` to determine the simulation grid size
+  and total number of time steps that have been output to disk.
+
+* These then loop over each time step, and:
+
+  * Call ``load_data_2d`` to read the simulation time and solution
+    array. 
+
+  * Create arrays for the :math:`x` and :math:`y` coordinates of each
+    solution data point.
+
+  * Plot ``u`` at that time step as a 2D surface plot, setting the
+    plot labels and title appropriately.
+
+  * Save the plot to disk in files of the form ``u_surf.###.png``.
+
+  * (Commented out) Pause the loop until the user hits "enter".
+
+
+Run this code as usual, using either Matlab,
 
 .. code-block:: bash
 
-   $ mpiexec -n 1 ./driver_GNU_interactive.exe
+   $ module load matlab
+   $ matlab -r plot_solution
 
-Run the program using 2 processes:
-
-.. code-block:: bash
-
-   $ mpiexec -n 2 ./driver_GNU_interactive.exe
-
-Run the program using 4 processes:
+or Python,
 
 .. code-block:: bash
 
-   $ mpiexec -n 4 ./driver_GNU_interactive.exe
+   $ module load gcc
+   $ module load python
+   $ python ./plot_solution.py
 
-All of these will run the MPI processes as separate threads on the
-login node.
-
-.. note::
-
-   Although the ManeFrame login nodes have 8 physical cores, because
-   they are shared among all users, you should **not** run any
-   MPI jobs on it using more than 4 processes, or for longer than a
-   few minutes.  Interactive jobs should be used **only** for
-   debugging purposes; when running your code on real problems you
-   must instead run using the worker nodes, using the procedures
-   described below. 
-
-
-
-
-
-.. index:: MPI example; running with GNU on parallel1
-
-.. _session8-running_MPI_GNU_parallel1:
-
-Running MPI code with the GNU compilers on *parallel1*
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-The key to launching MPI jobs that utilize more than one node using
-either *parallel1* or *parallel2* is that you must supply an "executable"
-to condor that handles the process of launching your program
-appropriately.  This Condor/MPI interaction is taken care of by 
-incorporating a few specific items into your condor submission script,
-along with a customized executable script that handles the launching
-of your executable.
-
-.. index:: mvapich_script
-
-This executable script is named ``mvapich_script``, and is included
-in the ``session8_MPI`` directory that you downloaded above.  You
-should not need to edit this script file except for more advanced
-usage scenarios, which we will not cover during this tutorial.
-
-.. index:: mvapich_condor.sub
-
-However, the example condor submission file, ``mvapich_condor.sub`` does
-contain specific items that you will need to modify for your usage
-scenario.  This file, modified for the GNU/*parallel1* usage scenario,
-is reproduced here: 
+You should then see a set of ``.png`` images in the directory:
 
 .. code-block:: bash
 
-   # FILENAME mvapich_condor.sub
-   # Use this script to submit MPI jobs on parallel1 and parallel2.
-   # Read the instructions carefully and 
-   # report any issues to your system admins. 
-
-   ###############################################
-   # Edit the following lines to set up your run #
-   ###############################################
-
-   # Your actual executable file name along with arguments goes here
-   arguments     = "driver_GNU_parallel1.exe"
-
-   # Total number of nodes you would like to run your code on
-   machine_count = 2
-
-   # The particular node type you wish to use,
-   # valid values are {inode,iwnode}
-   mynodetype    = "inode"
-
-   # Here you define the specific environment variables
-   # _LOAD_MODULE  MPI module required for your job
-   # _WAY          Number of MPI processes to run on each node
-   environment   = "_LOAD_MODULE=mvapich2/1.6/gcc _WAY=3"
-
-   # Select the appropriate file name for your output files.
-   output = out.txt
-   error  = err.txt
-   log    = log.txt
-
-   # Set email notification settings here
-   notification = Always
-   notify_user  = username@smu.edu
+   $ ls
+   Makefile          plot_solution.m   u_sol.012.txt  u_sol_meta.txt  u_surf.013.png
+   advection.cpp     plot_solution.py  u_sol.013.txt  u_surf.000.png  u_surf.014.png
+   advection.exe     u_sol.000.txt     u_sol.014.txt  u_surf.001.png  u_surf.015.png
+   advection.h       u_sol.001.txt     u_sol.015.txt  u_surf.002.png  u_surf.016.png
+   density.txt       u_sol.002.txt     u_sol.016.txt  u_surf.003.png  u_surf.017.png
+   initialize.cpp    u_sol.003.txt     u_sol.017.txt  u_surf.004.png  u_surf.018.png
+   input.txt         u_sol.004.txt     u_sol.018.txt  u_surf.005.png  u_surf.019.png
+   load_data_2d.m    u_sol.005.txt     u_sol.019.txt  u_surf.006.png  u_surf.020.png
+   load_data_2d.py   u_sol.006.txt     u_sol.020.txt  u_surf.007.png  u_surf.021.png
+   load_data_2d.pyc  u_sol.007.txt     u_sol.021.txt  u_surf.008.png  u_surf.022.png
+   load_info.m       u_sol.008.txt     u_sol.022.txt  u_surf.009.png  u_surf.023.png
+   load_info.py      u_sol.009.txt     u_sol.023.txt  u_surf.010.png  u_surf.024.png
+   load_info.pyc     u_sol.010.txt     u_sol.024.txt  u_surf.011.png  u_surf.025.png
+   output.cpp        u_sol.011.txt     u_sol.025.txt  u_surf.012.png
 
 
-   ###################################
-   # Do not edit the following lines #
-   ###################################
-   universe     = parallel
-   executable   = mvapich_script
-   getenv       = true
-   requirements = regexp($(mynodetype), Machine)
-   +WantParallelSchedulingGroups = TRUE
-   queue
 
-As should be clear from the comments in this file, you only need to
-modify the first few blocks of options:
+You can view these plots on ManeFrame with the command, e.g.
 
-* ``arguments`` -- this should include *both* your executable file
-  name and any command-line arguments that it requires.  If more than
-  one item is listed (i.e. if your program uses any command-line
-  arguments), they should be enclosed in double-quotation marks.
+.. code-block:: bash
 
-* ``machine_count`` -- this should be the number of nodes that you
-  wish to use for your program.  Recall that each node on *parallel1*
-  has 8 cores.
+   $ display u_surf.009.png
 
-* ``mynodetype`` -- this is the type of node you wish to use, here it
-  uses "inode", which is the name of the nodes comprisong *parallel1*.
+Alternately, you can open them all and cycle through them by
+right-clicking and selecting "Next":
 
-* ``environment`` -- in addition to any environment variables you wish
-  to specify on your own, you must specify the following two:
+.. code-block:: bash
+
+   $ display u_surf.*.png
+
+
+
+
+
+Advanced visualization
+================================================
+
+
+A few difficulties with using either Matlab or Python for data
+visualization include:
+
+* Difficulty dealing with three-dimensional plotting: while slices and
+  projections are simple, 3D data sets require much more interactive
+  visualization, including isocontour surface plots, moving slices,
+  rotating, etc.
+
+* Difficulty dealing with data output from parallel simulations: you
+  need to read in each processor's data file and glue them together
+  manually, and such in-core processing is impossible when the data
+  sets grow too large.
+
+As a result, there are a variety of high-quality visualization
+packages that are designed for interactive 3D visualization, as
+discussed below.  None of these are installed on ManeFrame at present,
+though all are freely-available and open-source, so if you need/want
+one you should make a request to the ManeFrame system administrators.
+
+
+.. index:: Mayavi
+
+Mayavi
+--------------------------------------------------
+
+Mayavi is a Python plotting package designed primarily for interactive
+3D visualization. See:
+
+* `Mayavi Documentation <http://code.enthought.com/projects/mayavi/docs/development/html/mayavi/index.html>`_
+* `Mayavi Gallery <http://code.enthought.com/projects/mayavi/docs/development/html/mayavi/auto/examples.html>`_
+
+
+.. index:: VisIt
+
+VisIt
+--------------------------------------------------
+
+`VisIt <https://wci.llnl.gov/codes/visit>`_ is an open source
+visualization package being developed at `Lawrence Livermore National
+Laboratory <http://www.llnl.gov>`_. It is designed for large-scale
+visualization problems (i.e. large data sets, rendered in parallel).
+VisIt has a GUI interface, as well as a Python interface for
+scripting.  See:
+
+* `VisIt Documentation <https://wci.llnl.gov/codes/visit/doc.html>`_
+* `VisIt Gallery <https://wci.llnl.gov/codes/visit/gallery.html>`_
+* `VisIt Tutorial <http://www.visitusers.org/index.php?title=Short_Tutorial>`_
+
+
+.. index:: ParaView
+
+ParaView
+--------------------------------------------------
+
+Like VisIt, `ParaView <http://www.paraview.org>`_ is another open
+source package for large-scale visualization developed at the
+U.S. Department of Energy National Labs.  It also has both a GUI
+interface and a Python interface for scripting.  See:
+
+* `ParaView Documentation
+  <http://www.paraview.org/paraview/help/documentation.html>`_ 
+* `ParaView Gallery
+  <http://www.paraview.org/paraview/project/imagegallery.php>`_ 
+
+
+
+
+Exercise
+================================================
+
+In the set of files for this session, you will find one additional
+file that you have not yet used, ``density.txt``.  This is a
+snapshot of a three-dimensional cosmological density field at a
+redshift of approximately :math:`z = 9`.  Unlike the previous
+example, this file contains only the data field itself, with no
+auxiliary metadata.  Like the previous example, this data is stored in
+a single column, with :math:`x` being the fastest index and :math:`z`
+the slowest.  The three-dimensional grid is uniform in each direction,
+(i.e. it has size :math:`N\times N\times N`) so the total number of
+lines in the file should equal :math:`N^3`. 
+
+Create a Matlab or Python script that accomplishes the following
+tasks:
+
+1. Determine the maximum density over the domain, and where it occurs.
+
+2. Determine the minimum density over the domain, and where it occurs.
+
+3. Determine the average density over the domain.
+
+4. Generate the following two-dimensional plots, and save each to disk:
  
-  * ``_LOAD_MODULE`` -- this is the MPI module required to compile
-    your job.  For GNU on *parallel1*, the module is
-    ``mvapich2/1.6/gcc``, as entered here.
+   * Slice through the center of the domain parallel to the
+     :math:`xy` plane. 
 
-  * ``_WAY`` -- this is the number of cores on each of your requested
-    nodes that you wish to use (1 :math:`\le`  ``_WAY`` :math:`\le`
-    8).  For example, if you chose 8 nodes and 3 way, you would run
-    with 24 total MPI processes.
+   * Slice through the center of the domain parallel to the
+     :math:`xz` plane. 
 
-* ``output``, ``error`` and ``log`` are as usual.
+   * Slice through the center of the domain parallel to the
+     :math:`yz` plane. 
 
-You should not modify any arguments below the lines
+   * Plot a projection of the density onto the :math:`xy` plane
+     (i.e. add all entries in the :math:`z` direction to collapse the
+     3D set to 2D).
 
-.. code-block:: bash
+   * Plot a projection of the density onto the :math:`xz` plane.
 
-   ###################################
-   # Do not edit the following lines #
-   ###################################
-
-To use this script you must also have the ``mvapich_script`` file in
-the same directory as your executable file and your condor job
-submission file.  I suggest that you copy this to somewhere safe in
-your home directory so that you can re-use it later on.
-
-Once you have finished setting up these files, you can submit the job as
-usual,
-
-.. code-block:: bash
-
-   $ condor_submit ./mvapich_condor.sub
+   * Plot a projection of the density onto the :math:`yz` plane.
 
 
+*Hints*: 
 
+* If you plot the :math:`log` of the density, you will get more
+  interesting pictures.  In both Matlab and Python/Numpy, this is
+  easily computed using whole-array operations, e.g. ``logd = log(d)``.
 
-
-.. index:: MPI example; running with PGI on parallel1
-
-.. _session8-running_MPI_PGI_parallel1:
-
-Running MPI code with the PGI compilers on *parallel1*
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-The key to launching MPI jobs that utilize more than one node using
-either *parallel1* or *parallel2* is that you must supply an "executable"
-to condor that handles the process of launching your program
-appropriately.  This Condor/MPI interaction is taken care of by
-incorporating a few specific items into your condor submission script,
-along with a customized executable script that handles the launching
-of your executable.
-
-.. index:: mvapich_script
-
-This executable script is named ``mvapich_script``, and is included
-in the ``session8_MPI`` directory that you downloaded above.  You
-should not need to edit this script file except for more advanced
-usage scenarios, which we will not cover during this tutorial.
-
-.. index:: mvapich_condor.sub
-
-However, the example condor submission file, ``mvapich_condor.sub`` does
-contain specific items that you will need to modify for your usage
-scenario.  This file, modified for the PGI/*parallel1* usage scenario,
-is reproduced here: 
-
-.. code-block:: bash
-
-   # FILENAME mvapich_condor.sub
-   # Use this script to submit MPI jobs on parallel1 and parallel2.
-   # Read the instructions carefully and 
-   # report any issues to your system admins. 
-
-   ###############################################
-   # Edit the following lines to set up your run #
-   ###############################################
-
-   # Your actual executable file name along with arguments goes here
-   arguments     = "driver_PGI_parallel1.exe"
-
-   # Total number of nodes you would like to run your code on
-   machine_count = 3
-
-   # The particular node type you wish to use,
-   # valid values are {inode,iwnode}
-   mynodetype    = "inode"
-
-   # Here you define the specific environment variables
-   # _LOAD_MODULE  MPI module required for your job
-   # _WAY          Number of MPI processes to run on each node
-   environment   = "_LOAD_MODULE=mvapich2/1.6/pgi _WAY=4"
-
-   # Select the appropriate file name for your output files.
-   output = out.txt
-   error  = err.txt
-   log    = log.txt
-
-   # Set email notification settings here
-   notification = Always
-   notify_user  = username@smu.edu
-
-
-   ###################################
-   # Do not edit the following lines #
-   ###################################
-   universe     = parallel
-   executable   = mvapich_script
-   getenv       = true
-   requirements = regexp($(mynodetype), Machine)
-   +WantParallelSchedulingGroups = TRUE
-   queue
-
-
-As should be clear from the structure of this file, you only need to
-modify the first few blocks of options:
-
-* ``arguments`` -- this should include *both* your executable file
-  name and any command-line arguments that it requires.  If more than
-  one item is listed (i.e. if your program uses any command-line
-  arguments), they should be enclosed in double-quotation marks.
-
-* ``machine_count`` -- this should be the number of nodes that you
-  wish to use for your program.  Recall that each node on *parallel1*
-  has 8 cores.
-
-* ``mynodetype`` -- this is the type of node you wish to use, here it
-  uses "inode", which is the name of the nodes comprisong *parallel1*.
-
-* ``environment`` -- in addition to any environment variables you wish
-  to specify on your own, you must specify the following two:
- 
-  * ``_LOAD_MODULE`` -- this is the MPI module required to compile
-    your job.  For GNU on *parallel1*, the module is
-    ``mvapich2/1.6/pgi``, as entered here.
-
-  * ``_WAY`` -- this is the number of cores on each of your requested
-    nodes that you wish to use (1 :math:`\le`  ``_WAY`` :math:`\le`
-    8).  For example, if you chose 3 nodes and 4 way, you would run
-    with 12 total MPI processes.
-
-* ``output``, ``error`` and ``log`` are as usual.
-
-You should not modify any arguments below the lines
-
-.. code-block:: bash
-
-   ###################################
-   # Do not edit the following lines #
-   ###################################
-
-To use this script you must also have the ``mvapich_script`` file in
-the same directory as your executable file and your condor job
-submission file.  I suggest that you copy this to somewhere safe in
-your home directory so that you can re-use it later on.
-
-Once you have finished setting up these files, you can submit the job as
-usual,
-
-.. code-block:: bash
-
-   $ condor_submit ./mvapich_condor.sub
-
-
-
-
-
-.. index:: MPI example; running with GNU on parallel2
-
-.. _session8-running_MPI_GNU_parallel2:
-
-Running MPI code with the GNU compilers on *parallel2*
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-The key to launching MPI jobs that utilize more than one node using
-either *parallel1* or *parallel2* is that you must supply an "executable"
-to condor that handles the process of launching your program
-appropriately.  This Condor/MPI interaction is taken care of by
-incorporating a few specific items into your condor submission script,
-along with a customized executable script that handles the launching
-of your executable.
-
-.. index:: mvapich_script
-
-This executable script is named ``mvapich_script``, and is included
-in the ``session8_MPI`` directory that you downloaded above.  You
-should not need to edit this script file except for more advanced
-usage scenarios, which we will not cover during this tutorial.
-
-.. index:: mvapich_condor.sub
-
-However, the example condor submission file, ``mvapich_condor.sub`` does
-contain specific items that you will need to modify for your usage
-scenario.  This file, modified for the GNU/*parallel2* usage scenario,
-is reproduced here: 
-
-.. code-block:: bash
-
-   # FILENAME mvapich_condor.sub
-   # Use this script to submit MPI jobs on parallel1 and parallel2.
-   # Read the instructions carefully and 
-   # report any issues to your system admins. 
+* Both Matlab and Python allow array slicing to extract a plane from
+  a 3D data set, e.g. 
    
-   ###############################################
-   # Edit the following lines to set up your run #
-   ###############################################
-   
-   # Your actual executable file name along with arguments goes here
-   arguments     = "driver_GNU_parallel2.exe"
-   
-   # Total number of nodes you would like to run your code on
-   machine_count = 2
-   
-   # The particular node type you wish to use,
-   # valid values are {inode,iwnode}
-   mynodetype    = "iwnode"
-   
-   # Here you define the specific environment variables
-   # _LOAD_MODULE  MPI module required for your job
-   # _WAY          Number of MPI processes to run on each node
-   environment = "_LOAD_MODULE=mvapich2/1.6/gcc-QL _WAY=11"
-   
-   # Select the appropriate file name for your output files.
-   output = out.txt
-   error  = err.txt
-   log    = log.txt
-   
-   # Set email notification settings here
-   notification = Always
-   notify_user  = username@smu.edu
-   
-   
-   ###################################
-   # Do not edit the following lines #
-   ###################################
-   universe     = parallel
-   executable   = mvapich_script
-   getenv       = true
-   requirements = regexp($(mynodetype), Machine)
-   +WantParallelSchedulingGroups = TRUE
-   queue
+  * Matlab: ``dslice = squeeze(d(:,:,2))`` -- here, the ``squeeze``
+    command may be used to eliminate the now-trivial 3rd dimension
+    that has length 1.
 
+  * Python/Numpy: ``dslice = d[:][:][2]``  or even ``dslice = d[:,:,2]``
+    (both forms of syntax are equivalent for Numpy arrays).
 
-As should be clear from the structure of this file, you only need to
-modify the first few blocks of options:
+* Both Matlab and Python/Numpy have a ``sum`` command that will add
+  all values of a multi-dimensional array along a specified
+  dimension.  Read their documentation to see how this works (it will
+  help with the average value and with the projection plots).
 
-* ``arguments`` -- this should include *both* your executable file
-  name and any command-line arguments that it requires.  If more than
-  one item is listed (i.e. if your program uses any command-line
-  arguments), they should be enclosed in double-quotation marks.
-
-* ``machine_count`` -- this should be the number of nodes that you
-  wish to use for your program.  Recall that each node on *parallel1*
-  has 8 cores.
-
-* ``mynodetype`` -- this is the type of node you wish to use, here it
-  uses "inode", which is the name of the nodes comprisong *parallel1*.
-
-* ``environment`` -- in addition to any environment variables you wish
-  to specify on your own, you must specify the following two:
- 
-  * ``_LOAD_MODULE`` -- this is the MPI module required to compile
-    your job.  For GNU on *parallel2*, the module is
-    ``mvapich2/1.6/gcc-QL``, as entered here.
-
-  * ``_WAY`` -- this is the number of cores on each of your requested
-    nodes that you wish to use (1 :math:`\le`  ``_WAY`` :math:`\le`
-    12).  For example, if you chose 2 nodes and 11 way, you would run
-    with 22 total MPI processes.
-
-* ``output``, ``error`` and ``log`` are as usual.
-
-You should not modify any arguments below the lines
-
-.. code-block:: bash
-
-   ###################################
-   # Do not edit the following lines #
-   ###################################
-
-Once you have finished setting up this file, you can submit it as
-usual,
-
-.. code-block:: bash
-
-   $ condor_submit ./mpi_condor.sub
-
-
-
-
-
-.. index:: MPI example; running with PGI on parallel2
-
-.. _session8-running_MPI_PGI_parallel2:
-
-Running MPI code with the PGI compilers on *parallel2*
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
-The key to launching MPI jobs that utilize more than one node using
-either *parallel1* or *parallel2* is that you must supply an "executable"
-to condor that handles the process of launching your program
-appropriately.  This Condor/MPI interaction is taken care of by
-incorporating a few specific items into your condor submission script,
-along with a customized executable script that handles the launching
-of your executable.
-
-.. index:: mvapich_script
-
-This executable script is named ``mvapich_script``, and is included
-in the ``session8_MPI`` directory that you downloaded above.  You
-should not need to edit this script file except for more advanced
-usage scenarios, which we will not cover during this tutorial.
-
-.. index:: mvapich_condor.sub
-
-However, the example condor submission file, ``mvapich_condor.sub`` does
-contain specific items that you will need to modify for your usage
-scenario.  This file, modified for the PGI/*parallel2* usage scenario,
-is reproduced here: 
-
-.. code-block:: bash
-
-   # FILENAME mvapich_condor.sub
-   # Use this script to submit MPI jobs on parallel1 and parallel2.
-   # Read the instructions carefully and 
-   # report any issues to your system admins. 
-   
-   ###############################################
-   # Edit the following lines to set up your run #
-   ###############################################
-   
-   # Your actual executable file name along with arguments goes here
-   arguments     = "driver_PGI_parallel2.exe"
-   
-   # Total number of nodes you would like to run your code on
-   machine_count = 3
-   
-   # The particular node type you wish to use,
-   # valid values are {inode,iwnode}
-   mynodetype    = "iwnode"
-   
-   # Here you define the specific environment variables
-   # _LOAD_MODULE  MPI module required for your job
-   # _WAY          Number of MPI processes to run on each node
-   environment = "_LOAD_MODULE=mvapich2/1.6/pgi-QL _WAY=10"
-   
-   # Select the appropriate file name for your output files.
-   output = out.txt
-   error  = err.txt
-   log    = log.txt
-   
-   # Set email notification settings here
-   notification = Always
-   notify_user  = username@smu.edu
-   
-   
-   ###################################
-   # Do not edit the following lines #
-   ###################################
-   universe     = parallel
-   executable   = mvapich_script
-   getenv       = true
-   requirements = regexp($(mynodetype), Machine)
-   +WantParallelSchedulingGroups = TRUE
-   queue
-
-
-
-As should be clear from the structure of this file, you only need to
-modify the first few blocks of options:
-
-* ``arguments`` -- this should include *both* your executable file
-  name and any command-line arguments that it requires.  If more than
-  one item is listed (i.e. if your program uses any command-line
-  arguments), they should be enclosed in double-quotation marks.
-
-* ``machine_count`` -- this should be the number of nodes that you
-  wish to use for your program.  Recall that each node on *parallel1*
-  has 8 cores.
-
-* ``mynodetype`` -- this is the type of node you wish to use, here it
-  uses "inode", which is the name of the nodes comprisong *parallel1*.
-
-* ``environment`` -- in addition to any environment variables you wish
-  to specify on your own, you must specify the following two:
- 
-  * ``_LOAD_MODULE`` -- this is the MPI module required to compile
-    your job.  For PGI on *parallel2*, the module is
-    ``mvapich2/1.6/pgi-QL``, as entered here.
-
-  * ``_WAY`` -- this is the number of cores on each of your requested
-    nodes that you wish to use (1 :math:`\le`  ``_WAY`` :math:`\le`
-    12).  For example, if you chose 3 nodes and 10 way, you would run
-    with 30 total MPI processes.
-
-* ``output``, ``error`` and ``log`` are as usual.
-
-You should not modify any arguments below the lines
-
-.. code-block:: bash
-
-   ###################################
-   # Do not edit the following lines #
-   ###################################
-
-Once you have finished setting up this file, you can submit it as
-usual,
-
-.. code-block:: bash
-
-   $ condor_submit ./mpi_condor.sub
-
-
-
-
-
-
-
-
-MPI exercise
-------------------------------------
-
-Compile the executable ``driver.exe`` to be run on *parallel1* using the
-GNU compilers.  
-
-Set up submission scripts to run this executable using
-1, 2, 4, 8, 16, 32 and 64 cores.  For the 1, 2, 4, and 8 processor jobs, just
-use one node. Run the 16, 32 and 64 processor jobs using 8 cores per node.
-
-Determine the parallel speedup when running this code using MPI.  Does
-it speed up optimally (i.e. by a factor of 64)?
+* Both Matlab and Python/Numpy have ``max`` and ``min`` commands that
+  can be applied to array-valued data.  Read their documentation to
+  see how this works (it will help with the maximum and minimum
+  values). 
 
 
 
