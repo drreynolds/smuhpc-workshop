@@ -27,6 +27,14 @@ environments that can be used for these purposes, we'll focus on two
 of the most popular options, Matlab and Python.
 
 
+To perform this tutorial session, we'll need to set up our environment
+to use Python 2.7.x,
+
+.. code-block:: bash
+
+   $ module load python/2.7.8
+
+
 Retrieve the set of files for this session either through
 :download:`clicking here <code/session8.tgz>` or by copying the
 relevant files at the command line:
@@ -56,7 +64,7 @@ List the files in the subdirectory; you should see a new set of files
 with the names ``u_sol.###.txt``.  These files contain solution data from
 the simulation that you just ran, which models the propagation of an
 acoustic wave over a periodic, two-dimensional surface, using a coarse
-:math:`50\times 50` spatial grid.
+:math:`50 \times 50` spatial grid.
 
 In the following sections, we will work on importing these data files
 into either a Matlab or Python environment, and then performing some
@@ -64,6 +72,11 @@ simple data analysis.  For the remainder of this session, both Matlab
 and Python will be presented, though you may choose to specialize in
 only your preferred interactive environment.
 
+.. note:: at the time of this writing, Matlab is not yet installed on
+	  ManeFrame.  To check if it installed when you get to this
+	  point, type ``module avail`` and look for "Matlab" somewhere
+	  in the output.  If it is not installed, you should use
+	  Python for the remainder of this tutorial.
 
 
 
@@ -379,9 +392,10 @@ How these work:
 
    In the Python version, we must specify that the data is
    ordered in "Fortran" style, i.e. that the first index is the fastest
-   (as opposed to "C" style, where it is the slowest).  Fortran
-   ordering is the default in Matlab, whereas C ordering is the default
-   in Python.
+   (as opposed to "C" style, where the first index is the slowest).
+   Fortran ordering is the default in Matlab, whereas C ordering is
+   the default in Python.  This output was written in "Fortran" style,
+   so we use that here.
 
 These data input routines can be used by Matlab or Python scripts to
 first read in the data, before either performing analysis or plotting.
@@ -605,15 +619,12 @@ Run this code as usual, using either Matlab,
 
 .. code-block:: bash
 
-   $ module load matlab
    $ matlab -r plot_solution
 
 or Python,
 
 .. code-block:: bash
 
-   $ module load gcc
-   $ module load python
    $ python ./plot_solution.py
 
 You should then see a set of ``.png`` images in the directory:
