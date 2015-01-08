@@ -270,7 +270,7 @@ list from 1993-2010:
    :scale: 90 %
    :align: center
 
-   (figure from `http://www.top500.org <http://www.top500.org>`_)
+   (figure from `http://www.top500.org`_)
 
 
 Definitions of terms above:
@@ -346,7 +346,7 @@ Common switches for commodity clusters include:
    :scale: 90 % 
    :align: center 
 
-   (figure from `http://www.top500.org <http://www.top500.org>`_)
+   (figure from `http://www.top500.org`_)
 
 
 Compare these to on-computer speeds of:

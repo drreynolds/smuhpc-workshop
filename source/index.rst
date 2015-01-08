@@ -50,6 +50,7 @@ will be tuned to computing on the new SMU cluster, *ManeFrame*.
    Parallel Comp. on ManeFrame (Thu. AM) <session_7>
    Postprocessing (Thu. PM) <session_8>
 
+
 .. note:: The Thursday afternoon session is for open interaction with
 	  the workshop organizers.  For attendees who have their own
 	  research codes, you are encouraged to use those on

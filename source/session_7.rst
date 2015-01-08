@@ -317,11 +317,11 @@ Furthermore, note that once the job is launched, it will use 7 of the
 remain idle.
 
 .. note:: In fact, each worker node does much more than just run your
-	  job (runs the operating system, handles network traffic,
-	  etc.), so in many instances SMP jobs *run faster* when using
-	  :math:`N-1` threads than when using :math:`N` threads, where
-          :math:`N` is the number of CPU cores, since this leaves one
-          core to handle all remaining non-job duties.
+   job (runs the operating system, handles network traffic, etc.), so
+   in many instances SMP jobs *run faster* when using :math:`N-1`
+   threads than when using :math:`N` threads, where :math:`N` is the
+   number of CPU cores, since this leaves one core to handle all
+   remaining non-job duties. 
 
 
 
