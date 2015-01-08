@@ -27,10 +27,9 @@ int main(int argc, char* argv[]) {
   // set problem parameters
   n = 10000000;
 
-  // root node outputs parallelism information to screen
-  if (myid == 0) 
-    printf(" starting MPI with %i processes (%i threads each)\n", 
-	   numprocs, omp_get_max_threads());
+  // each node outputs MPI+OpenMP parallelism information to screen
+  printf("Proc %i of %i: has %i OpenMP threads\n", 
+	 myid, numprocs, omp_get_max_threads());
 
   // determine this proc's interval in overall problem domain
   // (assumes homogeneous system, giving all procs equal work)
