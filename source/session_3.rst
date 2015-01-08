@@ -910,6 +910,13 @@ A typical scenario goes like this:
 Standard VCS programs
 --------------------------------------------------
 
+ManeFrame has a number of programs installed to enable version control
+over your codes.  The most popular of these systems are listed below
+(in chronological order, from oldest to youngest) -- all of these are
+installed on ManeFrame and are in your ``$PATH`` by default.
+
+
+
 .. index:: cvs
 
 CVS
@@ -1536,9 +1543,21 @@ other developers (for example, see `this blog post
 <http://rogerstringer.com/2012/04/16/using-dropbox-as-a-git-repository/>`_).
 In this way, you can benefit from using the cloud to share files with
 others (Dropbox, Google Drive, etc.), while also benefiting from a VCS
-system for all of the options discussed above.  That said, in my
-experience it's just as free and more helpful to use a professional
-repository hosting service like `Bitbucket <http://bitbucket.org>`_.
+system for all of the options discussed above.  
+
+However, a big problem with the above cloud-based approach is that the
+client software needs to be installed on all machines where you plan
+to access the in-cloud repository.  While you can certainly install
+these programs on your own computers, in general *you cannot install
+them on shared clusters* (like ManeFrame).  So if you do decide to use
+a customized cloud+VCS system, you'll still need to manually copy your 
+codes to/from ManeFrame (or other shared clusters), and ensure that any
+updates to the repository and/or to files on ManeFrame are manually
+merged back-and-forth. 
+
+In my experience, it's much simpler (and just as free) to use a
+professional repository hosting service like `Bitbucket
+<http://bitbucket.org>`_. 
 
 
 .. raw:: html

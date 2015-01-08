@@ -33,6 +33,7 @@ to use Python 2.7.x,
 .. code-block:: bash
 
    $ module load python/2.7.8
+   $ module load MATLAB
 
 
 Retrieve the set of files for this session either through
@@ -72,11 +73,6 @@ simple data analysis.  For the remainder of this session, both Matlab
 and Python will be presented, though you may choose to specialize in
 only your preferred interactive environment.
 
-.. note:: at the time of this writing, Matlab is not yet installed on
-	  ManeFrame.  To check if it installed when you get to this
-	  point, type ``module avail`` and look for "Matlab" somewhere
-	  in the output.  If it is not installed, you should use
-	  Python for the remainder of this tutorial.
 
 
 

@@ -441,14 +441,8 @@ that of using a tool to track down the bug for us.
 
 The tool we will use is the GNU debugger, which can be accessed
 through running the faulty executable program from within the
-debugging program itself.  You must first load the ``gcc`` module
-before accessing ``gdb``:
-
-.. code-block:: bash
- 
-   $ module load gcc
-
-Load the executable into ``gdb`` with the command 
+debugging program itself.  Load the executable into ``gdb`` with the
+command
 
 .. code-block:: bash
  
