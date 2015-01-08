@@ -55,7 +55,7 @@ will be tuned to computing on the new SMU cluster, *ManeFrame*.
 	  the workshop organizers.  For attendees who have their own
 	  research codes, you are encouraged to use those on
 	  ManeFrame; for attendees without current research projects
-	  you may instead follow the :ref:`Postprocessing <session_8>`
+	  you may instead follow the :ref:`Postprocessing <session8>`
 	  tutorial. 
 
 

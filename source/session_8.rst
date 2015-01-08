@@ -376,7 +376,7 @@ How these work:
     the ``load_info`` function from the ``load_data.py`` file before it
     may be used (*note: the ".py" extension for the ``load_data.py``
     file is assumed, and should not be added to the "from" portion of
-    the ``import`` command).
+    the ``import`` command*).
 
 * The routine then combines the time step index into a string that
   represents the correct file name (e.g. ``u_sol.006.txt``), and calls
