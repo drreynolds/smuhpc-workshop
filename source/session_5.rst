@@ -500,6 +500,7 @@ here we'll focus on those applicable to running batch and interactive jobs:
 
 
 .. index:: SLURM; srun
+.. _srun_options:
 
 * ``srun`` -- runs a parallel or interactive job on the worker nodes.
   A full list of options is available `here
@@ -530,6 +531,14 @@ here we'll focus on those applicable to running batch and interactive jobs:
 
   * ``-p <part>`` or ``--partition=<part>`` -- requests that the job
     be run on the requested partition.
+
+  * ``-N <num>`` or ``--nodes=<num>`` -- requests that the job
+    be run using ``<num>`` nodes.  *Primarily useful for running
+    parallel jobs*
+
+  * ``-n <num>`` or ``--ntasks=<num>`` -- requests that the job
+    be run using ``<num>`` tasks.  The default is one task per node.
+    *Primarily useful for running parallel jobs*
 
   * ``--pty`` -- requests that the task be run in a pseudo-terminal
 
@@ -694,7 +703,7 @@ directory.  View the results to ensure that things ran properly:
 
 
 
-.. index:: SLURM job submission file
+.. index:: SLURM; job submission file
 
 .. _batch_file:
 
@@ -802,6 +811,9 @@ the most useful options for running serial batch jobs.
 
      #SBATCH -p parallel
 
+.. index:: SLURM; time limit
+.. _time_limit:
+
 * ``-t <num>`` -- tells SLURM the maximum runtime to be allowed for
   the job (in minutes).  For example, to allow a job to run for up to
   3 hours you would use
@@ -810,8 +822,18 @@ the most useful options for running serial batch jobs.
 
      #SBATCH -t 180
 
+.. index:: SLURM; exclusive nodes
+.. _exclusive_nodes:
+
 * ``--exclusive`` -- tells SLURM that the job can not share nodes with
   other running jobs.
+
+  .. code-block:: bash
+
+     #SBATCH --exclusive
+
+.. index:: SLURM; shared nodes
+.. _shared_nodes:
 
 * ``-s`` or ``--share`` -- tells SLURM that the job can share nodes
   with other running jobs. This is the opposite of ``--exclusive``,
@@ -820,6 +842,16 @@ the most useful options for running serial batch jobs.
   the ``--share`` option was not set and allow higher system
   utilization, but application performance will likely suffer due to
   competition for resources within a node.
+
+  .. code-block:: bash
+
+     #SBATCH -s
+
+  .. note:: of the three ManeFrame partitions, job-based
+	    shared/exclusive control is only available for
+	    *parallel* and *highmem*; the *interactive* queue forces
+	    "shared" usage, with up to four shared jobs per node.
+
 
 * ``--mail-user <email address>`` -- tells SLURM your email address if 
   you'd like to receive job-related email notifications, e.g.

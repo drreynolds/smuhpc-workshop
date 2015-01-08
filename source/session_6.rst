@@ -14,10 +14,14 @@ Session 6: Introduction to Parallel Computing
 What is parallel computing?
 ================================================
 
+In essence, *parallel computing* merely means the use of more than one
+processing unit to help perform a computation.
+
 Parallel computing has historically focused on state-of-the-art
-engineering and scientific applications. Now video game consoles,
-laptops and desktops have begun to transition toward chips with
+engineering and scientific applications. Now smart phones, video game
+consoles, laptops and desktops have all transitioned to chips with
 multiple processors as well. 
+
 
 
 .. index:: Moore's law
@@ -30,8 +34,10 @@ and larger simulations.  In 1965, Gordon Moore observed that the CPU
 and RAM transistor count about doubled each year. “Moore’s Law” has
 since been revised to a doubling once every 2 years, with startling
 accuracy. However physical limits, e.g. power consumption, heat
-emission, and even the size of the atom, are making such advances more
-difficult, and will eventually halt this expansion.
+emission, and even the size of the atom, have currently stopped this
+expansion on individual processors, with speeds that have leveled off
+since around 2008.
+
 
 .. figure:: figs/Moore_law.png
    :scale: 90 %
@@ -41,24 +47,25 @@ difficult, and will eventually halt this expansion.
    <http://en.wikipedia.org/wiki/Moore%27s_law>`_]
 
 
+
 .. index:: CPU vs memory/disk speed
 
 Motivation: CPU vs memory/disk speed
 --------------------------------------------------
 
-* The overall rate of computation is determined not just by the
+* The overall rate of any computation is determined not just by the
   processor speed, but also by the ability of the memory system to
   feed data to it. 
 
 * Thanks to Moore’s law, clock rates of high-end processors have
-  increased at roughly 40% per year over the last decade. 
+  increased at roughly 40% per year since the 1970's.
 
 * However, over that same time interval, RAM access times have
   improved at roughly 10% per year. 
 
 * This growing mismatch between processor speed and RAM latency
   presents an increasing performance bottleneck, since the CPU spends
-  more and more time waiting on data from RAM. 
+  more and more time idle, waiting on data from RAM. 
 
 
 
@@ -66,7 +73,7 @@ Motivation: the parallel solution
 --------------------------------------------------
 
 In addition, many simulations require incredible amounts of memory to
-achieve high-accuracy solutions (PDE & Monte-Carlo solvers, etc.),
+achieve high-accuracy solutions (PDE & MD solvers, etc.),
 which cannot fit on a single computer alone.
 
 The natural solution to these problems is the use of parallel
@@ -118,11 +125,10 @@ metrics:
 Parallel computing hardware
 ================================================
 
-We typically group parallel computing architectures into two primary
-categories according to the memory layout on these machines: *shared
-memory* and *distributed memory*.  However, modern parallel computing
-facilities are in fact comprised of a hybrid between these two
-categories. 
+We historically group parallel computing architectures into two
+primary categories according to the memory layout on these machines:
+*shared memory* and *distributed memory*.  However, modern parallel
+computers are a hybrid between these two categories. 
 
 
 .. index:: multiprocessor, SMP
@@ -137,8 +143,8 @@ memory.
    :scale: 80 %
    :align: center
 
-* Perhaps the most easily usable (but costliest) approach for
-  parallelism. 
+
+Perhaps the most easily usable (but costliest) approach for parallelism:
 
 * Straightforward extension of uniprocessor: multiple CPUs are
   attached to the bus, all sharing the same primary memory, so the
@@ -233,14 +239,17 @@ computers relies on a network to connect disjoint computers together:
 Machine size history
 --------------------------------------------------
 
-Historical plot of the processor count in computers comprising the
-Top500 list since 1993. 
+Historical plot of the processor/core count in computers comprising
+the Top500 list from 1993-2010. 
 
 .. figure:: figs/parallelism_history.png
    :scale: 90 %
    :align: center
 
-   (figure from `http://www.top500.org <http://www.top500.org>`_)
+   In June 2010, ManeFrame [`Mana
+   <http://top500.org/system/176553>`_ at that time] was #68 on the
+   Top500 list, with 9210 total cores (figure from `http://www.top500.org
+   <http://www.top500.org>`_).
 
 
 Note the trend to achieve performance advances through increases in parallelism.
@@ -255,7 +264,7 @@ History of parallel architectures
 --------------------------------------------------
 
 Historical plot of the computer architectures comprising the Top500
-list since 1993: 
+list from 1993-2010: 
 
 .. figure:: figs/architecture_history.png
    :scale: 90 %
@@ -268,7 +277,7 @@ Definitions of terms above:
 
 * MPP: Massively Parallel Processors (commercially-designed)
 
-* Cluster: ‘loosely’ coupled commodity parts
+* Cluster: ‘loosely’ coupled commodity parts [ManeFrame]
 
 * SMP: Shared Memory Parallel
 
@@ -332,6 +341,7 @@ Common switches for commodity clusters include:
 * *Infiniband*: 40 Gbit/sec bandwidth, 1.07 μsec latency
 
 
+
 .. figure:: figs/network_pie.png 
    :scale: 90 % 
    :align: center 
@@ -351,6 +361,11 @@ Compare these to on-computer speeds of:
 
 
    
+.. note:: ManeFrame uses Infiniband exclusively for inter-processor
+	  communication.  SMUHPC primarily uses Gigabit Ethernet, with
+	  some small sections connected via Infiniband.
+
+
 
 
 .. index:: parallel computing paradigms
@@ -370,6 +385,9 @@ computers.  There are a number of options:
   * Difficult to do well: although an algorithm may be inherently
     parallelizable, the compiler may have difficulty realizing the
     extent, and putting it into practice.
+
+  * Only readily available for shared-memory parallelization.
+
 
 * Extend a sequential language (most popular):
 
@@ -1030,6 +1048,36 @@ software):
   for complex multi-physics problems [C++, Fortran, Python] 
 
 
+
+
+Group Discussion: Parallel Decomposition
+=================================================================
+
+You need to compute the sum of 1000 numbers as rapidly as possible.
+
+You have a stack of 1000 index cards, each with a single number, and
+you are in charge of 1000 accountants, each with a pencil and a set of
+blank index cards.  
+
+These accountants are sitting at desks in a large room, where the
+desks are organized into 50 rows of 20 desks each.  Each accountant
+can only pass cards to her four nearest accountants (front, back, left
+and right).  You can choose to use any number of these accountants
+that you wish, and you can have accountants do different tasks.
+
+1. What is an optimal method for distributing cards to accountants?
+
+2. What is an optimal method for accumulating subtotals generated by the
+   active accountants into a grand total?
+
+3. How will these approaches change if you increase the work to adding
+   10\ :sup:`4` numbers with the same 1000 accountants?  What about 10\ :sup:`5` numbers?
+
+4. Is it possible for 1000 accountants to perform the task 1000 times
+   faster than only one accountant? 
+
+5. Is there a better way to arrange the desks to reduce the time
+   needed to distribute cards and collect subtotals?
 
 
 

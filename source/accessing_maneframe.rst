@@ -35,7 +35,7 @@ natively support SSH access from the command line.  First, open a
 ``/Applications/Utilities/Terminal.app`` (I recommend making a shortcut
 to this in your dock).  Depending on your Linux variant, this can be
 in a variety of locations; if you cannot find it I recommend you
-search on the web.
+search the web.
 
 In your terminal, you can SSH into ManeFrame with the command
 
@@ -49,10 +49,10 @@ or
 
    ssh -CY yourusername@mflogin02.hpc.smu.edu
 
-.. note:: Replace ``yourusername`` with the username for your account
-	  on ManeFrame.  The flag ``C`` enables compression of data
+.. note:: Replace *yourusername* with the username for your account
+	  on ManeFrame.  The flag *C* enables compression of data
 	  across the network (helpful when running graphical
-	  programs).  The flags ``X`` and ``Y`` both enable forwarding
+	  programs).  The flags *X* and *Y* both enable forwarding
 	  of graphics from ManeFrame to your computer.
 
 	  Depending on your version of OS X, you may need an auxiliary
