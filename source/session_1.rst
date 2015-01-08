@@ -10,7 +10,10 @@ Session 1: Introduction to Linux
 The internet is `full of useful Linux tutorials
 <http://lmgtfy.com/?q=linux+tutorial>`_; this is just one more, but
 hopefully it will be brief yet thorough enough to learn the basics of
-using Linux insofar as will be needed for the remainder of this workshop.
+using Linux insofar as will be needed for the remainder of this
+workshop.  The contents of this tutorial are adapted from an 
+`online UNIX tutorial <http://www.ee.surrey.ac.uk/Teaching/Unix/>`_
+by `Michael Stonebank <https://www.linkedin.com/in/mstonebank>`_.
 
 
 .. sidebar:: Accessing Linux from Windows or OS X
@@ -363,7 +366,7 @@ which should give you something like this,
 
 .. code-block:: bash
 
-   /home/reynolds
+   /users/dreynolds
 
 Suppose you were on the computer from our example UNIX directory
 structure figure (reproduced again below). There, typing ``pwd`` in
@@ -413,7 +416,7 @@ You will get a message like this
 
 .. code-block:: bash
 
-   backups: No such file or directory
+   /bin/ls: cannot access backups: No such file or directory
 
 The reason is, ``backups`` is not in your current working
 directory. To use a command on a file (or directory) not in the
@@ -510,10 +513,7 @@ Then at the UNIX prompt, type,
 
 .. code-block:: bash
 
-   $ cp /usr/include/sys/types.h ./types.h
-
-.. note:: Don't forget the dot-slash ``./`` before ``types.h``. 
-	  Remember, in UNIX, the dot means the current directory. 
+   $ cp /usr/include/sys/types.h types.h
 
 The above command means copy the file ``types.h`` from the
 ``/usr/include/sys`` directory to the current directory, keeping the
@@ -581,8 +581,11 @@ Inside your ``unixstuff`` directory, type
 
    $ cp types.h tempfile.txt
    $ ls
-   $ rm tempfile.txt 
+   $ rm tempfile.txt
    $ ls
+
+(after ``rm tempfile.txt`` you may need to answer "y" at the prompt
+and hit [Enter] before continuing).  
 
 These commands first copied the file ``types.h`` to a copy called
 ``tempfile.txt``, then showed you the list of files in this directory

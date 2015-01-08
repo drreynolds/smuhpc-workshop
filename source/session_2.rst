@@ -14,7 +14,15 @@ Session 2: Introduction to Scripts and Programs
 Getting started
 =================================
 
-Retrieve the set of files for this session either through
+First, we'll need to set up our environment so that we can run Python
+scripts during this tutorial session:
+
+.. code-block:: bash
+
+   $ module load python/2.7.8
+
+
+Second, retrieve the set of files for this session either through 
 :download:`clicking here <code/session2.tgz>` or by copying the
 relevant files at the command line:
 
@@ -95,7 +103,8 @@ line, indicating job number and PID, is returned by the machine. The
 user is be notified of a job number (numbered from 1) enclosed in
 square brackets, together with a PID and is notified when a background
 process is finished. Backgrounding is useful for jobs which will take
-a long time to complete. 
+a long time to complete, or for starting graphical programs that you
+want to run alongside the command line. 
 
 
 Backgrounding a foreground process
@@ -228,7 +237,8 @@ can try using the ``-9`` option, i.e. type
 
    $ kill -9 32259
 
-Note: It is not possible to kill off other users' processes!
+Note: It is not possible to kill off other users' processes, unless
+you are a "superuser" on that computer.
 
 
 Summary of commands for interacting with running processes:
@@ -291,36 +301,41 @@ Scripting vs. shell/GUI
 While it is certainly possible to manually type all commands required
 to compile a code, run it in a variety of ways, and even post-process
 the results, this makes it hard to reproduce the results unless you
-remember exactly the steps that were taken.  Instead, it is
-preferrable to write scripts that set all the appropriate input
-parameters for your program, run it in the desired manner, and process
-the results in such a way that rerunning the scripts will give exactly
-the same results.  With some plotting tools such a script can be
-automatically generated after you’ve come up with the optimal plot by
-fiddling around with the GUI or by typing commands at the prompt.  It
-is worth figuring out how to do this most easily for your own tools
-and work style.  If you always create a script for each figure, and
-then check that it works properly, then you will be able to easily
-reproduce the figure again later.  Since *reproducibility* is a
-cornerstone of the modern scientific method, this additional effort
-can save you later on.  For example, it often happens that the
-referees of a journal or members of a thesis committee will suggest
-improving a figure by plotting something differently, perhaps as
-simple as increasing the font size so that the labels on the axes can
-be read. If you have the code that produced the plot this is easy to
-do in a few minutes. If you don’t, it may take days (or longer) to
-figure out again exactly how you produced that plot to begin with. 
+remember exactly the steps that were taken.  
+
+Instead, it is referrable to write scripts that set all the
+appropriate input parameters for your program, run it in the desired
+manner, and process the results in such a way that rerunning the
+scripts will give exactly the same results.  
+
+With some plotting tools such a script can be automatically generated
+after you’ve come up with the optimal plot by using some menu entry or
+by typing commands at the prompt.  It is worth figuring out how to do
+this most easily for your own tools and work style.  
+
+If you always create a script for each figure, and then check that it
+works properly, then you will be able to easily reproduce the figure
+again later.  Since *reproducibility* is a cornerstone of the modern
+scientific method, this additional effort can save you later on.  For
+example, it often happens that the referees of a journal or members of
+a thesis committee will suggest improving a figure by plotting
+something differently, perhaps as simple as increasing the font size
+so that the labels on the axes can be read. If you have the code that
+produced the plot this is easy to do in a few minutes. If you don’t,
+it may take a significant amount of time to figure out again exactly
+how you produced that plot to begin with.
 
 A second, but almost equally important reason for creating scripts is
 that you may need to do the same thing (or nearly the same thing)
-repeatedly during the course of your experimentation.  This can arise
-out of a need to explore a parameter space of simulation inputs, or
-when post-processing many experimental outputs.  In such scenarios,
-even a moderate amount of effort to create a script can easily pay
-dividends if you must do the task repeatedly.  
+repeatedly during the course of your work.  This can arise out of a
+need to explore a parameter space of simulation inputs, or when
+post-processing many experimental outputs.  In such scenarios, even a
+moderate amount of effort to create a script can easily pay dividends
+if you must do the task repeatedly.
 
 .. figure:: figs/is_it_worth_the_time.png
    :scale: 100 %
+   :align: center
 
    xkcd comic 1205, `Is It Worth the Time? <http://xkcd.com/1205/>`_
 
@@ -343,16 +358,22 @@ Basics of BASH shell scripting:
   to indicate that the script contents should be executed by the BASH
   shell.
 
+  .. note:: this line works on Linux and OS X systems; BASH scripting
+	    on Windows is an entirely different animal!
+
 * Lines beginning with a ``#`` character are interpreted as
   :index:`comments <pair: BASH; comment>` (except for the first line).
 
 * :index:`Variables <BASH; variable>` may be defined in-line via
-  setting *variable*=*value*, e.g.
+  setting *variable=value*, e.g.
  
   .. code-block:: bash
 
      CXX=g++
      STUDENTS=(Sally Frankie Wally Jenny Ahmad)
+
+  .. note:: there should be *no* space before or after the equal
+	    sign that separates the variable name from its value.
 
   Here, ``CXX`` is a scalar variable, while ``STUDENTS`` is an array.
   Variables may be :index:`referenced <BASH; variable reference>`
@@ -378,7 +399,7 @@ Basics of BASH shell scripting:
      ${a[1]}
 
 * :index:`Loops <pair: BASH; loop>` may be performed via iteration
-  over a range (version 3.0+): 
+  over a range (BASH version 3.0+): 
 
   .. code-block:: bash
 
@@ -397,7 +418,7 @@ Basics of BASH shell scripting:
      The number is 4
      The number is 5
 
-  or over a range with a user-supplied increment (version 4.0+):
+  or over a range with a user-supplied increment (BASH version 4.0+):
 
   .. code-block:: bash
 
@@ -515,7 +536,8 @@ Basics of BASH shell scripting:
 
 
 
-As an example, consider the following script (in ``bash_example.sh``):
+As an example, consider the following script (in ``bash_example.sh``
+from the ``session_2.tgz`` "tarball"):
 
 .. code-block:: bash
 
@@ -564,9 +586,10 @@ short examples, except that there are a few notable exceptions:
 * We perform the :index:`logical <pair: BASH; logic operators>`
   "equality" operation via ``-eq``.  The inequality logical operation
   is ``-ne``.  The mathematical :math:`<`, :math:`\le`, :math:`>` and
-  :math:`\ge` operators are given by ``-lt``, ``-le``, ``-gt`` and ``-ge``.
+  :math:`\ge` operators are given by ``-lt``, ``-le``, ``-gt`` and
+  ``-ge``, respectively.
 
-* BASH logic operations may be combined using the standard ``&&``
+* BASH logic operations may be performed using the standard ``&&``
   (and), ``||`` (or) and ``!`` (not). 
 
 * Function :index:`arguments <pair: BASH; function arguments>` are
@@ -590,25 +613,26 @@ Basics of Python shell scripting:
 
      #!/usr/bin/env python
 
-  to indicate that the script contents should be executed by the BASH
-  shell.  However, since Python is installed in different locations on
-  many systems, this may be inadvisable, since Python scripts are
-  typically run from within a Python environment.
+  to indicate that the script contents should be executed by the Python
+  shell.  
+
+  .. note:: Again, the above line is usable on Linux and OS X
+	    machines, and does not apply to Windows.
 
 * Lines beginning with a ``#`` character are interpreted as
   :index:`comments <pair: Python; comment>` (except for the first line).
 
 * :index:`Variables <pair: Python; variable>` may be defined in-line
-  via setting *variable*=*value*, e.g.
+  via setting *variable = value* (spaces allowed, but not required), e.g.
  
   .. code-block:: python
 
-     r = 7
-     h = 6
+     r= 7
+     h =6
      pi = 3.1415926535897932
 
-  Here, ``N`` is a scalar integer variable and ``pi`` is a scalar
-  double-precision variable.  Variables may be 
+  Here, ``r`` and ``h`` are scalar integer variables and ``pi`` is a
+  scalar double-precision variable.  Variables may be 
   :index:`referenced <Python; variable reference>` subsequently in the
   script by just writing the variable name, e.g. 
 
@@ -680,8 +704,8 @@ Basics of Python shell scripting:
      [-10, -40, -70]
 
   Here, when given three arguments, the first is the initial value,
-  the second is the upper bound, and the third argument is the
-  increment.  When given two arguments, an increment of 1 is
+  the second is the [unattained] upper bound, and the third argument
+  is the increment.  When given two arguments, an increment of 1 is
   assumed. When given one argument, a starting value of 0 and an
   increment of 1 are assumed. 
 
@@ -1033,7 +1057,7 @@ In the ``session2`` directory, you will notice a number of files:
 
 .. code-block:: bash
 
-   $ cd session2
+   $ cd ~/session2
    $ ls
    Makefile         hello.c    hello.f    python_example.py
    bash_example.sh  hello.cpp  hello.f90
@@ -1082,8 +1106,8 @@ to the following
    }
 
 For those of you familar to the "Windows" (and even OS X's "Xcode")
-approach for programming, you're used to seeing this within an
-*Integrated Desktop Environment* 
+approach to programming, you're probably more used to seeing this
+within an *Integrated Desktop Environment* 
 (:index:`IDE <integrated desktop environment>`), where you enter your
 code and click icons that will handle compilation and execution of
 your program for you.  While IDEs exist in the Linux world, they are
@@ -1091,8 +1115,8 @@ rarely used in high-performance computing since the compilation
 approach on your laptop typically cannot create code that will execute
 on the worker nodes of a cluster. 
 
-Hence, we'll now learn the (rather simple) approach for compiling
-codes at the command-line in Linux.  
+So with *portability* in mind, let's investigate the (rather simple)
+world of command-line compilation in Linux.  
 
 The first step in compilation is knowing which compiler to use.
 Nearly every Linux system is installed with the 
@@ -1103,12 +1127,12 @@ Nearly every Linux system is installed with the
 * ``g++`` -- the :index:`GNU C++ compiler <GNU compiler collection; g++>`
 
 * ``gfortran`` -- the :index:`GNU Fortran compiler <GNU compiler collection; gfortran>`
-  (handles both F77 and F90) 
+  (handles F77/F90/F95/F2003) 
 
 However, if you have a very 
 :index:`old version of the GNU compiler <GNU compiler collection; g77>` 
 suite, instead of ``gfortran`` you may have ``g77``, that only works
-with F77 code (no F90).
+with F77 code (no F90 or newer).
 
 The GNU compiler suite is open-source (i.e. you can modify it if you
 want), free, and is available for all major computer architectures
@@ -1122,7 +1146,7 @@ code.  As a result, the `SMU Center for Scientific Computation
 * ``pgc++`` - the :index:`PGI C++ compiler <PGI compiler suite; pgc++>`
 
 * ``pgfortran`` - the :index:`PGI Fortran compiler <PGI compiler suite; pgfortran>` 
-  (both F77 and F90) 
+  (handles F77/F90/F95/F2003) 
 
 In my experience, with some applications a program compiled with the
 PGI compilers can run 50% faster than the same code compiled with the
@@ -1144,12 +1168,12 @@ or for the F77 code we'd use
 
    $ gfortran hello.f
    
-Both of these commands produce the same output, a new file named
-``a.out``.  This is the :index:`standard output name <a.out>` for
-executables produced by compilers.  However, since a computer on which
-every program was named "a.out" would be entirely unusable, it is
-typical to name your program something more useful.  This is handled
-with the command line option ``-o``, e.g.  
+Either of these commands will produce a new file named ``a.out``.
+This is the :index:`standard output name <a.out>` for executables
+produced by compilers.  However, since a computer where every program
+was named "a.out" would be unusable, it is typical to give your your
+program a somewhat more descriptive name.  This is handled with the
+command line option ``-o``, e.g.
 
 .. code-block:: bash
 
