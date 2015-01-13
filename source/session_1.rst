@@ -1083,6 +1083,44 @@ Try typing
 
  
 
+
+
+
+
+File Editing
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+While it is technically possible to create text files using ``cat``
+and redirection, these tools are inadequate for creating/editing
+program text files.  A wide variety of text editors exist within the
+Linux ecosystem; a brief overview of the main editors installed on
+ManeFrame is given here:
+
+* GEdit -- This is a simple graphical text editor that should be
+  familiar to Windows users, since it uses the same keyboard shortcuts
+  as Windows programs (copy/cut/paste/save/find/quit).  Newer versions
+  even support syntax highlighting in source code files.  GEdit may be 
+  launched at the command line via the command ``gedit``
+* Nano -- This is another simple text editor, but it runs *inside the
+  terminal*, so it can be used with broken X11-forwarding or with slow
+  network connections.  While the keyboard shortcuts differ from
+  Windows, they are listed at the bottom of the screen.  Nano may be
+  launched with the command ``nano``.
+* Emacs -- This is a full-featured editor, that may either be launched
+  as a graphical editor (``emacs``) or within the terminal (``emacs
+  -nw``).  The keyboard shortcuts differ from Windows, but when
+  launched graphically there are clickable menus.
+* VI -- This is another full-featured editor that runs within the
+  terminal (``vi``).  Graphical variants of VI exist as well
+  (e.g. ``gvim``) but do not seem to be installed on ManeFrame.  The
+  keyboard shortcuts are different from all other editors, and no menu
+  system is available.
+
+.. note:: I recommend that new users start with GEdit and/or Nano, and
+	  move on to Emacs or VI after they are comfortable with
+	  Linux.
+ 
+
 Filename conventions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

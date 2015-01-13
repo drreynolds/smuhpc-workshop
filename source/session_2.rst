@@ -805,7 +805,7 @@ Basics of Python shell scripting:
   .. code-block:: python
      
      def birthday():
-        month = March
+        month = 'March'
         day = 24
 	return [month, day]
 
