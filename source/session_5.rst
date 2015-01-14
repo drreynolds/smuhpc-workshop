@@ -260,7 +260,8 @@ General information
 Getting along with LUSTRE
 ===========================
 
-[Amit]
+
+:download:`Presentation <files/Workshop_2015_Jan_LustreFileSystemPresentation.pptx>`
 
 
 
