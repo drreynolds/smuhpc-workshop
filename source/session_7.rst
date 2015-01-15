@@ -231,15 +231,14 @@ Run the executable ``driver.exe`` from the command line:
 
    $ ./driver.exe
 
-In fact, this executable did not run using more than one thread, since
-the default behavior of OpenMP programs on SMU HPC is to only use a
-single thread.
+Depending on your default setup, you will have either used 1 or 8
+threads. 
 
 .. index:: OpenMP; OMP_NUM_THREADS
 
-To change the number of threads used by our program, we must adjust
-the ``OMP_NUM_THREADS`` environment variable. First, verify that this is
-set to the default value of 1 (or it may be blank): 
+To control the number of threads used by our program, we must adjust
+the ``OMP_NUM_THREADS`` environment variable. First, check your
+current default value (it may be blank): 
 
 .. code-block:: bash
 
