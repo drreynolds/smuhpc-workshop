@@ -44,10 +44,6 @@ There are currently three partitions/queues on ManeFrame:
   processing.
 
 
-.. note:: During the workshop itself, there is also a **workshop**
-	  queue for use by workshop participants.  Submissions to all
-	  othe queues are blocked.
-
 Although acquired by a small group of SMU faculty, ManeFrame is a
 *shared* resource for all SMU researchers (not your personal/group
 research cluster).  As such, it is currently the user's responsibility
@@ -298,8 +294,7 @@ Create a batch job submission file:
    #!/bin/bash
    #SBATCH -J test1          # job name
    #SBATCH -o test1.txt      # output/error file name
-   #SBATCH -p workshop       # requested queue
-   #SBATCH -A workshop       # account to charge
+   #SBATCH -p parallel       # requested queue
    #SBATCH --exclusive       # do not share the compute node
    #SBATCH -t 1              # maximum runtime in minutes
 
@@ -338,7 +333,7 @@ enabled.
 
 Create a single SLURM submission script that will run the program
 ``driver.exe`` using 1, 2, 3, ..., 12 OpenMP threads on ManeFrame's
-*workshop* partition.  Recall from session 5 that you may embed
+*parallel* partition.  Recall from session 5 that you may embed
 multiple commands within your job submission script.
 
 Launch this job, and when it has completed, determine the *parallel
@@ -561,13 +556,13 @@ On ManeFrame, we should only run interactive MPI jobs by requesting
 them through the batch system.  This may be accomplished with the
 ``srun`` command.  Recall the two :ref:`srun options <srun_options>`,
 ``-N`` and ``-n``, that request a specified number of nodes and
-tasks.  To request an interactive session on an entire *workshop* node
+tasks.  To request an interactive session on an entire *highmem* node
 (with up to 8 tasks on that node), for a maximum of 10 minutes, issue
 the command:
 
 .. code-block:: bash
 
-   $ srun -I -N1 -n8 -t 10 -p workshop -A workshop --x11=first --pty $SHELL
+   $ srun -I -N1 -n8 -t 10 -p highmem --x11=first --pty $SHELL
 
 .. note:: even though ManeFrame has a special *interactive* partition,
 	  it is not recommended that you use that partition for
@@ -729,8 +724,7 @@ specific number of MPI tasks with the ``-n`` option:
 
    #!/bin/bash
    #SBATCH -n 12                # requested MPI tasks
-   #SBATCH -p workshop          # requested queue
-   #SBATCH -A workshop          # account to charge
+   #SBATCH -p parallel          # requested queue
    #SBATCH -t 1                 # maximum runtime in minutes
 
    srun ./driver.exe
@@ -752,8 +746,7 @@ behavior slightly:
 
    #!/bin/bash
    #SBATCH -n 12                # requested MPI tasks
-   #SBATCH -p workshop          # requested queue
-   #SBATCH -A workshop          # account to charge
+   #SBATCH -p parallel          # requested queue
    #SBATCH -t 1                 # maximum runtime in minutes
    #SBATCH --exclusive          # do not share nodes
 
@@ -777,8 +770,7 @@ option comes in handy:
    #!/bin/bash
    #SBATCH -N 2                 # requested nodes
    #SBATCH --ntasks-per-node=2  # task load per node
-   #SBATCH -p workshop          # requested queue
-   #SBATCH -A workshop          # account to charge
+   #SBATCH -p parallel          # requested queue
    #SBATCH -t 1                 # maximum runtime in minutes
    #SBATCH --exclusive          # do not share nodes
 
@@ -799,8 +791,7 @@ the total number of MPI tasks, along with the load you want on each node:
    #!/bin/bash
    #SBATCH -n 15                # requested MPI tasks
    #SBATCH --ntasks-per-node=4  # maximum task load per node
-   #SBATCH -p workshop          # requested queue
-   #SBATCH -A workshop          # account to charge
+   #SBATCH -p parallel          # requested queue
    #SBATCH -t 1                 # maximum runtime in minutes
    #SBATCH --exclusive          # do not share nodes
 
@@ -821,8 +812,7 @@ total nodes will eventually be needed, e.g.
    #SBATCH -N 4                 # requested nodes
    #SBATCH -n 15                # requested MPI tasks
    #SBATCH --ntasks-per-node=4  # maximum task load per node
-   #SBATCH -p workshop          # requested queue
-   #SBATCH -A workshop          # account to charge
+   #SBATCH -p parallel          # requested queue
    #SBATCH -t 1                 # maximum runtime in minutes
    #SBATCH --exclusive          # do not share nodes
 
@@ -930,8 +920,7 @@ can use the following submission script:
    #SBATCH -N 4                 # requested nodes
    #SBATCH --ntasks-per-node=1  # one MPI task per node
    #SBATCH --exclusive          # do not share nodes
-   #SBATCH -p workshop          # requested queue
-   #SBATCH -A workshop          # account to charge
+   #SBATCH -p parallel          # requested queue
    #SBATCH -t 1                 # maximum runtime in minutes
 
    export OMP_NUM_THREADS=8

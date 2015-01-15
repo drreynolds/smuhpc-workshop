@@ -377,11 +377,6 @@ create new ones as needed to optimize usage.
    multi-node-multi-core parallel jobs.
 
 
-.. note:: During the workshop, there will be a fourth queue available,
-	  **workshop**, for use by workshop participants.  During the
-	  workshop, new submissions to the other three queues will be
-	  blocked.
-
 
 SLURM commands
 --------------------------------------------------
@@ -917,8 +912,7 @@ In the ``session5`` subdirectory, create a new job submission file,
    #!/bin/bash
    #SBATCH -J myjob          # job name
    #SBATCH -o test1.txt      # output/error file
-   #SBATCH -p workshop       # requested queue
-   #SBATCH -A workshop       # account to charge
+   #SBATCH -p parallel       # requested queue
    #SBATCH -t 1              # maximum runtime in minutes
 
    # run for first 100 primes
@@ -972,8 +966,7 @@ Again in the ``session5`` subdirectory, create a new job submission file,
    #!/bin/bash
    #SBATCH -J myjob2         # job name
    #SBATCH -o test2.txt      # output/error file name
-   #SBATCH -p workshop       # requested queue
-   #SBATCH -A workshop       # account to charge
+   #SBATCH -p parallel       # requested queue
    #SBATCH --exclusive       # do not share the compute node
    #SBATCH -t 10             # maximum runtime in minutes
    
@@ -1064,8 +1057,7 @@ following contents:
       # append sbatch options into file header
       echo "#SBATCH -J job_$n" >> $JOBFILE
       echo "#SBATCH -o test_$n.txt" >> $JOBFILE
-      echo "#SBATCH -p workshop" >> $JOBFILE
-      echo "#SBATCH -A workshop" >> $JOBFILE
+      echo "#SBATCH -p parallel" >> $JOBFILE
       echo "#SBATCH -t 10" >> $JOBFILE
    
       # append test execution commands into job file
