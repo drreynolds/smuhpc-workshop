@@ -1,0 +1,10 @@
+1. Show examples of OpenMP/MPI/Hybrid code in different languages 
+   (C++/F90).
+
+2. Add "Applications" page with any specific details regarding use of
+   individual packages on ManeFrame (e.g. NAMD).  See Amit's directory 
+   /grid/software/examples, that has NAMD, R, gaussian, LINDA, etc..
+
+3. Ensure that SMUHPC references are changed to ManeFrame.
+
+4. 
