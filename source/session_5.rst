@@ -377,6 +377,10 @@ create new ones as needed to optimize usage.
    multi-node-multi-core parallel jobs.
 
 
+.. note:: During the workshop, there will be a fourth queue available,
+	  **workshop**, for use by workshop participants.  During the
+	  workshop, new submissions to the other three queues will be
+	  blocked.
 
 
 SLURM commands
@@ -557,7 +561,7 @@ here we'll focus on those applicable to running batch and interactive jobs:
 
   .. code-block:: bash
 
-     $ srun -p parallel /bin/program  # runs executable /bin/program on "parallel" partition
+     $ srun -p parallel /bin/program # runs executable /bin/program on "parallel" partition
      $ srun --x11=first --pty emacs  # runs "emacs" and forwards graphics
      $ srun --x11=first --pty $SHELL # runs a the user's current shell and forwards graphics
 
@@ -810,7 +814,7 @@ the most useful options for running serial batch jobs.
 
   .. code-block:: bash
 
-     #SBATCH -p parallel
+     #SBATCH -p highmem
 
 .. index:: SLURM; time limit
 .. _time_limit:
@@ -913,7 +917,8 @@ In the ``session5`` subdirectory, create a new job submission file,
    #!/bin/bash
    #SBATCH -J myjob          # job name
    #SBATCH -o test1.txt      # output/error file
-   #SBATCH -p parallel       # requested queue
+   #SBATCH -p workshop       # requested queue
+   #SBATCH -A workshop       # account to charge
    #SBATCH -t 1              # maximum runtime in minutes
 
    # run for first 100 primes
@@ -967,7 +972,8 @@ Again in the ``session5`` subdirectory, create a new job submission file,
    #!/bin/bash
    #SBATCH -J myjob2         # job name
    #SBATCH -o test2.txt      # output/error file name
-   #SBATCH -p parallel       # requested queue
+   #SBATCH -p workshop       # requested queue
+   #SBATCH -A workshop       # account to charge
    #SBATCH --exclusive       # do not share the compute node
    #SBATCH -t 10             # maximum runtime in minutes
    
@@ -1058,7 +1064,8 @@ following contents:
       # append sbatch options into file header
       echo "#SBATCH -J job_$n" >> $JOBFILE
       echo "#SBATCH -o test_$n.txt" >> $JOBFILE
-      echo "#SBATCH -p parallel" >> $JOBFILE
+      echo "#SBATCH -p workshop" >> $JOBFILE
+      echo "#SBATCH -A workshop" >> $JOBFILE
       echo "#SBATCH -t 10" >> $JOBFILE
    
       # append test execution commands into job file
