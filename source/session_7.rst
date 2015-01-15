@@ -685,24 +685,28 @@ MPI batch job execution
 """"""""""""""""""""""""""""
 
 The job *execution* corresponds with the command that you actually use
-to launch the MPI job.  Here, the most relevant commands are: 
-
-.. code-block:: bash
-
-   srun <executable>
+to launch the MPI job.  Here, we may launch the job inside of our
+submission script with the usual
 
 .. code-block:: bash
 
    mpiexec <executable>
 
-and
+call; however it is preferrable to replace ``mpiexec`` here with ``srun``:
 
 .. code-block:: bash
 
-   mpiexec -n <NumProcesses> <executable>
+   srun <executable>
 
-The first two of these are equivalent, and will launch the MPI job to
-use all of the reserved resources.
+or even
+
+.. code-block:: bash
+
+   srun -n <NumProcesses> <executable>
+
+The first two of these are essentially equivalent (unless one of the
+MPI tasks fails for some reason, in which case ``srun`` will exit
+gracefully whereas ``mpiexec`` may not).
 
 The third option is somewhat different, as it launches the MPI job
 to use precisely ``<NumProcesses>`` MPI execution threads.  This value
